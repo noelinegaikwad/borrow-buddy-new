@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Requests | BorrowBuddy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .login {
+            border: 1px solid #2563eb;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #2563eb;
+        }
+
+        .signup {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        #authLoggedIn {
+            display: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logout-btn {
+            border: 1px solid #cbd5e1;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #475569;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 50px 7% 30px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            border: 1px solid #dbe2ea;
+            background: white;
+            padding: 9px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #475569;
+        }
+
+        .tab-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .list-wrap {
+            max-width: 800px;
+            margin: 0 auto 90px;
+            padding: 0 20px;
+        }
+
+        .request-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .request-photo {
+            width: 70px;
+            height: 70px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .request-info {
+            flex: 1;
+        }
+
+        .request-info h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .request-info p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .status-pill {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-transform: capitalize;
+        }
+
+        .status-pending {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        .status-accepted {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-returned {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .request-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 14px;
+            border-radius: 7px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .return-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state a {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        footer {
+            background: #172033;
+            color: white;
+            text-align: center;
+            padding: 40px 7%;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            nav a:not(.login):not(.signup) {
+                display: none;
+            }
+
+            .request-card {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="logo">BorrowBuddy</a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="index.html#how-it-works">How It Works</a>
+
+        <span id="authLoggedOut" style="display:flex; align-items:center; gap:25px;">
+            <a href="login.html" class="login">Login</a>
+            <a href="signup.html" class="signup">Sign Up</a>
+        </span>
+
+        <span id="authLoggedIn">
+            <a href="my-items.html">My Items</a>
+            <a href="my-requests.html">Hi, <span id="authUserName"></span></a>
+            <button class="logout-btn" onclick="bbLogout()">Logout</button>
+        </span>
+    </nav>
+</header>
+
+<section class="page-header">
+    <h1>My Requests</h1>
+    <p>Track the items you've requested to borrow.</p>
+</section>
+
+<div class="tabs">
+    <button class="tab-btn active" data-filter="all">All</button>
+    <button class="tab-btn" data-filter="pending">Pending</button>
+    <button class="tab-btn" data-filter="accepted">Currently Borrowed</button>
+    <button class="tab-btn" data-filter="returned">Returned</button>
+    <button class="tab-btn" data-filter="rejected">Rejected</button>
+</div>
+
+<div class="list-wrap" id="listWrap"></div>
+
+<footer>
+    <h2>BorrowBuddy</h2>
+    <p>Borrow what you need. Share what you don't.</p>
+    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+</footer>
+
+<script src="auth.js"></script>
+<script src="items-data.js"></script>
+<script src="requests.js"></script>
+<script>
+    const user = bbRequireAuth();
+    let currentFilter = "all";
+
+    function render() {
+        const listWrap = document.getElementById("listWrap");
+        let requests = bbGetMyRequests(user.id);
+
+        if (currentFilter !== "all") {
+            requests = requests.filter(r => r.status === currentFilter);
+        }
+
+        requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        if (requests.length === 0) {
+            listWrap.innerHTML = `
+                <div class="empty-state">
+                    <h3>No requests here</h3>
+                    <p>Browse items and send a request to get started. <a href="browse.html">Browse Items →</a></p>
+                </div>
+            `;
+            return;
+        }
+
+        listWrap.innerHTML = "";
+
+        requests.forEach(req => {
+            const item = bbGetItemById(req.itemId);
+            const card = document.createElement("div");
+            card.className = "request-card";
+
+            let actionsHtml = "";
+            if (req.status === "accepted") {
+                actionsHtml = `<button class="action-btn return-btn" onclick="markReturned('${req.id}')">Mark as Returned</button>`;
+            }
+
+            card.innerHTML = `
+                <div class="request-photo">${item.photo}</div>
+                <div class="request-info">
+                    <h3>${item.name}</h3>
+                    <p>Owner: ${item.owner} · ${item.price}</p>
+                </div>
+                <div class="request-actions">
+                    <span class="status-pill status-${req.status}">${req.status}</span>
+                    ${actionsHtml}
+                </div>
+            `;
+            listWrap.appendChild(card);
+        });
+    }
+
+    function markReturned(requestId) {
+        bbUpdateRequestStatus(requestId, "returned");
+        render();
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentFilter = btn.dataset.filter;
+            render();
+        });
+    });
+
+    render();
+</script>
+
+</body>
+</html>

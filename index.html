@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BorrowBuddy | Borrow What You Need</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+        }
+
+        nav {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        .login-btn {
+            border: 1px solid #2563eb;
+            color: #2563eb;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        .signup-btn {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        #authLoggedIn {
+            display: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logout-btn {
+            border: 1px solid #cbd5e1;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #475569;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .hero {
+            padding: 90px 7% 80px;
+            text-align: center;
+            background: linear-gradient(135deg, #eff6ff, #f8fafc);
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 6vw, 68px);
+            line-height: 1.05;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .hero h1 span {
+            color: #2563eb;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 22px auto;
+            color: #64748b;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .search-box {
+            background: white;
+            max-width: 650px;
+            margin: 35px auto 25px;
+            padding: 8px;
+            border: 1px solid #dbe2ea;
+            border-radius: 12px;
+            display: flex;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 0 25px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 13px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary-btn {
+            background: white;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+
+        section {
+            padding: 70px 7%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #64748b;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .category {
+            background: white;
+            padding: 25px 15px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            transition: 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .category:hover {
+            transform: translateY(-4px);
+            border-color: #93c5fd;
+        }
+
+        .category .icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .category h3 {
+            font-size: 15px;
+        }
+
+        .items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 22px;
+        }
+
+        .item-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        .item-image {
+            height: 180px;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .item-info {
+            padding: 18px;
+        }
+
+        .item-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .item-info p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .item-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .view-btn {
+            text-decoration: none;
+            color: #2563eb;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .step {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .step-number {
+            color: #2563eb;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .benefit {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .benefit-icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .benefit p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        footer {
+            background: #172033;
+            color: white;
+            padding: 45px 7%;
+            text-align: center;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 700px) {
+            nav a:not(.login-btn):not(.signup-btn) {
+                display: none;
+            }
+
+            #authLoggedIn a {
+                display: inline;
+            }
+
+            .hero {
+                padding-top: 65px;
+            }
+
+            .search-box {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .search-box button {
+                padding: 13px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .steps,
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">BorrowBuddy</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="#how-it-works">How It Works</a>
+
+        <span id="authLoggedOut" style="display:flex; align-items:center; gap:28px;">
+            <a href="login.html" class="login-btn">Login</a>
+            <a href="signup.html" class="signup-btn">Sign Up</a>
+        </span>
+
+        <span id="authLoggedIn">
+            <a href="my-items.html">Hi, <span id="authUserName"></span></a>
+            <a href="my-requests.html">My Requests</a>
+            <button class="logout-btn" onclick="bbLogout()">Logout</button>
+        </span>
+    </nav>
+</header>
+
+<section class="hero">
+
+    <h1>
+        Borrow what you need.<br>
+        <span>Share what you don't.</span>
+    </h1>
+
+    <p>
+        Find useful items around you, borrow them when you need them,
+        and save money by avoiding unnecessary purchases.
+    </p>
+
+    <div class="search-box">
+        <input type="text" id="heroSearch" placeholder="What are you looking for?">
+        <button onclick="heroSearch()">Search</button>
+    </div>
+
+    <div class="hero-buttons">
+        <a href="browse.html" class="primary-btn">Browse Items</a>
+        <a href="list-item.html" class="secondary-btn">List an Item</a>
+    </div>
+
+</section>
+
+<section id="categories">
+
+    <div class="section-title">
+        <h2>Explore Categories</h2>
+        <p>Find something useful for your next need.</p>
+    </div>
+
+    <div class="categories">
+
+        <a href="browse.html?category=Books" class="category">
+            <div class="icon">📚</div>
+            <h3>Books</h3>
+        </a>
+
+        <a href="browse.html?category=Electronics" class="category">
+            <div class="icon">💻</div>
+            <h3>Electronics</h3>
+        </a>
+
+        <a href="browse.html?category=Travel" class="category">
+            <div class="icon">🧳</div>
+            <h3>Travel</h3>
+        </a>
+
+        <a href="browse.html?category=Tools" class="category">
+            <div class="icon">🔧</div>
+            <h3>Tools</h3>
+        </a>
+
+        <a href="browse.html?category=Study" class="category">
+            <div class="icon">🎓</div>
+            <h3>Study</h3>
+        </a>
+
+        <a href="browse.html?category=Photography" class="category">
+            <div class="icon">📷</div>
+            <h3>Photography</h3>
+        </a>
+
+        <a href="browse.html?category=Sports" class="category">
+            <div class="icon">⚽</div>
+            <h3>Sports</h3>
+        </a>
+
+        <a href="browse.html" class="category">
+            <div class="icon">🏠</div>
+            <h3>Home</h3>
+        </a>
+
+    </div>
+
+</section>
+
+<section id="items">
+
+    <div class="section-title">
+        <h2>Featured Items</h2>
+        <p>Items available to borrow from the community.</p>
+    </div>
+
+    <div class="items">
+
+        <div class="item-card">
+            <div class="item-image">📷</div>
+            <div class="item-info">
+                <h3>Camera Tripod</h3>
+                <p>Photography • 📍 Nearby</p>
+
+                <div class="item-bottom">
+                    <span class="price">Free</span>
+                    <a href="item.html?id=1" class="view-btn">View Details →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-image">🧮</div>
+            <div class="item-info">
+                <h3>Scientific Calculator</h3>
+                <p>Study • 📍 Nearby</p>
+
+                <div class="item-bottom">
+                    <span class="price">Free</span>
+                    <a href="item.html?id=2" class="view-btn">View Details →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-image">🧳</div>
+            <div class="item-info">
+                <h3>Travel Suitcase</h3>
+                <p>Travel • 📍 Nearby</p>
+
+                <div class="item-bottom">
+                    <span class="price">₹100/day</span>
+                    <a href="item.html?id=3" class="view-btn">View Details →</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<section id="how-it-works">
+
+    <div class="section-title">
+        <h2>How BorrowBuddy Works</h2>
+        <p>Borrowing something is simple.</p>
+    </div>
+
+    <div class="steps">
+
+        <div class="step">
+            <div class="step-number">01 — FIND</div>
+            <h3>Find what you need</h3>
+            <p>Search for useful items listed by people around you.</p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">02 — BORROW</div>
+            <h3>Send a request</h3>
+            <p>Request the item for the dates you need it.</p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">03 — RETURN</div>
+            <h3>Return & review</h3>
+            <p>Return the item on time and share your experience.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-title">
+        <h2>Why BorrowBuddy?</h2>
+    </div>
+
+    <div class="benefits">
+
+        <div class="benefit">
+            <div class="benefit-icon">💰</div>
+            <h3>Save Money</h3>
+            <p>Don't purchase something you'll only use once.</p>
+        </div>
+
+        <div class="benefit">
+            <div class="benefit-icon">♻️</div>
+            <h3>Reduce Waste</h3>
+            <p>Give unused items another purpose instead of leaving them unused.</p>
+        </div>
+
+        <div class="benefit">
+            <div class="benefit-icon">🤝</div>
+            <h3>Build Trust</h3>
+            <p>Connect with people through ratings and reviews.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    <h2>BorrowBuddy</h2>
+    <p>Borrow what you need. Share what you don't.</p>
+    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+</footer>
+
+<script src="auth.js"></script>
+<script>
+    function heroSearch() {
+        const q = document.getElementById("heroSearch").value.trim();
+        window.location.href = "browse.html" + (q ? "?q=" + encodeURIComponent(q) : "");
+    }
+</script>
+
+</body>
+</html>

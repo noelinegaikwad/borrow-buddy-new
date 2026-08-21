@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List an Item | BorrowBuddy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .login {
+            border: 1px solid #2563eb;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #2563eb;
+        }
+
+        .signup {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        #authLoggedIn {
+            display: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logout-btn {
+            border: 1px solid #cbd5e1;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #475569;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 50px 7% 30px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+        }
+
+        .form-wrap {
+            max-width: 640px;
+            margin: 0 auto 90px;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 34px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #dbe2ea;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            font-family: Arial, sans-serif;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: #2563eb;
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .price-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .price-row select {
+            flex: 1;
+        }
+
+        .price-row input {
+            flex: 1;
+        }
+
+        .emoji-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .emoji-option {
+            width: 46px;
+            height: 46px;
+            border: 1px solid #dbe2ea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            background: white;
+        }
+
+        .emoji-option.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .success-msg {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            padding: 14px 16px;
+            border-radius: 9px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-msg a {
+            color: #065f46;
+            font-weight: 700;
+        }
+
+        footer {
+            background: #172033;
+            color: white;
+            text-align: center;
+            padding: 40px 7%;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            nav a:not(.login):not(.signup) {
+                display: none;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="logo">BorrowBuddy</a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="index.html#how-it-works">How It Works</a>
+
+        <span id="authLoggedOut" style="display:flex; align-items:center; gap:25px;">
+            <a href="login.html" class="login">Login</a>
+            <a href="signup.html" class="signup">Sign Up</a>
+        </span>
+
+        <span id="authLoggedIn">
+            <a href="my-items.html">Hi, <span id="authUserName"></span></a>
+            <a href="my-requests.html">My Requests</a>
+            <button class="logout-btn" onclick="bbLogout()">Logout</button>
+        </span>
+    </nav>
+</header>
+
+<section class="page-header">
+    <h1>List an Item</h1>
+    <p>Share something you're not using — someone nearby might need it.</p>
+</section>
+
+<div class="form-wrap">
+    <div class="form-card">
+
+        <div class="success-msg" id="successMsg"></div>
+
+        <form id="listForm">
+
+            <div class="field">
+                <label for="itemName">Item name</label>
+                <input type="text" id="itemName" placeholder="e.g. Camera Tripod" required>
+            </div>
+
+            <div class="two-col">
+                <div class="field">
+                    <label for="itemCategory">Category</label>
+                    <select id="itemCategory" required>
+                        <option value="">Select category</option>
+                        <option>Books</option>
+                        <option>Electronics</option>
+                        <option>Travel</option>
+                        <option>Tools</option>
+                        <option>Study</option>
+                        <option>Photography</option>
+                        <option>Sports</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="itemCondition">Condition</label>
+                    <select id="itemCondition" required>
+                        <option value="">Select condition</option>
+                        <option>Like New</option>
+                        <option>Very Good</option>
+                        <option>Good</option>
+                        <option>Fair</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="itemDescription">Description</label>
+                <textarea id="itemDescription" placeholder="Describe the item, what it's good for, and any details a borrower should know." required></textarea>
+            </div>
+
+            <div class="field">
+                <label for="itemLocation">Location</label>
+                <input type="text" id="itemLocation" placeholder="e.g. Koramangala, Bangalore" required>
+            </div>
+
+            <div class="field">
+                <label>Pick an icon</label>
+                <div class="emoji-picker" id="emojiPicker">
+                    <div class="emoji-option selected" data-emoji="📦">📦</div>
+                    <div class="emoji-option" data-emoji="📷">📷</div>
+                    <div class="emoji-option" data-emoji="🧮">🧮</div>
+                    <div class="emoji-option" data-emoji="🧳">🧳</div>
+                    <div class="emoji-option" data-emoji="📚">📚</div>
+                    <div class="emoji-option" data-emoji="🔧">🔧</div>
+                    <div class="emoji-option" data-emoji="⚽">⚽</div>
+                    <div class="emoji-option" data-emoji="💻">💻</div>
+                    <div class="emoji-option" data-emoji="🎸">🎸</div>
+                    <div class="emoji-option" data-emoji="🚲">🚲</div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Availability</label>
+                <div class="price-row">
+                    <select id="priceType">
+                        <option value="free">Free to borrow</option>
+                        <option value="paid">Paid — per day</option>
+                    </select>
+                    <input type="number" id="priceAmount" placeholder="₹ amount" min="1" style="display:none;">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">List This Item</button>
+
+        </form>
+
+    </div>
+</div>
+
+<footer>
+    <h2>BorrowBuddy</h2>
+    <p>Borrow what you need. Share what you don't.</p>
+    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+</footer>
+
+<script src="auth.js"></script>
+<script src="items-data.js"></script>
+<script>
+    // Must be logged in to list an item.
+    const currentUser = bbRequireAuth();
+
+    let selectedEmoji = "📦";
+
+    document.querySelectorAll(".emoji-option").forEach(opt => {
+        opt.addEventListener("click", () => {
+            document.querySelectorAll(".emoji-option").forEach(o => o.classList.remove("selected"));
+            opt.classList.add("selected");
+            selectedEmoji = opt.dataset.emoji;
+        });
+    });
+
+    const priceType = document.getElementById("priceType");
+    const priceAmount = document.getElementById("priceAmount");
+
+    priceType.addEventListener("change", () => {
+        priceAmount.style.display = priceType.value === "paid" ? "block" : "none";
+        priceAmount.required = priceType.value === "paid";
+    });
+
+    document.getElementById("listForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const user = bbCurrentUser();
+        if (!user) {
+            window.location.href = "login.html?redirect=list-item.html";
+            return;
+        }
+
+        const data = {
+            name: document.getElementById("itemName").value.trim(),
+            category: document.getElementById("itemCategory").value,
+            condition: document.getElementById("itemCondition").value,
+            description: document.getElementById("itemDescription").value.trim(),
+            location: document.getElementById("itemLocation").value.trim(),
+            photo: selectedEmoji,
+            priceType: priceType.value,
+            priceAmount: priceAmount.value
+        };
+
+        const newItem = bbCreateItem(data, user);
+
+        document.getElementById("listForm").style.display = "none";
+        const successEl = document.getElementById("successMsg");
+        successEl.style.display = "block";
+        successEl.innerHTML = `Your item "${newItem.name}" is now listed! ` +
+            `<a href="item.html?id=${newItem.id}">View it</a> or ` +
+            `<a href="my-items.html">go to My Items</a>.`;
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | BorrowBuddy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        .login {
+            border: 1px solid #2563eb;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #2563eb;
+        }
+
+        .signup {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        #authLoggedIn {
+            display: none;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logout-btn {
+            border: 1px solid #cbd5e1;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #475569;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .auth-wrap {
+            max-width: 440px;
+            margin: 60px auto 90px;
+            padding: 0 20px;
+        }
+
+        .auth-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 38px 34px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .auth-card h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        .auth-card .sub {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 26px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #dbe2ea;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: #2563eb;
+        }
+
+        .error-msg {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 10px 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .switch a {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        footer {
+            background: #172033;
+            color: white;
+            text-align: center;
+            padding: 40px 7%;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            nav a:not(.login):not(.signup) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="logo">BorrowBuddy</a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+
+        <span id="authLoggedOut" style="display:flex; align-items:center; gap:25px;">
+            <a href="login.html" class="login">Login</a>
+            <a href="signup.html" class="signup">Sign Up</a>
+        </span>
+
+        <span id="authLoggedIn">
+            <a href="my-items.html">Hi, <span id="authUserName"></span></a>
+            <button class="logout-btn" onclick="bbLogout()">Logout</button>
+        </span>
+    </nav>
+</header>
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h1>Create your account</h1>
+        <p class="sub">Join BorrowBuddy to start borrowing and lending items.</p>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <form id="signupForm">
+            <div class="field">
+                <label for="name">Full name</label>
+                <input type="text" id="name" placeholder="Your name" required>
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="At least 6 characters" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <div class="switch">
+            Already have an account? <a href="login.html">Log in</a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <h2>BorrowBuddy</h2>
+    <p>Borrow what you need. Share what you don't.</p>
+    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+</footer>
+
+<script src="auth.js"></script>
+<script>
+    document.getElementById("signupForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const errorEl = document.getElementById("errorMsg");
+
+        const result = bbSignup(name, email, password);
+
+        if (!result.ok) {
+            errorEl.textContent = result.error;
+            errorEl.style.display = "block";
+            return;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get("redirect");
+        window.location.href = redirect || "index.html";
+    });
+</script>
+
+</body>
+</html>
