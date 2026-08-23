@@ -1,156 +1,241 @@
 /*
-  BorrowBuddy shared auth module.
-  Uses localStorage to simulate a backend (no server yet).
-  Include this file on every page via:
-    [script tag for auth.js]
-  and call updateAuthNav() after the header loads.
+  BorrowBuddy - Real Supabase Authentication
 */
 
-const BB_USERS_KEY = "bb_users";
 const BB_SESSION_KEY = "bb_session";
 
-// ---------- storage helpers ----------
+// ---------- current user ----------
 
-function bbGetUsers() {
-    const raw = localStorage.getItem(BB_USERS_KEY);
-    return raw ? JSON.parse(raw) : [];
-}
+async function bbCurrentUser() {
+    const { data, error } = await supabaseClient.auth.getUser();
 
-function bbSaveUsers(users) {
-    localStorage.setItem(BB_USERS_KEY, JSON.stringify(users));
-}
-
-function bbGetSession() {
-    const raw = localStorage.getItem(BB_SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
-}
-
-function bbSaveSession(session) {
-    localStorage.setItem(BB_SESSION_KEY, JSON.stringify(session));
-}
-
-function bbClearSession() {
-    localStorage.removeItem(BB_SESSION_KEY);
-}
-
-// Very small hash so we're not storing raw passwords in plain text in
-// localStorage. This is NOT secure — it's a placeholder until there's a
-// real backend with proper password hashing. Good enough for a frontend demo.
-function bbSimpleHash(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i);
-        hash |= 0;
-    }
-    return hash.toString(36);
-}
-
-// ---------- public API ----------
-
-function bbCurrentUser() {
-    const session = bbGetSession();
-    if (!session) return null;
-    const users = bbGetUsers();
-    return users.find(u => u.id === session.userId) || null;
-}
-
-function bbSignup(name, email, password) {
-    email = email.trim().toLowerCase();
-    const users = bbGetUsers();
-
-    if (users.some(u => u.email === email)) {
-        return { ok: false, error: "An account with this email already exists." };
-    }
-    if (!name.trim() || !email || password.length < 6) {
-        return { ok: false, error: "Please fill all fields. Password must be at least 6 characters." };
+    if (error || !data.user) {
+        return null;
     }
 
-    const newUser = {
-        id: "u_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
-        name: name.trim(),
-        email: email,
-        passwordHash: bbSimpleHash(password),
-        role: "user",
-        joined: new Date().toISOString(),
-        rating: null,
-        reviewCount: 0
+    const user = data.user;
+
+    return {
+        id: user.id,
+        name:
+            user.user_metadata?.full_name ||
+            "BorrowBuddy User",
+        email: user.email,
+        role:
+            user.user_metadata?.role ||
+            "user"
     };
-
-    users.push(newUser);
-    bbSaveUsers(users);
-    bbSaveSession({ userId: newUser.id });
-
-    return { ok: true, user: newUser };
 }
 
-function bbLogin(email, password) {
-    email = email.trim().toLowerCase();
-    const users = bbGetUsers();
-    const user = users.find(u => u.email === email);
 
-    if (!user || user.passwordHash !== bbSimpleHash(password)) {
-        return { ok: false, error: "Incorrect email or password." };
+// ---------- signup ----------
+
+async function bbSignup(name, email, password) {
+
+    name = name.trim();
+    email = email.trim().toLowerCase();
+
+    if (!name || !email || !password) {
+        return {
+            ok: false,
+            error: "Please fill all fields."
+        };
     }
 
-    bbSaveSession({ userId: user.id });
-    return { ok: true, user: user };
+    if (password.length < 6) {
+        return {
+            ok: false,
+            error: "Password must be at least 6 characters."
+        };
+    }
+
+    const { data, error } =
+        await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    full_name: name
+                }
+            }
+        });
+
+    if (error) {
+        return {
+            ok: false,
+            error: error.message
+        };
+    }
+
+    return {
+        ok: true,
+        user: data.user,
+        session: data.session
+    };
 }
 
-function bbLogout() {
-    bbClearSession();
+
+// ---------- login ----------
+
+async function bbLogin(email, password) {
+
+    email = email.trim().toLowerCase();
+
+    if (!email || !password) {
+        return {
+            ok: false,
+            error: "Please enter your email and password."
+        };
+    }
+
+    const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+    if (error) {
+        return {
+            ok: false,
+            error: "Incorrect email or password."
+        };
+    }
+
+    return {
+        ok: true,
+        user: data.user,
+        session: data.session
+    };
+}
+
+
+// ---------- logout ----------
+
+async function bbLogout() {
+
+    const { error } =
+        await supabaseClient.auth.signOut();
+
+    if (error) {
+        console.error("Logout error:", error);
+    }
+
     window.location.href = "index.html";
 }
 
-function bbRequireAuth() {
-    const user = bbCurrentUser();
+
+// ---------- protect page ----------
+
+async function bbRequireAuth() {
+
+    const user = await bbCurrentUser();
+
     if (!user) {
-        window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.pathname + window.location.search);
+
+        window.location.href =
+            "login.html?redirect=" +
+            encodeURIComponent(
+                window.location.pathname +
+                window.location.search
+            );
+
+        return null;
     }
+
     return user;
 }
 
-// Seeds one demo admin account on first load so the Admin Dashboard has
-// something to log into during the internship demo.
-function bbSeedAdmin() {
-    const users = bbGetUsers();
-    if (!users.some(u => u.role === "admin")) {
-        users.push({
-            id: "u_admin_seed",
-            name: "Admin",
-            email: "admin@borrowbuddy.com",
-            passwordHash: bbSimpleHash("admin123"),
-            role: "admin",
-            joined: new Date().toISOString(),
-            rating: null,
-            reviewCount: 0
-        });
-        bbSaveUsers(users);
+
+// ---------- get profile ----------
+
+async function bbGetProfile() {
+
+    const user = await bbCurrentUser();
+
+    if (!user) {
+        return null;
     }
+
+    const { data, error } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single();
+
+    if (error) {
+        console.error("Profile error:", error);
+        return null;
+    }
+
+    return data;
 }
-bbSeedAdmin();
 
-// Updates any header nav on the page to reflect logged-in/out state.
-// Expects the nav to contain elements with these IDs (see header markup
-// added to each page):
-//   #authLoggedOut  -> wraps Login/Sign Up links
-//   #authLoggedIn   -> wraps user greeting/dashboard/logout links
-//   #authUserName   -> text node for the user's name
-function updateAuthNav() {
-    const user = bbCurrentUser();
-    const loggedOutEl = document.getElementById("authLoggedOut");
-    const loggedInEl = document.getElementById("authLoggedIn");
-    const nameEl = document.getElementById("authUserName");
 
-    if (!loggedOutEl || !loggedInEl) return;
+// ---------- update navigation ----------
+
+async function updateAuthNav() {
+
+    const user = await bbCurrentUser();
+
+    const loggedOutEl =
+        document.getElementById("authLoggedOut");
+
+    const loggedInEl =
+        document.getElementById("authLoggedIn");
+
+    const nameEl =
+        document.getElementById("authUserName");
+
+    if (!loggedOutEl || !loggedInEl) {
+        return;
+    }
 
     if (user) {
+
         loggedOutEl.style.display = "none";
+
         loggedInEl.style.display = "flex";
-        if (nameEl) nameEl.textContent = user.name.split(" ")[0];
+
+        if (nameEl) {
+
+            const firstName =
+                user.name
+                    ? user.name.split(" ")[0]
+                    : "User";
+
+            nameEl.textContent = firstName;
+        }
+
     } else {
+
         loggedOutEl.style.display = "flex";
+
         loggedInEl.style.display = "none";
     }
 }
 
-document.addEventListener("DOMContentLoaded", updateAuthNav);
+
+// ---------- authentication listener ----------
+
+supabaseClient.auth.onAuthStateChange(
+    async function(event, session) {
+
+        console.log(
+            "BorrowBuddy authentication:",
+            event
+        );
+
+        await updateAuthNav();
+    }
+);
+
+
+// ---------- page load ----------
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+        updateAuthNav();
+    }
+);
