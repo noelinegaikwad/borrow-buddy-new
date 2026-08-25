@@ -1,533 +1,784 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Browse Items | BorrowBuddy</title><style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    background: #f8fafc;
-    color: #172033;
-}
-
-header {
-    background: white;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 18px 7%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-size: 25px;
-    font-weight: 800;
-    color: #2563eb;
-    text-decoration: none;
-}
-
-nav {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #475569;
-    font-size: 14px;
-}
-
-nav a:hover {
-    color: #2563eb;
-}
-
-.login {
-    border: 1px solid #2563eb;
-    padding: 9px 16px;
-    border-radius: 8px;
-    color: #2563eb;
-}
-
-.signup {
-    background: #2563eb;
-    color: white !important;
-    padding: 10px 16px;
-    border-radius: 8px;
-}
-
-#authLoggedIn {
-    display: none;
-    align-items: center;
-    gap: 20px;
-}
-
-.logout-btn {
-    border: 1px solid #cbd5e1;
-    padding: 9px 16px;
-    border-radius: 8px;
-    color: #475569;
-    background: none;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.page-header {
-    text-align: center;
-    padding: 55px 7% 35px;
-}
-
-.page-header h1 {
-    font-size: 40px;
-    margin-bottom: 12px;
-}
-
-.page-header p {
-    color: #64748b;
-}
-
-.search-area {
-    max-width: 800px;
-    margin: 0 auto 35px;
-    padding: 0 7%;
-}
-
-.search-box {
-    display: flex;
-    background: white;
-    border: 1px solid #dbe2ea;
-    border-radius: 10px;
-    padding: 7px;
-    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
-}
-
-.search-box input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 13px;
-    font-size: 15px;
-}
-
-.search-box button {
-    border: none;
-    background: #2563eb;
-    color: white;
-    padding: 0 22px;
-    border-radius: 7px;
-    cursor: pointer;
-}
-
-.content {
-    display: flex;
-    gap: 30px;
-    padding: 20px 7% 70px;
-    max-width: 1400px;
-    margin: auto;
-}
-
-.filters {
-    width: 220px;
-    flex-shrink: 0;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 22px;
-    height: fit-content;
-}
-
-.filters h3 {
-    margin-bottom: 18px;
-}
-
-.filter-title {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 20px 0 10px;
-}
-
-.filters label {
-    display: block;
-    margin: 10px 0;
-    font-size: 14px;
-    color: #475569;
-}
-
-.filters input {
-    margin-right: 8px;
-}
-
-.clear-filters {
-    margin-top: 18px;
-    display: inline-block;
-    font-size: 13px;
-    color: #2563eb;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    text-decoration: underline;
-}
-
-.items-section {
-    flex: 1;
-}
-
-.items-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.items-top h2 {
-    font-size: 22px;
-}
-
-.sort {
-    border: 1px solid #dbe2ea;
-    background: white;
-    padding: 9px;
-    border-radius: 7px;
-}
-
-.items {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.item-card {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    overflow: hidden;
-    transition: 0.2s;
-}
-
-.item-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-}
-
-.item-image {
-    height: 180px;
-    background: #e2e8f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 55px;
-}
-
-.item-info {
-    padding: 17px;
-}
-
-.category {
-    font-size: 12px;
-    color: #2563eb;
-    font-weight: 600;
-    margin-bottom: 7px;
-}
-
-.item-info h3 {
-    font-size: 17px;
-    margin-bottom: 8px;
-}
-
-.location {
-    color: #64748b;
-    font-size: 13px;
-    margin-bottom: 7px;
-}
-
-.owner {
-    color: #475569;
-    font-size: 13px;
-    margin-bottom: 12px;
-}
-
-.condition {
-    display: inline-block;
-    background: #f1f5f9;
-    color: #475569;
-    padding: 5px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    margin-bottom: 14px;
-}
-
-.bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.price {
-    color: #2563eb;
-    font-weight: 700;
-}
-
-.details {
-    color: #2563eb;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.availability {
-    font-size: 11px;
-    margin-top: 8px;
-}
-
-.available {
-    color: #059669;
-}
-
-.unavailable {
-    color: #dc2626;
-}
-
-.no-results {
-    text-align: center;
-    padding: 60px 20px;
-    color: #64748b;
-    display: none;
-}
-
-.loading {
-    text-align: center;
-    padding: 60px 20px;
-    color: #64748b;
-}
-
-.error-box {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #b91c1c;
-    padding: 16px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    display: none;
-}
-
-footer {
-    background: #172033;
-    color: white;
-    text-align: center;
-    padding: 40px 7%;
-}
-
-footer p {
-    color: #94a3b8;
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-@media (max-width: 900px) {
-    .items {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 700px) {
-
-    nav {
-        display: none;
-    }
-
-    .content {
-        flex-direction: column;
-    }
-
-    .filters {
-        width: auto;
-    }
-
-    .items {
-        grid-template-columns: 1fr;
-    }
-
-    .page-header h1 {
-        font-size: 32px;
-    }
-
-    .search-box {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .search-box button {
-        padding: 12px;
-    }
-}
-</style></head><body><header><a href="index.html" class="logo">
-    BorrowBuddy
-</a><nav><a href="index.html">Home</a>
-
-<a href="browse.html">Browse</a>
-
-<a href="index.html#how-it-works">
-    How It Works
-</a><span id="authLoggedOut"
-style="display:flex;align-items:center;gap:25px;">
-
-<a href="login.html" class="login">
-    Login
-</a>
-
-<a href="signup.html" class="signup">
-    Sign Up
-</a>
-
-</span><span id="authLoggedIn"><a href="my-items.html">
-    Hi, <span id="authUserName"></span>
-</a>
-
-<a href="my-requests.html">
-    My Requests
-</a>
-
-<button
-    type="button"
-    class="logout-btn"
-    onclick="bbLogout()">
-    Logout
-</button>
-
-</span></nav></header><section class="page-header"><h1>Browse Items</h1><p>
-    Find something useful without buying it.
-</p></section><div class="search-area"><div class="search-box"><input
-type="text"
-id="searchInput"
-placeholder="Search for books, electronics, tools..."
-
-«»
-
-<button
-type="button"
-onclick="applyFilters()">
-Search
-</button>
-
-</div></div><main class="content"><aside class="filters"><h3>Filters</h3><div class="filter-title">
-    Category
-</div><label>
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Books">
-Books
-</label><label>
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Electronics">
-Electronics
-</label><label>
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Travel">
-Travel
-</label><label>
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Tools">
-Tools
-</label><label>
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Study">
-Study
-</label><label>
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Photography">
-Photography
-</label><label>
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Sports">
-Sports
-</label><div class="filter-title">
-    Availability
-</div><label>
-<input
-    type="checkbox"
-    id="availableNow">
-Available now
-</label><label>
-<input
-    type="checkbox"
-    id="freeOnly">
-Free items
-</label><button
-type="button"
-class="clear-filters"
-onclick="clearFilters()">
-Clear all filters
-</button>
-
-</aside><section class="items-section"><div class="items-top"><h2 id="resultsHeading">
-    Available Items
-</h2><select
-class="sort"
-id="sortSelect">
-
-<option value="recommended">
-    Sort: Recommended
-</option>
-
-<option value="newest">
-    Newest
-</option>
-
-<option value="price-low">
-    Price: Low to High
-</option>
-
-<option value="price-high">
-    Price: High to Low
-</option>
-
-</select></div><div
-    class="error-box"
-    id="errorBox">
-</div><div
-    class="loading"
-    id="loading">
-    Loading BorrowBuddy items...
-</div><div
-    class="items"
-    id="itemsGrid">
-</div><div
-    class="no-results"
-    id="noResults"><h3>
-    No items match your filters
-</h3>
-
-<p>
-    Try clearing some filters or searching for something else.
-</p>
-
-</div></section></main><footer><h2>BorrowBuddy</h2><p>
-    Borrow what you need. Share what you don't.
-</p><p>
-    © 2026 BorrowBuddy. All rights reserved.
-</p></footer><!-- SUPABASE --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script><script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Browse Items | BorrowBuddy</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        .login {
+            border: 1px solid #2563eb;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #2563eb;
+        }
+
+        .signup {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        #authLoggedIn {
+            display: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logout-btn {
+            border: 1px solid #cbd5e1;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #475569;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* ================= PAGE HEADER ================= */
+
+        .page-header {
+            text-align: center;
+            padding: 55px 7% 35px;
+        }
+
+        .page-header h1 {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .page-header p {
+            color: #64748b;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-area {
+            max-width: 800px;
+            margin: 0 auto 35px;
+            padding: 0 7%;
+        }
+
+        .search-box {
+            display: flex;
+            background: white;
+            border: 1px solid #dbe2ea;
+            border-radius: 10px;
+            padding: 7px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 13px;
+            font-size: 15px;
+        }
+
+        .search-box button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 0 22px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            display: flex;
+            gap: 30px;
+            padding: 20px 7% 70px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        /* ================= FILTERS ================= */
+
+        .filters {
+            width: 220px;
+            flex-shrink: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+            height: fit-content;
+        }
+
+        .filters h3 {
+            margin-bottom: 18px;
+        }
+
+        .filter-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+        }
+
+        .filters label {
+            display: block;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .filters input {
+            margin-right: 8px;
+        }
+
+        .clear-filters {
+            margin-top: 18px;
+            display: inline-block;
+            font-size: 13px;
+            color: #2563eb;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+        }
+
+        /* ================= ITEMS ================= */
+
+        .items-section {
+            flex: 1;
+        }
+
+        .items-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .items-top h2 {
+            font-size: 22px;
+        }
+
+        .sort {
+            border: 1px solid #dbe2ea;
+            background: white;
+            padding: 9px;
+            border-radius: 7px;
+        }
+
+        .items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .item-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .item-image {
+            height: 180px;
+            background: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 55px;
+        }
+
+        .item-info {
+            padding: 17px;
+        }
+
+        .category {
+            font-size: 12px;
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .item-info h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .location {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .owner {
+            color: #475569;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .condition {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            margin-bottom: 14px;
+        }
+
+        /* ================= BOTTOM ================= */
+
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price {
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .details {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ================= AVAILABILITY ================= */
+
+        .availability {
+            font-size: 11px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+
+        .available {
+            color: #059669;
+        }
+
+        .unavailable {
+            color: #dc2626;
+        }
+
+        /* ================= NO RESULTS ================= */
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+            display: none;
+        }
+
+        /* ================= LOADING ================= */
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        /* ================= ERROR ================= */
+
+        .error-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: #172033;
+            color: white;
+            text-align: center;
+            padding: 40px 7%;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 900px) {
+
+            .items {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            nav {
+                display: none;
+            }
+
+            .content {
+                flex-direction: column;
+            }
+
+            .filters {
+                width: auto;
+            }
+
+            .items {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 32px;
+            }
+
+            .search-box {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .search-box button {
+                padding: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <a href="index.html" class="logo">
+        BorrowBuddy
+    </a>
+
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="browse.html">
+            Browse
+        </a>
+
+        <a href="index.html#how-it-works">
+            How It Works
+        </a>
+
+
+        <!-- LOGGED OUT -->
+
+        <span
+            id="authLoggedOut"
+            style="display:flex;align-items:center;gap:25px;"
+        >
+
+            <a
+                href="login.html"
+                class="login"
+            >
+                Login
+            </a>
+
+            <a
+                href="signup.html"
+                class="signup"
+            >
+                Sign Up
+            </a>
+
+        </span>
+
+
+        <!-- LOGGED IN -->
+
+        <span id="authLoggedIn">
+
+            <a href="my-items.html">
+                Hi,
+                <span id="authUserName"></span>
+            </a>
+
+            <a href="my-requests.html">
+                My Requests
+            </a>
+
+            <button
+                type="button"
+                class="logout-btn"
+                onclick="bbLogout()"
+            >
+                Logout
+            </button>
+
+        </span>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= PAGE HEADER ================= -->
+
+<section class="page-header">
+
+    <h1>
+        Browse Items
+    </h1>
+
+    <p>
+        Find something useful without buying it.
+    </p>
+
+</section>
+
+
+<!-- ================= SEARCH ================= -->
+
+<div class="search-area">
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for books, electronics, tools..."
+        >
+
+        <button
+            type="button"
+            onclick="applyFilters()"
+        >
+            Search
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<main class="content">
+
+
+    <!-- ================= FILTERS ================= -->
+
+    <aside class="filters">
+
+        <h3>
+            Filters
+        </h3>
+
+
+        <div class="filter-title">
+            Category
+        </div>
+
+
+        <label>
+            <input
+                type="checkbox"
+                class="category-filter"
+                value="Books"
+            >
+            Books
+        </label>
+
+
+        <label>
+            <input
+                type="checkbox"
+                class="category-filter"
+                value="Electronics"
+            >
+            Electronics
+        </label>
+
+
+        <label>
+            <input
+                type="checkbox"
+                class="category-filter"
+                value="Travel"
+            >
+            Travel
+        </label>
+
+
+        <label>
+            <input
+                type="checkbox"
+                class="category-filter"
+                value="Tools"
+            >
+            Tools
+        </label>
+
+
+        <label>
+            <input
+                type="checkbox"
+                class="category-filter"
+                value="Study"
+            >
+            Study
+        </label>
+
+
+        <label>
+            <input
+                type="checkbox"
+                class="category-filter"
+                value="Photography"
+            >
+            Photography
+        </label>
+
+
+        <label>
+            <input
+                type="checkbox"
+                class="category-filter"
+                value="Sports"
+            >
+            Sports
+        </label>
+
+
+        <div class="filter-title">
+            Availability
+        </div>
+
+
+        <label>
+
+            <input
+                type="checkbox"
+                id="availableNow"
+            >
+
+            Available now
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="checkbox"
+                id="freeOnly"
+            >
+
+            Free items
+
+        </label>
+
+
+        <button
+            type="button"
+            class="clear-filters"
+            onclick="clearFilters()"
+        >
+            Clear all filters
+        </button>
+
+    </aside>
+
+
+    <!-- ================= ITEMS SECTION ================= -->
+
+    <section class="items-section">
+
+
+        <div class="items-top">
+
+            <h2 id="resultsHeading">
+                Available Items
+            </h2>
+
+
+            <select
+                class="sort"
+                id="sortSelect"
+            >
+
+                <option value="recommended">
+                    Sort: Recommended
+                </option>
+
+                <option value="newest">
+                    Newest
+                </option>
+
+                <option value="price-low">
+                    Price: Low to High
+                </option>
+
+                <option value="price-high">
+                    Price: High to Low
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            class="error-box"
+            id="errorBox"
+        ></div>
+
+
+        <!-- LOADING -->
+
+        <div
+            class="loading"
+            id="loading"
+        >
+            Loading BorrowBuddy items...
+        </div>
+
+
+        <!-- ITEMS -->
+
+        <div
+            class="items"
+            id="itemsGrid"
+        ></div>
+
+
+        <!-- NO RESULTS -->
+
+        <div
+            class="no-results"
+            id="noResults"
+        >
+
+            <h3>
+                No items match your filters
+            </h3>
+
+            <p>
+                Try clearing some filters or searching for something else.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <h2>
+        BorrowBuddy
+    </h2>
+
+    <p>
+        Borrow what you need. Share what you don't.
+    </p>
+
+    <p>
+        © 2026 BorrowBuddy. All rights reserved.
+    </p>
+
+</footer>
+
+
+<!-- ================= SUPABASE ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+<script src="auth.js"></script>
+
+
+<script>
 
 "use strict";
 
+
+/* ==================================================
+   VARIABLES
+================================================== */
 
 let allItems = [];
 
@@ -535,45 +786,54 @@ let allItems = [];
 const searchInput =
     document.getElementById("searchInput");
 
+
 const categoryCheckboxes =
     document.querySelectorAll(
         ".category-filter"
     );
+
 
 const availableNowCheckbox =
     document.getElementById(
         "availableNow"
     );
 
+
 const freeOnlyCheckbox =
     document.getElementById(
         "freeOnly"
     );
+
 
 const itemsGrid =
     document.getElementById(
         "itemsGrid"
     );
 
+
 const noResults =
     document.getElementById(
         "noResults"
     );
+
 
 const loading =
     document.getElementById(
         "loading"
     );
 
+
 const errorBox =
     document.getElementById(
         "errorBox"
     );
 
+
 const resultsHeading =
     document.getElementById(
         "resultsHeading"
     );
+
 
 const sortSelect =
     document.getElementById(
@@ -581,25 +841,72 @@ const sortSelect =
     );
 
 
-/* ==========================================
+/* ==================================================
    HTML ESCAPE
-========================================== */
+================================================== */
 
 function escapeHtml(value) {
 
     return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
 
-/* ==========================================
+/* ==================================================
+   AVAILABILITY CHECK
+================================================== */
+
+function isItemAvailable(item) {
+
+    /*
+       Supports both:
+
+       true
+
+       and
+
+       "available"
+
+       so the Browse page works
+       with either database format.
+    */
+
+    return (
+        item.availability === true ||
+        item.availability === "available"
+    );
+
+}
+
+
+/* ==================================================
    PRICE DISPLAY
-========================================== */
+================================================== */
 
 function getPriceText(item) {
 
@@ -608,9 +915,13 @@ function getPriceText(item) {
         Number(item.price_amount) > 0
     ) {
 
-        return "₹" +
-            Number(item.price_amount) +
-            "/day";
+        return (
+            "₹" +
+            Number(
+                item.price_amount
+            ).toLocaleString("en-IN") +
+            "/day"
+        );
 
     }
 
@@ -619,64 +930,106 @@ function getPriceText(item) {
 }
 
 
-/* ==========================================
+/* ==================================================
    ITEM CARD
-========================================== */
+================================================== */
 
 function renderItemCard(item) {
 
     const div =
         document.createElement("div");
 
+
     div.className =
         "item-card";
 
+
     const icon =
         item.icon || "📦";
+
 
     const ownerName =
         item.profiles?.full_name ||
         "BorrowBuddy User";
 
+
     const availability =
-    item.availability === true;
+        isItemAvailable(item);
+
 
     div.innerHTML = `
 
         <div class="item-image">
+
             ${escapeHtml(icon)}
+
         </div>
+
 
         <div class="item-info">
 
             <div class="category">
-                ${escapeHtml(item.category)}
+
+                ${escapeHtml(
+                    item.category
+                )}
+
             </div>
+
 
             <h3>
-                ${escapeHtml(item.title)}
+
+                ${escapeHtml(
+                    item.title
+                )}
+
             </h3>
 
+
             <div class="location">
-                📍 ${escapeHtml(item.location || "Location not specified")}
+
+                📍
+
+                ${escapeHtml(
+                    item.location ||
+                    "Location not specified"
+                )}
+
             </div>
+
 
             <div class="owner">
+
                 👤 Listed by
+
                 <strong>
-                    ${escapeHtml(ownerName)}
+
+                    ${escapeHtml(
+                        ownerName
+                    )}
+
                 </strong>
+
             </div>
+
 
             <div class="condition">
-                ${escapeHtml(item.condition)}
+
+                ${escapeHtml(
+                    item.condition ||
+                    "Not specified"
+                )}
+
             </div>
 
-            <div class="availability ${
-                availability
-                    ? "available"
-                    : "unavailable"
-            }">
+
+            <div
+                class="availability ${
+                    availability
+                        ? "available"
+                        : "unavailable"
+                }"
+            >
 
                 ${
                     availability
@@ -686,15 +1039,20 @@ function renderItemCard(item) {
 
             </div>
 
+
             <div class="bottom">
 
                 <span class="price">
+
                     ${getPriceText(item)}
+
                 </span>
+
 
                 <a
                     href="item.html?id=${encodeURIComponent(item.id)}"
-                    class="details">
+                    class="details"
+                >
 
                     View Details →
 
@@ -703,28 +1061,35 @@ function renderItemCard(item) {
             </div>
 
         </div>
+
     `;
 
+
     return div;
+
 }
 
 
-/* ==========================================
+/* ==================================================
    LOAD ITEMS FROM SUPABASE
-========================================== */
+================================================== */
 
 async function loadItems() {
 
     loading.style.display =
         "block";
 
+
     errorBox.style.display =
         "none";
+
 
     itemsGrid.innerHTML =
         "";
 
+
     try {
+
 
         if (
             typeof supabaseClient ===
@@ -761,6 +1126,7 @@ async function loadItems() {
                 icon,
                 price_type,
                 price_amount,
+
                 profiles (
                     full_name
                 )
@@ -782,6 +1148,7 @@ async function loadItems() {
             );
 
             throw error;
+
         }
 
 
@@ -798,15 +1165,23 @@ async function loadItems() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Browse loading error:",
+            error
+        );
+
 
         loading.style.display =
             "none";
 
+
         errorBox.textContent =
             "Could not load items: " +
-            (error.message ||
-                "Unknown error");
+            (
+                error.message ||
+                "Unknown error"
+            );
+
 
         errorBox.style.display =
             "block";
@@ -816,11 +1191,12 @@ async function loadItems() {
 }
 
 
-/* ==========================================
+/* ==================================================
    RENDER ITEMS
-========================================== */
+================================================== */
 
 function renderItems() {
+
 
     const searchText =
         searchInput.value
@@ -832,9 +1208,11 @@ function renderItems() {
         Array.from(
             categoryCheckboxes
         )
+
         .filter(
             cb => cb.checked
         )
+
         .map(
             cb => cb.value
         );
@@ -852,7 +1230,9 @@ function renderItems() {
         allItems.filter(
             item => {
 
+
                 const searchableText =
+
                     (
                         (item.title || "") +
                         " " +
@@ -862,82 +1242,121 @@ function renderItems() {
                         " " +
                         (item.location || "")
                     )
+
                     .toLowerCase();
 
 
                 const matchesSearch =
+
                     searchText === "" ||
+
                     searchableText.includes(
                         searchText
                     );
 
 
                 const matchesCategory =
+
                     checkedCategories.length === 0 ||
+
                     checkedCategories.includes(
                         item.category
                     );
 
 
                 const matchesFree =
+
                     !freeOnly ||
+
                     item.price_type === "free";
 
 
                 const matchesAvailable =
-    !availableOnly ||
-    item.availability === true;
+
+                    !availableOnly ||
+
+                    isItemAvailable(item);
 
 
                 return (
+
                     matchesSearch &&
+
                     matchesCategory &&
+
                     matchesFree &&
+
                     matchesAvailable
+
                 );
 
             }
+
         );
 
 
-    /* SORT */
+    /* ==================================================
+       SORT
+    ================================================== */
 
     const sort =
         sortSelect.value;
 
 
-    if (sort === "newest") {
+    if (
+        sort === "newest"
+    ) {
 
         filteredItems.sort(
             (a, b) =>
-                new Date(b.created_at) -
-                new Date(a.created_at)
+                new Date(
+                    b.created_at
+                ) -
+                new Date(
+                    a.created_at
+                )
         );
 
     }
 
 
-    if (sort === "price-low") {
+    if (
+        sort === "price-low"
+    ) {
 
         filteredItems.sort(
             (a, b) =>
-                Number(a.price_amount || 0) -
-                Number(b.price_amount || 0)
+                Number(
+                    a.price_amount || 0
+                ) -
+                Number(
+                    b.price_amount || 0
+                )
         );
 
     }
 
 
-    if (sort === "price-high") {
+    if (
+        sort === "price-high"
+    ) {
 
         filteredItems.sort(
             (a, b) =>
-                Number(b.price_amount || 0) -
-                Number(a.price_amount || 0)
+                Number(
+                    b.price_amount || 0
+                ) -
+                Number(
+                    a.price_amount || 0
+                )
         );
 
     }
 
+
+    /* ==================================================
+       DISPLAY
+    ================================================== */
 
     itemsGrid.innerHTML =
         "";
@@ -955,49 +1374,63 @@ function renderItems() {
 
 
     noResults.style.display =
+
         filteredItems.length === 0
             ? "block"
             : "none";
 
 
     resultsHeading.textContent =
+
         `Available Items (${filteredItems.length})`;
 
 }
 
 
-/* ==========================================
+/* ==================================================
    CLEAR FILTERS
-========================================== */
+================================================== */
 
 function clearFilters() {
+
 
     searchInput.value =
         "";
 
+
     categoryCheckboxes.forEach(
-        cb => cb.checked = false
+        cb => {
+
+            cb.checked =
+                false;
+
+        }
     );
+
 
     availableNowCheckbox.checked =
         false;
 
+
     freeOnlyCheckbox.checked =
         false;
 
+
     sortSelect.value =
         "recommended";
+
 
     renderItems();
 
 }
 
 
-/* ==========================================
+/* ==================================================
    URL PARAMETERS
-========================================== */
+================================================== */
 
 function applyUrlParams() {
+
 
     const params =
         new URLSearchParams(
@@ -1007,6 +1440,7 @@ function applyUrlParams() {
 
     const category =
         params.get("category");
+
 
     const q =
         params.get("q");
@@ -1046,9 +1480,20 @@ function applyUrlParams() {
 }
 
 
-/* ==========================================
+/* ==================================================
+   SEARCH
+================================================== */
+
+function applyFilters() {
+
+    renderItems();
+
+}
+
+
+/* ==================================================
    EVENTS
-========================================== */
+================================================== */
 
 searchInput.addEventListener(
     "input",
@@ -1086,13 +1531,17 @@ sortSelect.addEventListener(
 );
 
 
-/* ==========================================
+/* ==================================================
    START
-========================================== */
+================================================== */
 
-loadItems().then(
-    applyUrlParams
-);
+loadItems()
+    .then(
+        applyUrlParams
+    );
 
-</script></body>
+</script>
+
+</body>
+
 </html>
