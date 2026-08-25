@@ -50,9 +50,10 @@ async function bbSignup(name, email, password) {
     }
 
     return {
-        ok: true,
-        user: data.user
-    };
+    ok: true,
+    user: data.user,
+    session: data.session
+};
 }
 
 
