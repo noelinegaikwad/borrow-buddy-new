@@ -1,437 +1,1460 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Item Details | BorrowBuddy</title>
+    <title>Item Details | BorrowBuddy</title><style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+    body {
+        background: #f8fafc;
+        color: #172033;
+    }
 
-        body {
-            background: #f8fafc;
-            color: #172033;
-        }
+    header {
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 18px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        header {
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 18px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .logo {
+        font-size: 25px;
+        font-weight: 800;
+        color: #2563eb;
+        text-decoration: none;
+    }
 
-        .logo {
-            font-size: 25px;
-            font-weight: 800;
-            color: #2563eb;
-            text-decoration: none;
-        }
+    nav {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+    }
 
-        nav {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
+    nav a {
+        text-decoration: none;
+        color: #475569;
+        font-size: 14px;
+    }
 
-        nav a {
-            text-decoration: none;
-            color: #475569;
-            font-size: 14px;
-        }
+    nav a:hover {
+        color: #2563eb;
+    }
 
-        .login {
-            border: 1px solid #2563eb;
-            color: #2563eb;
-            padding: 9px 16px;
-            border-radius: 8px;
-        }
+    .login {
+        border: 1px solid #2563eb;
+        color: #2563eb;
+        padding: 9px 16px;
+        border-radius: 8px;
+    }
 
-        .signup {
-            background: #2563eb;
-            color: white !important;
-            padding: 10px 16px;
-            border-radius: 8px;
-        }
+    .signup {
+        background: #2563eb;
+        color: white !important;
+        padding: 10px 16px;
+        border-radius: 8px;
+    }
 
-        #authLoggedIn {
+    #authLoggedIn {
+        display: none;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .logout-btn {
+        border: 1px solid #cbd5e1;
+        padding: 9px 16px;
+        border-radius: 8px;
+        color: #475569;
+        background: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .back {
+        display: block;
+        max-width: 1100px;
+        margin: 30px auto 0;
+        padding: 0 7%;
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .details-container {
+        max-width: 1100px;
+        margin: 25px auto 80px;
+        padding: 0 7%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 45px;
+    }
+
+    .item-photo {
+        height: 430px;
+        background: #e2e8f0;
+        border-radius: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 100px;
+    }
+
+    .category {
+        color: #2563eb;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .item-info h1 {
+        font-size: 38px;
+        margin-bottom: 12px;
+    }
+
+    .location {
+        color: #64748b;
+        margin-bottom: 22px;
+    }
+
+    .description {
+        color: #475569;
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+
+    .info-box {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 22px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .label {
+        color: #64748b;
+    }
+
+    .value {
+        font-weight: 600;
+        text-align: right;
+    }
+
+    .owner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 22px;
+    }
+
+    .owner-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #dbeafe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #2563eb;
+        font-size: 18px;
+        overflow: hidden;
+    }
+
+    .owner-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .owner p {
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    .request-btn {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        background: #2563eb;
+        color: white;
+        border-radius: 9px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .request-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .request-btn:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+    }
+
+    .request-note {
+        text-align: center;
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 10px;
+    }
+
+    .request-note a {
+        color: #2563eb;
+        font-weight: 600;
+    }
+
+    .status-banner {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #065f46;
+        padding: 12px 16px;
+        border-radius: 9px;
+        font-size: 14px;
+        margin-bottom: 16px;
+        display: none;
+    }
+
+    .error-banner {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        padding: 12px 16px;
+        border-radius: 9px;
+        font-size: 14px;
+        margin-bottom: 16px;
+        display: none;
+        word-break: break-word;
+    }
+
+    .loading {
+        max-width: 1100px;
+        margin: 80px auto;
+        padding: 0 7%;
+        text-align: center;
+        color: #64748b;
+    }
+
+    .not-found {
+        max-width: 700px;
+        margin: 80px auto;
+        padding: 40px 20px;
+        text-align: center;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        display: none;
+    }
+
+    .not-found h2 {
+        margin-bottom: 10px;
+    }
+
+    .not-found p {
+        color: #64748b;
+        margin-bottom: 20px;
+    }
+
+    .browse-btn {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        padding: 11px 18px;
+        border-radius: 8px;
+    }
+
+    footer {
+        background: #172033;
+        color: white;
+        text-align: center;
+        padding: 40px 7%;
+    }
+
+    footer p {
+        color: #94a3b8;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 750px) {
+
+        nav a:not(.login):not(.signup) {
             display: none;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logout-btn {
-            border: 1px solid #cbd5e1;
-            padding: 9px 16px;
-            border-radius: 8px;
-            color: #475569;
-            background: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-family: Arial, sans-serif;
-        }
-
-        .back {
-            display: block;
-            max-width: 1100px;
-            margin: 30px auto 0;
-            padding: 0 7%;
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 14px;
         }
 
         .details-container {
-            max-width: 1100px;
-            margin: 25px auto 80px;
-            padding: 0 7%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 45px;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
 
         .item-photo {
-            height: 430px;
-            background: #e2e8f0;
-            border-radius: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 100px;
-        }
-
-        .category {
-            color: #2563eb;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 12px;
+            height: 300px;
         }
 
         .item-info h1 {
-            font-size: 38px;
-            margin-bottom: 12px;
+            font-size: 30px;
         }
+    }
+</style>
 
-        .rating {
-            margin-bottom: 20px;
-        }
+</head><body><header><a href="index.html" class="logo">
+    BorrowBuddy
+</a>
 
-        .location {
-            color: #64748b;
-            margin-bottom: 22px;
-        }
+<nav>
 
-        .description {
-            color: #475569;
-            line-height: 1.7;
-            margin-bottom: 25px;
-        }
+    <a href="index.html">
+        Home
+    </a>
 
-        .info-box {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 22px;
-        }
+    <a href="browse.html">
+        Browse
+    </a>
 
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 9px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
+    <a href="index.html#how-it-works">
+        How It Works
+    </a>
 
-        .info-row:last-child {
-            border-bottom: none;
-        }
+    <span id="authLoggedOut"
+          style="display:flex; align-items:center; gap:25px;">
 
-        .label {
-            color: #64748b;
-        }
+        <a href="login.html" class="login">
+            Login
+        </a>
 
-        .value {
-            font-weight: 600;
-        }
+        <a href="signup.html" class="signup">
+            Sign Up
+        </a>
 
-        .owner {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 22px;
-        }
+    </span>
 
-        .owner-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #dbeafe;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #2563eb;
-        }
+    <span id="authLoggedIn">
 
-        .owner p {
-            color: #64748b;
-            font-size: 13px;
-            margin-top: 4px;
-        }
+        <a href="my-items.html">
+            Hi, <span id="authUserName"></span>
+        </a>
 
-        .request-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            background: #2563eb;
-            color: white;
-            border-radius: 9px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-        }
+        <a href="my-requests.html">
+            My Requests
+        </a>
 
-        .request-btn:hover {
-            background: #1d4ed8;
-        }
+        <button
+            type="button"
+            class="logout-btn"
+            onclick="bbLogout()">
 
-        .request-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-        }
+            Logout
 
-        .request-note {
-            text-align: center;
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 10px;
-        }
-
-        .request-note a {
-            color: #2563eb;
-            font-weight: 600;
-        }
-
-        .status-banner {
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            color: #065f46;
-            padding: 12px 16px;
-            border-radius: 9px;
-            font-size: 14px;
-            margin-bottom: 16px;
-            display: none;
-        }
-
-        footer {
-            background: #172033;
-            color: white;
-            text-align: center;
-            padding: 40px 7%;
-        }
-
-        footer p {
-            color: #94a3b8;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 750px) {
-            nav a:not(.login):not(.signup) {
-                display: none;
-            }
-
-            .details-container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .item-photo {
-                height: 300px;
-            }
-
-            .item-info h1 {
-                font-size: 30px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-    <a href="index.html" class="logo">BorrowBuddy</a>
-
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="browse.html">Browse</a>
-        <a href="index.html#how-it-works">How It Works</a>
-
-        <span id="authLoggedOut" style="display:flex; align-items:center; gap:25px;">
-            <a href="login.html" class="login">Login</a>
-            <a href="signup.html" class="signup">Sign Up</a>
-        </span>
-
-        <span id="authLoggedIn">
-            <a href="my-items.html">Hi, <span id="authUserName"></span></a>
-            <a href="my-requests.html">My Requests</a>
-            <button class="logout-btn" onclick="bbLogout()">Logout</button>
-        </span>
-    </nav>
-</header>
-
-<a href="browse.html" class="back">← Back to Browse</a>
-
-<main class="details-container">
-
-    <div class="item-photo" id="itemPhoto"></div>
-
-    <div class="item-info">
-
-        <div class="category" id="itemCategory"></div>
-
-        <h1 id="itemName"></h1>
-
-        <div class="rating" id="itemRating"></div>
-
-        <div class="location" id="itemLocation"></div>
-
-        <p class="description" id="itemDescription"></p>
-
-        <div class="info-box">
-
-            <div class="info-row">
-                <span class="label">Condition</span>
-                <span class="value" id="itemCondition"></span>
-            </div>
-
-            <div class="info-row">
-                <span class="label">Availability</span>
-                <span class="value" id="itemAvailability"></span>
-            </div>
-
-            <div class="info-row">
-                <span class="label">Borrowing</span>
-                <span class="value" id="itemPrice"></span>
-            </div>
-
-        </div>
-
-        <div class="owner">
-
-            <div class="owner-avatar" id="ownerAvatar"></div>
-
-            <div>
-                <strong id="ownerName"></strong>
-                <p id="ownerRating"></p>
-            </div>
-
-        </div>
-
-        <div class="status-banner" id="statusBanner"></div>
-
-        <button class="request-btn" id="requestBtn" onclick="requestBorrow()">
-            Request to Borrow
         </button>
 
-        <p class="request-note" id="requestNote"></p>
+    </span>
+
+</nav>
+
+</header><a href="browse.html" class="back">
+    ← Back to Browse
+</a><div class="loading" id="loading">
+    <h2>Loading item...</h2>
+    <p>Please wait.</p>
+</div><div class="not-found" id="notFound"><h2>Item not found</h2>
+
+<p>
+    This item may have been removed or the link is incorrect.
+</p>
+
+<a href="browse.html" class="browse-btn">
+    Back to Browse
+</a>
+
+</div><main
+    class="details-container"
+    id="detailsContainer"
+    style="display:none;"><div
+    class="item-photo"
+    id="itemPhoto">
+    📦
+</div>
+
+
+<div class="item-info">
+
+    <div
+        class="category"
+        id="itemCategory">
+    </div>
+
+
+    <h1 id="itemName">
+    </h1>
+
+
+    <div
+        class="location"
+        id="itemLocation">
+    </div>
+
+
+    <p
+        class="description"
+        id="itemDescription">
+    </p>
+
+
+    <div class="info-box">
+
+        <div class="info-row">
+
+            <span class="label">
+                Condition
+            </span>
+
+            <span
+                class="value"
+                id="itemCondition">
+            </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span class="label">
+                Availability
+            </span>
+
+            <span
+                class="value"
+                id="itemAvailability">
+            </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span class="label">
+                Borrowing
+            </span>
+
+            <span
+                class="value"
+                id="itemPrice">
+            </span>
+
+        </div>
 
     </div>
 
-</main>
 
-<footer>
-    <h2>BorrowBuddy</h2>
-    <p>Borrow what you need. Share what you don't.</p>
-    <p>© 2026 BorrowBuddy. All rights reserved.</p>
-</footer>
+    <div class="owner">
 
-<script src="auth.js"></script>
-<script src="items-data.js"></script>
-<script src="requests.js"></script>
-<script>
+        <div
+            class="owner-avatar"
+            id="ownerAvatar">
+        </div>
 
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id") || "1";
-    const item = bbGetItemById(id);
+        <div>
 
-    document.getElementById("itemPhoto").textContent = item.photo;
-    document.getElementById("itemCategory").textContent = item.category.toUpperCase();
-    document.getElementById("itemName").textContent = item.name;
-    document.getElementById("itemRating").textContent = item.rating;
-    document.getElementById("itemLocation").textContent = item.location;
-    document.getElementById("itemDescription").textContent = item.description;
-    document.getElementById("itemCondition").textContent = item.condition;
-    document.getElementById("itemAvailability").textContent = item.availability ? "Available" : "Currently borrowed";
-    document.getElementById("itemPrice").textContent = item.price;
-    document.getElementById("ownerAvatar").textContent = item.owner.charAt(0);
-    document.getElementById("ownerName").textContent = item.owner;
-    document.getElementById("ownerRating").textContent = item.ownerRating;
+            <strong id="ownerName">
+            </strong>
 
-    function refreshRequestUI() {
-        const btn = document.getElementById("requestBtn");
-        const note = document.getElementById("requestNote");
-        const banner = document.getElementById("statusBanner");
-        const user = bbCurrentUser();
+            <p>
+                Item owner
+            </p>
 
-        banner.style.display = "none";
+        </div>
 
-        if (!item.availability) {
-            btn.disabled = true;
-            btn.textContent = "Currently Unavailable";
-            note.textContent = "This item is currently borrowed by someone else.";
+    </div>
+
+
+    <div
+        class="status-banner"
+        id="statusBanner">
+    </div>
+
+
+    <div
+        class="error-banner"
+        id="errorBanner">
+    </div>
+
+
+    <button
+        class="request-btn"
+        id="requestBtn"
+        type="button"
+        onclick="requestBorrow()">
+
+        Request to Borrow
+
+    </button>
+
+
+    <p
+        class="request-note"
+        id="requestNote">
+    </p>
+
+</div>
+
+</main><footer><h2>
+    BorrowBuddy
+</h2>
+
+<p>
+    Borrow what you need. Share what you don't.
+</p>
+
+<p>
+    © 2026 BorrowBuddy. All rights reserved.
+</p>
+
+</footer><!-- SUPABASE --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script><script>
+
+"use strict";
+
+
+/* ==================================================
+   GLOBAL VARIABLES
+================================================== */
+
+let currentItem = null;
+let currentUser = null;
+
+
+/* ==================================================
+   GET ITEM ID FROM URL
+================================================== */
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const itemId =
+    params.get("id");
+
+
+/* ==================================================
+   ELEMENTS
+================================================== */
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+const notFound =
+    document.getElementById(
+        "notFound"
+    );
+
+const detailsContainer =
+    document.getElementById(
+        "detailsContainer"
+    );
+
+const itemPhoto =
+    document.getElementById(
+        "itemPhoto"
+    );
+
+const itemCategory =
+    document.getElementById(
+        "itemCategory"
+    );
+
+const itemName =
+    document.getElementById(
+        "itemName"
+    );
+
+const itemLocation =
+    document.getElementById(
+        "itemLocation"
+    );
+
+const itemDescription =
+    document.getElementById(
+        "itemDescription"
+    );
+
+const itemCondition =
+    document.getElementById(
+        "itemCondition"
+    );
+
+const itemAvailability =
+    document.getElementById(
+        "itemAvailability"
+    );
+
+const itemPrice =
+    document.getElementById(
+        "itemPrice"
+    );
+
+const ownerAvatar =
+    document.getElementById(
+        "ownerAvatar"
+    );
+
+const ownerName =
+    document.getElementById(
+        "ownerName"
+    );
+
+const requestBtn =
+    document.getElementById(
+        "requestBtn"
+    );
+
+const requestNote =
+    document.getElementById(
+        "requestNote"
+    );
+
+const statusBanner =
+    document.getElementById(
+        "statusBanner"
+    );
+
+const errorBanner =
+    document.getElementById(
+        "errorBanner"
+    );
+
+
+/* ==================================================
+   SHOW ERROR
+================================================== */
+
+function showError(message) {
+
+    errorBanner.textContent =
+        message;
+
+    errorBanner.style.display =
+        "block";
+}
+
+
+/* ==================================================
+   HIDE ERROR
+================================================== */
+
+function hideError() {
+
+    errorBanner.style.display =
+        "none";
+
+    errorBanner.textContent =
+        "";
+}
+
+
+/* ==================================================
+   LOAD ITEM
+================================================== */
+
+async function loadItem() {
+
+    try {
+
+        if (!itemId) {
+
+            loading.style.display =
+                "none";
+
+            notFound.style.display =
+                "block";
+
             return;
         }
 
-        if (!user) {
-            btn.disabled = false;
-            btn.textContent = "Request to Borrow";
-            note.innerHTML = 'You need to <a href="login.html?redirect=' +
-                encodeURIComponent(window.location.pathname + window.location.search) +
-                '">log in</a> to request this item.';
+
+        if (
+            typeof supabaseClient ===
+            "undefined"
+        ) {
+
+            throw new Error(
+                "Supabase is not connected. Please check supabase-config.js."
+            );
+        }
+
+
+        /*
+         Get the exact item from Supabase.
+        */
+
+        const { data: item, error } =
+            await supabaseClient
+                .from("items")
+                .select("*")
+                .eq("id", itemId)
+                .single();
+
+
+        if (error) {
+
+            console.error(
+                "Item loading error:",
+                error
+            );
+
+            throw new Error(
+                "Could not load this item."
+            );
+        }
+
+
+        if (!item) {
+
+            loading.style.display =
+                "none";
+
+            notFound.style.display =
+                "block";
+
             return;
         }
 
-        const existing = bbGetRequestsForItem(item.id).find(r => r.borrowerId === user.id && r.status === "pending");
 
-        if (existing) {
-            btn.disabled = true;
-            btn.textContent = "Request Sent";
-            note.textContent = "";
-            banner.textContent = "Your request is pending — track it on My Requests.";
-            banner.style.display = "block";
+        currentItem =
+            item;
+
+
+        /*
+         Get owner profile.
+        */
+
+        const { data: profile, error: profileError } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "id, full_name, email, avatar_url"
+                )
+                .eq(
+                    "id",
+                    item.owner_id
+                )
+                .single();
+
+
+        if (profileError) {
+
+            console.warn(
+                "Could not load owner profile:",
+                profileError
+            );
+
+        }
+
+
+        renderItem(
+            item,
+            profile
+        );
+
+
+        loading.style.display =
+            "none";
+
+        detailsContainer.style.display =
+            "grid";
+
+
+        await refreshRequestUI();
+
+
+    } catch (error) {
+
+        console.error(
+            "Load item error:",
+            error
+        );
+
+        loading.style.display =
+            "none";
+
+        notFound.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* ==================================================
+   RENDER ITEM
+================================================== */
+
+function renderItem(
+    item,
+    profile
+) {
+
+    /*
+     ICON
+    */
+
+    itemPhoto.textContent =
+        item.icon || "📦";
+
+
+    /*
+     CATEGORY
+    */
+
+    itemCategory.textContent =
+        item.category
+            ? item.category.toUpperCase()
+            : "";
+
+
+    /*
+     NAME
+    */
+
+    itemName.textContent =
+        item.title || "Untitled Item";
+
+
+    /*
+     LOCATION
+    */
+
+    itemLocation.textContent =
+        item.location
+            ? "📍 " + item.location
+            : "📍 Location not specified";
+
+
+    /*
+     DESCRIPTION
+    */
+
+    itemDescription.textContent =
+        item.description ||
+        "No description provided.";
+
+
+    /*
+     CONDITION
+    */
+
+    itemCondition.textContent =
+        item.condition || "Good";
+
+
+    /*
+     AVAILABILITY
+
+     IMPORTANT:
+     Your database stores:
+     available
+     unavailable
+
+     NOT true / false.
+    */
+
+    if (
+        item.availability ===
+        "available"
+    ) {
+
+        itemAvailability.textContent =
+            "Available";
+
+        itemAvailability.style.color =
+            "#059669";
+
+    } else {
+
+        itemAvailability.textContent =
+            "Currently borrowed";
+
+        itemAvailability.style.color =
+            "#dc2626";
+
+    }
+
+
+    /*
+     PRICE
+    */
+
+    if (
+        item.price_type ===
+        "paid" &&
+        item.price_amount
+    ) {
+
+        itemPrice.textContent =
+            "₹" +
+            Number(
+                item.price_amount
+            ).toLocaleString("en-IN") +
+            " / day";
+
+    } else {
+
+        itemPrice.textContent =
+            "Free to borrow";
+
+    }
+
+
+    /*
+     OWNER
+    */
+
+    const name =
+        profile &&
+        profile.full_name
+            ? profile.full_name
+            : "BorrowBuddy User";
+
+
+    ownerName.textContent =
+        name;
+
+
+    /*
+     OWNER AVATAR
+
+     If avatar_url exists,
+     show the image.
+
+     Otherwise show first
+     letter of the owner's name.
+    */
+
+    if (
+        profile &&
+        profile.avatar_url
+    ) {
+
+        ownerAvatar.innerHTML =
+            `<img src="${profile.avatar_url}" alt="Owner">`;
+
+    } else {
+
+        ownerAvatar.textContent =
+            name
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
+
+
+/* ==================================================
+   GET CURRENT USER
+================================================== */
+
+async function getCurrentUser() {
+
+    try {
+
+        if (
+            typeof bbCurrentUser ===
+            "function"
+        ) {
+
+            return await bbCurrentUser();
+
+        }
+
+
+        if (
+            typeof supabaseClient !==
+            "undefined"
+        ) {
+
+            const {
+                data
+            } =
+                await supabaseClient
+                    .auth
+                    .getUser();
+
+            return data.user || null;
+
+        }
+
+
+        return null;
+
+    } catch (error) {
+
+        console.error(
+            "Current user error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* ==================================================
+   REFRESH REQUEST UI
+================================================== */
+
+async function refreshRequestUI() {
+
+    hideError();
+
+    statusBanner.style.display =
+        "none";
+
+
+    if (!currentItem) {
+        return;
+    }
+
+
+    /*
+     Check availability.
+    */
+
+    if (
+        currentItem.availability !==
+        "available"
+    ) {
+
+        requestBtn.disabled =
+            true;
+
+        requestBtn.textContent =
+            "Currently Unavailable";
+
+        requestNote.textContent =
+            "This item is currently unavailable.";
+
+        return;
+
+    }
+
+
+    /*
+     Get logged-in user.
+    */
+
+    currentUser =
+        await getCurrentUser();
+
+
+    /*
+     Not logged in.
+    */
+
+    if (!currentUser) {
+
+        requestBtn.disabled =
+            false;
+
+        requestBtn.textContent =
+            "Request to Borrow";
+
+        requestNote.innerHTML =
+            'You need to <a href="login.html?redirect=' +
+            encodeURIComponent(
+                window.location.pathname +
+                window.location.search
+            ) +
+            '">log in</a> to request this item.';
+
+        return;
+
+    }
+
+
+    /*
+     Owner cannot request own item.
+    */
+
+    if (
+        currentUser.id ===
+        currentItem.owner_id
+    ) {
+
+        requestBtn.disabled =
+            true;
+
+        requestBtn.textContent =
+            "Your Item";
+
+        requestNote.textContent =
+            "You cannot request your own item.";
+
+        return;
+
+    }
+
+
+    /*
+     Check whether this borrower
+     already has a pending request.
+    */
+
+    const {
+        data: existingRequest,
+        error
+    } =
+        await supabaseClient
+            .from("borrow_requests")
+            .select(
+                "id, status"
+            )
+            .eq(
+                "item_id",
+                currentItem.id
+            )
+            .eq(
+                "borrower_id",
+                currentUser.id
+            )
+            .in(
+                "status",
+                [
+                    "pending",
+                    "approved"
+                ]
+            )
+            .limit(1);
+
+
+    if (error) {
+
+        console.warn(
+            "Request check error:",
+            error
+        );
+
+        /*
+         Don't block the button
+         if request checking fails.
+        */
+
+        requestBtn.disabled =
+            false;
+
+        requestBtn.textContent =
+            "Request to Borrow";
+
+        requestNote.textContent =
+            "";
+
+        return;
+}
+
+
+    if (
+        existingRequest &&
+        existingRequest.length > 0
+    ) {
+
+        const request =
+            existingRequest[0];
+
+
+        if (
+            request.status ===
+            "approved"
+        ) {
+
+            requestBtn.disabled =
+                true;
+
+            requestBtn.textContent =
+                "Request Approved";
+
+            requestNote.textContent =
+                "Your borrowing request has been approved.";
+
+            statusBanner.textContent =
+                "Your request has been approved by the owner.";
+
+            statusBanner.style.display =
+                "block";
+
         } else {
-            btn.disabled = false;
-            btn.textContent = "Request to Borrow";
-            note.textContent = "";
+
+            requestBtn.disabled =
+                true;
+
+            requestBtn.textContent =
+                "Request Sent";
+
+            requestNote.textContent =
+                "Your request is pending.";
+
+            statusBanner.textContent =
+                "Your borrowing request is waiting for the owner's response.";
+
+            statusBanner.style.display =
+                "block";
+
         }
+
+        return;
+
     }
 
-    function requestBorrow() {
-        const user = bbCurrentUser();
 
-        if (!user) {
-            window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.pathname + window.location.search);
-            return;
-        }
+    /*
+     No existing request.
+    */
 
-        if (user.id === item.ownerId) {
-            alert("You can't request to borrow your own item.");
-            return;
-        }
+    requestBtn.disabled =
+        false;
 
-        bbCreateRequest(item.id, user.id);
-        refreshRequestUI();
-        alert("Your request has been sent to " + item.owner + "! Track it on My Requests.");
+    requestBtn.textContent =
+        "Request to Borrow";
+
+    requestNote.textContent =
+        "";
+
+}
+
+
+/* ==================================================
+   REQUEST TO BORROW
+================================================== */
+
+async function requestBorrow() {
+
+    hideError();
+
+
+    /*
+     Check login.
+    */
+
+    currentUser =
+        await getCurrentUser();
+
+
+    if (!currentUser) {
+
+        window.location.href =
+            "login.html?redirect=" +
+            encodeURIComponent(
+                window.location.pathname +
+                window.location.search
+            );
+
+        return;
+
     }
 
-    document.addEventListener("DOMContentLoaded", refreshRequestUI);
+
+    /*
+     Check item.
+    */
+
+    if (!currentItem) {
+
+        showError(
+            "Item information could not be loaded."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Prevent owner from requesting own item.
+    */
+
+    if (
+        currentUser.id ===
+        currentItem.owner_id
+    ) {
+
+        showError(
+            "You cannot request to borrow your own item."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Check availability.
+    */
+
+    if (
+        currentItem.availability !==
+        "available"
+    ) {
+
+        showError(
+            "This item is currently unavailable."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Disable button while sending.
+    */
+
+    requestBtn.disabled =
+        true;
+
+    requestBtn.textContent =
+        "Sending Request...";
+
+
+    try {
+
+        /*
+         Insert REAL request into
+         borrow_requests table.
+        */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("borrow_requests")
+                .insert({
+
+                    item_id:
+                        currentItem.id,
+
+                    borrower_id:
+                        currentUser.id,
+
+                    owner_id:
+                        currentItem.owner_id,
+
+                    message:
+                        "I would like to borrow this item.",
+
+                    status:
+                        "pending"
+
+                })
+                .select()
+                .single();
+
+
+        if (error) {
+
+            console.error(
+                "Borrow request error:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        console.log(
+            "Borrow request created:",
+            data
+        );
+
+
+        /*
+         Success.
+        */
+
+        statusBanner.textContent =
+            "Your request has been sent to the item owner.";
+
+        statusBanner.style.display =
+            "block";
+
+        requestBtn.disabled =
+            true;
+
+        requestBtn.textContent =
+            "Request Sent";
+
+        requestNote.textContent =
+            "You can track your request from My Requests.";
+
+
+    } catch (error) {
+
+        console.error(
+            "Request failed:",
+            error
+        );
+
+
+        let message =
+            "Could not send the borrow request.";
+
+
+        if (
+            error &&
+            error.message
+        ) {
+
+            message =
+                error.message;
+
+        }
+
+
+        showError(
+            message
+        );
+
+
+        requestBtn.disabled =
+            false;
+
+        requestBtn.textContent =
+            "Request to Borrow";
+
+    }
+
+}
+
+
+/* ==================================================
+   START
+================================================== */
+
+loadItem();
 
 </script>
 
