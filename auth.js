@@ -1,64 +1,46 @@
 /*
-  BorrowBuddy - Real Supabase Authentication
+  BorrowBuddy - Supabase Authentication
 */
 
-const BB_SESSION_KEY = "bb_session";
-
-// ---------- current user ----------
-
 async function bbCurrentUser() {
-    const { data, error } = await supabaseClient.auth.getUser();
 
-    if (error || !data.user) {
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+    if (error || !user) {
         return null;
     }
 
-    const user = data.user;
-
-    return {
-        id: user.id,
-        name:
-            user.user_metadata?.full_name ||
-            "BorrowBuddy User",
-        email: user.email,
-        role:
-            user.user_metadata?.role ||
-            "user"
-    };
+    return user;
 }
 
 
-// ---------- signup ----------
-
+// SIGN UP
 async function bbSignup(name, email, password) {
 
-    name = name.trim();
     email = email.trim().toLowerCase();
 
-    if (!name || !email || !password) {
+    if (!name.trim() || !email || password.length < 6) {
         return {
             ok: false,
-            error: "Please fill all fields."
+            error: "Please fill all fields. Password must be at least 6 characters."
         };
     }
 
-    if (password.length < 6) {
-        return {
-            ok: false,
-            error: "Password must be at least 6 characters."
-        };
-    }
-
-    const { data, error } =
-        await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    full_name: name
-                }
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            data: {
+                full_name: name.trim()
             }
-        });
+        }
+    });
 
     if (error) {
         return {
@@ -69,63 +51,48 @@ async function bbSignup(name, email, password) {
 
     return {
         ok: true,
-        user: data.user,
-        session: data.session
+        user: data.user
     };
 }
 
 
-// ---------- login ----------
-
+// LOGIN
 async function bbLogin(email, password) {
 
     email = email.trim().toLowerCase();
 
-    if (!email || !password) {
-        return {
-            ok: false,
-            error: "Please enter your email and password."
-        };
-    }
-
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
 
     if (error) {
         return {
             ok: false,
-            error: "Incorrect email or password."
+            error: error.message
         };
     }
 
     return {
         ok: true,
-        user: data.user,
-        session: data.session
+        user: data.user
     };
 }
 
 
-// ---------- logout ----------
-
+// LOGOUT
 async function bbLogout() {
 
-    const { error } =
-        await supabaseClient.auth.signOut();
-
-    if (error) {
-        console.error("Logout error:", error);
-    }
+    await supabaseClient.auth.signOut();
 
     window.location.href = "index.html";
 }
 
 
-// ---------- protect page ----------
-
+// REQUIRE LOGIN
 async function bbRequireAuth() {
 
     const user = await bbCurrentUser();
@@ -146,34 +113,7 @@ async function bbRequireAuth() {
 }
 
 
-// ---------- get profile ----------
-
-async function bbGetProfile() {
-
-    const user = await bbCurrentUser();
-
-    if (!user) {
-        return null;
-    }
-
-    const { data, error } =
-        await supabaseClient
-            .from("profiles")
-            .select("*")
-            .eq("id", user.id)
-            .single();
-
-    if (error) {
-        console.error("Profile error:", error);
-        return null;
-    }
-
-    return data;
-}
-
-
-// ---------- update navigation ----------
-
+// UPDATE NAVIGATION
 async function updateAuthNav() {
 
     const user = await bbCurrentUser();
@@ -199,12 +139,13 @@ async function updateAuthNav() {
 
         if (nameEl) {
 
-            const firstName =
-                user.name
-                    ? user.name.split(" ")[0]
-                    : "User";
+            const name =
+                user.user_metadata?.full_name ||
+                user.email ||
+                "User";
 
-            nameEl.textContent = firstName;
+            nameEl.textContent =
+                name.split(" ")[0];
         }
 
     } else {
@@ -216,26 +157,7 @@ async function updateAuthNav() {
 }
 
 
-// ---------- authentication listener ----------
-
-supabaseClient.auth.onAuthStateChange(
-    async function(event, session) {
-
-        console.log(
-            "BorrowBuddy authentication:",
-            event
-        );
-
-        await updateAuthNav();
-    }
-);
-
-
-// ---------- page load ----------
-
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
-        updateAuthNav();
-    }
+    updateAuthNav
 );
