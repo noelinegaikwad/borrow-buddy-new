@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Requests | BorrowBuddy</title>
 
     <style>
@@ -17,6 +18,8 @@
             background: #f8fafc;
             color: #172033;
         }
+
+        /* ================= HEADER ================= */
 
         header {
             background: white;
@@ -44,6 +47,10 @@
             text-decoration: none;
             color: #475569;
             font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #2563eb;
         }
 
         .login {
@@ -74,8 +81,9 @@
             background: none;
             cursor: pointer;
             font-size: 14px;
-            font-family: Arial, sans-serif;
         }
+
+        /* ================= PAGE HEADER ================= */
 
         .page-header {
             text-align: center;
@@ -91,11 +99,15 @@
             color: #64748b;
         }
 
+        /* ================= TABS ================= */
+
         .tabs {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
+            padding: 0 15px;
         }
 
         .tab-btn {
@@ -108,16 +120,24 @@
             color: #475569;
         }
 
+        .tab-btn:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
         .tab-btn.active {
             background: #2563eb;
             color: white;
             border-color: #2563eb;
         }
 
+        /* ================= LIST ================= */
+
         .list-wrap {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto 90px;
             padding: 0 20px;
+            min-height: 300px;
         }
 
         .request-card {
@@ -131,15 +151,19 @@
             align-items: center;
         }
 
+        .request-card:hover {
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        }
+
         .request-photo {
-            width: 70px;
-            height: 70px;
+            width: 75px;
+            height: 75px;
             background: #e2e8f0;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 34px;
             flex-shrink: 0;
         }
 
@@ -148,21 +172,33 @@
         }
 
         .request-info h3 {
-            font-size: 16px;
-            margin-bottom: 4px;
+            font-size: 17px;
+            margin-bottom: 6px;
         }
 
         .request-info p {
             color: #64748b;
             font-size: 13px;
+            line-height: 1.5;
         }
+
+        .request-message {
+            margin-top: 8px;
+            padding: 8px 10px;
+            background: #f8fafc;
+            border-radius: 7px;
+            color: #475569 !important;
+        }
+
+        /* ================= STATUS ================= */
 
         .status-pill {
             font-size: 12px;
             font-weight: 700;
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 20px;
             text-transform: capitalize;
+            white-space: nowrap;
         }
 
         .status-pending {
@@ -170,7 +206,7 @@
             color: #854d0e;
         }
 
-        .status-accepted {
+        .status-approved {
             background: #dbeafe;
             color: #1e40af;
         }
@@ -180,10 +216,17 @@
             color: #991b1b;
         }
 
+        .status-cancelled {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
         .status-returned {
             background: #dcfce7;
             color: #166534;
         }
+
+        /* ================= ACTIONS ================= */
 
         .request-actions {
             display: flex;
@@ -194,7 +237,7 @@
 
         .action-btn {
             border: none;
-            padding: 7px 14px;
+            padding: 8px 14px;
             border-radius: 7px;
             font-size: 12px;
             cursor: pointer;
@@ -206,16 +249,79 @@
             color: white;
         }
 
+        .return-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .chat-btn {
+            background: #0f766e;
+            color: white;
+        }
+
+        .chat-btn:hover {
+            background: #115e59;
+        }
+
+        /* ================= EMPTY / LOADING ================= */
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #64748b;
         }
 
+        .empty-state h3 {
+            color: #172033;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            line-height: 1.6;
+        }
+
         .empty-state a {
             color: #2563eb;
             font-weight: 600;
+            text-decoration: none;
         }
+
+        .error-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            color: #991b1b;
+        }
+
+        .error-state h3 {
+            margin-bottom: 8px;
+        }
+
+        .login-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .login-state h3 {
+            margin-bottom: 10px;
+        }
+
+        .login-state p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+        }
+
+        /* ================= FOOTER ================= */
 
         footer {
             background: #172033;
@@ -230,13 +336,33 @@
             font-size: 14px;
         }
 
+        /* ================= MOBILE ================= */
+
         @media (max-width: 700px) {
+
             nav a:not(.login):not(.signup) {
                 display: none;
             }
 
             .request-card {
+                align-items: flex-start;
                 flex-wrap: wrap;
+            }
+
+            .request-info {
+                min-width: calc(100% - 95px);
+            }
+
+            .request-actions {
+                width: 100%;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
             }
         }
     </style>
@@ -244,118 +370,912 @@
 
 <body>
 
+<!-- ================= HEADER ================= -->
+
 <header>
-    <a href="index.html" class="logo">BorrowBuddy</a>
+
+    <a href="index.html" class="logo">
+        BorrowBuddy
+    </a>
 
     <nav>
-        <a href="index.html">Home</a>
-        <a href="browse.html">Browse</a>
-        <a href="index.html#how-it-works">How It Works</a>
 
-        <span id="authLoggedOut" style="display:flex; align-items:center; gap:25px;">
-            <a href="login.html" class="login">Login</a>
-            <a href="signup.html" class="signup">Sign Up</a>
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="browse.html">
+            Browse
+        </a>
+
+        <a href="index.html#how-it-works">
+            How It Works
+        </a>
+
+        <!-- LOGGED OUT -->
+
+        <span
+            id="authLoggedOut"
+            style="display:flex; align-items:center; gap:25px;"
+        >
+
+            <a href="login.html" class="login">
+                Login
+            </a>
+
+            <a href="signup.html" class="signup">
+                Sign Up
+            </a>
+
         </span>
+
+
+        <!-- LOGGED IN -->
 
         <span id="authLoggedIn">
-            <a href="my-items.html">My Items</a>
-            <a href="my-requests.html">Hi, <span id="authUserName"></span></a>
-            <button class="logout-btn" onclick="bbLogout()">Logout</button>
+
+            <a href="my-items.html">
+                My Items
+            </a>
+
+            <a href="my-requests.html">
+                Hi, <span id="authUserName"></span>
+            </a>
+
+            <button
+                type="button"
+                class="logout-btn"
+                onclick="bbLogout()"
+            >
+                Logout
+            </button>
+
         </span>
+
     </nav>
+
 </header>
 
+
+<!-- ================= PAGE HEADER ================= -->
+
 <section class="page-header">
-    <h1>My Requests</h1>
-    <p>Track the items you've requested to borrow.</p>
+
+    <h1>
+        My Requests
+    </h1>
+
+    <p>
+        Track the items you've requested to borrow.
+    </p>
+
 </section>
 
+
+<!-- ================= FILTER TABS ================= -->
+
 <div class="tabs">
-    <button class="tab-btn active" data-filter="all">All</button>
-    <button class="tab-btn" data-filter="pending">Pending</button>
-    <button class="tab-btn" data-filter="accepted">Currently Borrowed</button>
-    <button class="tab-btn" data-filter="returned">Returned</button>
-    <button class="tab-btn" data-filter="rejected">Rejected</button>
+
+    <button
+        class="tab-btn active"
+        data-filter="all"
+    >
+        All
+    </button>
+
+    <button
+        class="tab-btn"
+        data-filter="pending"
+    >
+        Pending
+    </button>
+
+    <button
+        class="tab-btn"
+        data-filter="approved"
+    >
+        Currently Borrowed
+    </button>
+
+    <button
+        class="tab-btn"
+        data-filter="returned"
+    >
+        Returned
+    </button>
+
+    <button
+        class="tab-btn"
+        data-filter="rejected"
+    >
+        Rejected
+    </button>
+
 </div>
 
-<div class="list-wrap" id="listWrap"></div>
+
+<!-- ================= REQUEST LIST ================= -->
+
+<div
+    class="list-wrap"
+    id="listWrap"
+>
+
+    <div class="empty-state">
+
+        <h3>
+            Loading requests...
+        </h3>
+
+        <p>
+            Please wait.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
 
 <footer>
-    <h2>BorrowBuddy</h2>
-    <p>Borrow what you need. Share what you don't.</p>
-    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+
+    <h2>
+        BorrowBuddy
+    </h2>
+
+    <p>
+        Borrow what you need. Share what you don't.
+    </p>
+
+    <p>
+        © 2026 BorrowBuddy. All rights reserved.
+    </p>
+
 </footer>
 
+
+<!-- ================= SUPABASE ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
 <script src="auth.js"></script>
-<script src="items-data.js"></script>
-<script src="requests.js"></script>
+
+
 <script>
-    const user = bbRequireAuth();
-    let currentFilter = "all";
 
-    function render() {
-        const listWrap = document.getElementById("listWrap");
-        let requests = bbGetMyRequests(user.id);
+"use strict";
 
-        if (currentFilter !== "all") {
-            requests = requests.filter(r => r.status === currentFilter);
+
+/* ==================================================
+   VARIABLES
+================================================== */
+
+let currentUser = null;
+
+let currentFilter = "all";
+
+const listWrap =
+    document.getElementById(
+        "listWrap"
+    );
+
+
+/* ==================================================
+   GET CURRENT USER
+================================================== */
+
+async function getCurrentUser() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+
+        if (error) {
+
+            console.error(
+                "User error:",
+                error
+            );
+
+            return null;
         }
 
-        requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        if (requests.length === 0) {
-            listWrap.innerHTML = `
-                <div class="empty-state">
-                    <h3>No requests here</h3>
-                    <p>Browse items and send a request to get started. <a href="browse.html">Browse Items →</a></p>
-                </div>
-            `;
-            return;
+        return data.user || null;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Current user error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* ==================================================
+   LOAD REQUESTS
+================================================== */
+
+async function loadRequests() {
+
+    listWrap.innerHTML = `
+
+        <div class="empty-state">
+
+            <h3>
+                Loading requests...
+            </h3>
+
+            <p>
+                Please wait.
+            </p>
+
+        </div>
+
+    `;
+
+
+    currentUser =
+        await getCurrentUser();
+
+
+    /* ================================
+       NOT LOGGED IN
+    ================================= */
+
+    if (!currentUser) {
+
+        listWrap.innerHTML = `
+
+            <div class="login-state">
+
+                <h3>
+                    Please log in
+                </h3>
+
+                <p>
+                    You need to log in
+                    to see your borrow requests.
+                </p>
+
+                <a
+                    href="login.html"
+                    class="login-btn"
+                >
+                    Login
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    /* ================================
+       GET REQUESTS
+    ================================= */
+
+    const {
+        data: requests,
+        error
+    } =
+        await supabaseClient
+
+            .from("borrow_requests")
+
+            .select(`
+                id,
+                item_id,
+                borrower_id,
+                owner_id,
+                message,
+                status,
+                requested_at,
+                approved_at,
+                returned_at,
+
+                items (
+                    id,
+                    title,
+                    icon,
+                    price_type,
+                    price_amount,
+                    location
+                ),
+
+                profiles:owner_id (
+                    id,
+                    full_name
+                )
+            `)
+
+            .eq(
+                "borrower_id",
+                currentUser.id
+            )
+
+            .order(
+                "requested_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    /* ================================
+       DATABASE ERROR
+    ================================= */
+
+    if (error) {
+
+        console.error(
+            "Requests loading error:",
+            error
+        );
+
+
+        listWrap.innerHTML = `
+
+            <div class="error-state">
+
+                <h3>
+                    Could not load requests
+                </h3>
+
+                <p>
+                    ${escapeHtml(error.message)}
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    renderRequests(
+        requests || []
+    );
+
+}
+
+
+/* ==================================================
+   RENDER REQUESTS
+================================================== */
+
+function renderRequests(
+    requests
+) {
+
+    let filteredRequests =
+        requests;
+
+
+    /* ================================
+       FILTER
+    ================================= */
+
+    if (
+        currentFilter !==
+        "all"
+    ) {
+
+        filteredRequests =
+            requests.filter(
+                request =>
+                    request.status ===
+                    currentFilter
+            );
+
+    }
+
+
+    /* ================================
+       EMPTY
+    ================================= */
+
+    if (
+        filteredRequests.length ===
+        0
+    ) {
+
+        let message =
+            "Browse items and send a request to get started.";
+
+
+        if (
+            currentFilter !==
+            "all"
+        ) {
+
+            message =
+                "You don't have any " +
+                currentFilter +
+                " requests.";
+
         }
 
-        listWrap.innerHTML = "";
 
-        requests.forEach(req => {
-            const item = bbGetItemById(req.itemId);
-            const card = document.createElement("div");
-            card.className = "request-card";
+        listWrap.innerHTML = `
 
-            let actionsHtml = "";
-            if (req.status === "accepted") {
-                actionsHtml = `<button class="action-btn return-btn" onclick="markReturned('${req.id}')">Mark as Returned</button>`;
+            <div class="empty-state">
+
+                <h3>
+                    No requests here
+                </h3>
+
+                <p>
+                    ${message}
+                </p>
+
+                <br>
+
+                <a href="browse.html">
+                    Browse Items →
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    /* ================================
+       CLEAR LIST
+    ================================= */
+
+    listWrap.innerHTML = "";
+
+
+    /* ================================
+       CREATE CARDS
+    ================================= */
+
+    filteredRequests.forEach(
+        request => {
+
+            const item =
+                request.items;
+
+
+            const owner =
+                request.profiles;
+
+
+            /* -------------------------
+               Safety check
+            -------------------------- */
+
+            if (!item) {
+                return;
             }
 
+
+            /* -------------------------
+               Price
+            -------------------------- */
+
+            let priceText =
+                "Free to borrow";
+
+
+            if (
+                item.price_type ===
+                "paid"
+                &&
+                item.price_amount !==
+                null
+            ) {
+
+                priceText =
+                    "₹" +
+                    Number(
+                        item.price_amount
+                    ).toLocaleString(
+                        "en-IN"
+                    ) +
+                    " / day";
+
+            }
+
+
+            /* -------------------------
+               Owner
+            -------------------------- */
+
+            const ownerName =
+                owner &&
+                owner.full_name
+                    ? owner.full_name
+                    : "BorrowBuddy User";
+
+
+            /* -------------------------
+               Status
+            -------------------------- */
+
+            let statusText =
+                request.status;
+
+
+            if (
+                request.status ===
+                "approved"
+            ) {
+
+                statusText =
+                    "Approved";
+
+            }
+
+
+            /* -------------------------
+               Actions
+            -------------------------- */
+
+            let actionsHtml =
+                "";
+
+
+            /*
+             APPROVED REQUEST
+
+             Show Chat later.
+             For now only return button.
+            */
+
+            if (
+                request.status ===
+                "approved"
+            ) {
+
+                actionsHtml = `
+
+                    <button
+                        class="action-btn return-btn"
+                        onclick="markReturned('${request.id}')"
+                    >
+                        Mark as Returned
+                    </button>
+
+                `;
+
+            }
+
+
+            /*
+             RETURNED
+
+             No action.
+            */
+
+            if (
+                request.status ===
+                "returned"
+            ) {
+
+                actionsHtml = "";
+
+            }
+
+
+            /*
+             CARD
+            */
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "request-card";
+
+
             card.innerHTML = `
-                <div class="request-photo">${item.photo}</div>
+
+                <div class="request-photo">
+                    ${escapeHtml(
+                        item.icon || "📦"
+                    )}
+                </div>
+
+
                 <div class="request-info">
-                    <h3>${item.name}</h3>
-                    <p>Owner: ${item.owner} · ${item.price}</p>
+
+                    <h3>
+                        ${escapeHtml(
+                            item.title ||
+                            "Untitled Item"
+                        )}
+                    </h3>
+
+
+                    <p>
+                        Owner:
+                        ${escapeHtml(
+                            ownerName
+                        )}
+                        ·
+                        ${escapeHtml(
+                            priceText
+                        )}
+                    </p>
+
+
+                    ${
+                        request.message
+                        ? `
+
+                            <p class="request-message">
+
+                                <strong>
+                                    Your message:
+                                </strong>
+
+                                ${escapeHtml(                                    request.message
+                                )}
+
+                            </p>
+
+                        `
+                        : ""
+                    }
+
                 </div>
+
+
                 <div class="request-actions">
-                    <span class="status-pill status-${req.status}">${req.status}</span>
+
+                    <span
+                        class="status-pill status-${escapeHtml(
+                            request.status
+                        )}"
+                    >
+                        ${escapeHtml(statusText)}
+                    </span>
+
+
                     ${actionsHtml}
+
                 </div>
+
             `;
-            listWrap.appendChild(card);
-        });
+
+
+            listWrap.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   MARK REQUEST AS RETURNED
+================================================== */
+
+async function markReturned(
+    requestId
+) {
+
+    if (!currentUser) {
+        return;
     }
 
-    function markReturned(requestId) {
-        bbUpdateRequestStatus(requestId, "returned");
-        render();
+
+    const confirmed =
+        confirm(
+            "Have you returned this item to the owner?"
+        );
+
+
+    if (!confirmed) {
+        return;
     }
 
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            currentFilter = btn.dataset.filter;
-            render();
-        });
-    });
 
-    render();
+    /*
+     Update the request in Supabase
+    */
+
+    const {
+        error
+    } =
+        await supabaseClient
+
+            .from("borrow_requests")
+
+            .update({
+                status: "returned",
+                returned_at:
+                    new Date().toISOString()
+            })
+
+            .eq(
+                "id",
+                requestId
+            )
+
+            .eq(
+                "borrower_id",
+                currentUser.id
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Return update error:",
+            error
+        );
+
+
+        alert(
+            "Could not mark the item as returned.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "Item marked as returned successfully!"
+    );
+
+
+    /*
+     Reload the requests
+    */
+
+    await loadRequests();
+
+}
+
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ==================================================
+   FILTER BUTTONS
+================================================== */
+
+document
+    .querySelectorAll(".tab-btn")
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    /*
+                     Remove active
+                     from all buttons
+                    */
+
+                    document
+                        .querySelectorAll(
+                            ".tab-btn"
+                        )
+                        .forEach(
+                            btn =>
+                                btn.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    /*
+                     Activate clicked button
+                    */
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    /*
+                     Change filter
+                    */
+
+                    currentFilter =
+                        button.dataset.filter;
+
+
+                    /*
+                     Reload requests
+                    */
+
+                    loadRequests();
+
+                }
+            );
+
+        }
+    );
+
+
+/* ==================================================
+   START PAGE
+================================================== */
+
+loadRequests();
+
 </script>
 
 </body>
 </html>
+   
