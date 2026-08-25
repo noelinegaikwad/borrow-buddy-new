@@ -46,6 +46,10 @@
             font-size: 14px;
         }
 
+        nav a:hover {
+            color: #2563eb;
+        }
+
         .login {
             border: 1px solid #2563eb;
             padding: 9px 16px;
@@ -74,7 +78,6 @@
             background: none;
             cursor: pointer;
             font-size: 14px;
-            font-family: Arial, sans-serif;
         }
 
         .page-header {
@@ -152,10 +155,7 @@
             align-items: center;
         }
 
-        .price-row select {
-            flex: 1;
-        }
-
+        .price-row select,
         .price-row input {
             flex: 1;
         }
@@ -201,6 +201,11 @@
             background: #1d4ed8;
         }
 
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
         .success-msg {
             background: #ecfdf5;
             border: 1px solid #a7f3d0;
@@ -215,6 +220,17 @@
         .success-msg a {
             color: #065f46;
             font-weight: 700;
+        }
+
+        .error-msg {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 14px 16px;
+            border-radius: 9px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
         }
 
         footer {
@@ -252,41 +268,94 @@
         <a href="browse.html">Browse</a>
         <a href="index.html#how-it-works">How It Works</a>
 
-        <span id="authLoggedOut" style="display:flex; align-items:center; gap:25px;">
+        <span id="authLoggedOut"
+              style="display:flex; align-items:center; gap:25px;">
+
             <a href="login.html" class="login">Login</a>
             <a href="signup.html" class="signup">Sign Up</a>
+
         </span>
 
         <span id="authLoggedIn">
-            <a href="my-items.html">Hi, <span id="authUserName"></span></a>
-            <a href="my-requests.html">My Requests</a>
-            <button class="logout-btn" onclick="bbLogout()">Logout</button>
+
+            <a href="my-items.html">
+                Hi, <span id="authUserName"></span>
+            </a>
+
+            <a href="my-requests.html">
+                My Requests
+            </a>
+
+            <button
+                class="logout-btn"
+                onclick="bbLogout()">
+                Logout
+            </button>
+
         </span>
     </nav>
 </header>
 
+
 <section class="page-header">
+
     <h1>List an Item</h1>
-    <p>Share something you're not using — someone nearby might need it.</p>
+
+    <p>
+        Share something you're not using — someone nearby might need it.
+    </p>
+
 </section>
 
+
 <div class="form-wrap">
+
     <div class="form-card">
 
-        <div class="success-msg" id="successMsg"></div>
+        <div
+            class="success-msg"
+            id="successMsg">
+        </div>
+
+        <div
+            class="error-msg"
+            id="errorMsg">
+        </div>
+
 
         <form id="listForm">
 
             <div class="field">
-                <label for="itemName">Item name</label>
-                <input type="text" id="itemName" placeholder="e.g. Camera Tripod" required>
+
+                <label for="itemName">
+                    Item name
+                </label>
+
+                <input
+                    type="text"
+                    id="itemName"
+                    placeholder="e.g. Camera Tripod"
+                    required>
+
             </div>
 
+
             <div class="two-col">
+
                 <div class="field">
-                    <label for="itemCategory">Category</label>
-                    <select id="itemCategory" required>
-                        <option value="">Select category</option>
+
+                    <label for="itemCategory">
+                        Category
+                    </label>
+
+                    <select
+                        id="itemCategory"
+                        required>
+
+                        <option value="">
+                            Select category
+                        </option>
+
                         <option>Books</option>
                         <option>Electronics</option>
                         <option>Travel</option>
@@ -294,124 +363,512 @@
                         <option>Study</option>
                         <option>Photography</option>
                         <option>Sports</option>
+
                     </select>
+
                 </div>
 
+
                 <div class="field">
-                    <label for="itemCondition">Condition</label>
-                    <select id="itemCondition" required>
-                        <option value="">Select condition</option>
+
+                    <label for="itemCondition">
+                        Condition
+                    </label>
+
+                    <select
+                        id="itemCondition"
+                        required>
+
+                        <option value="">
+                            Select condition
+                        </option>
+
                         <option>Like New</option>
                         <option>Very Good</option>
                         <option>Good</option>
                         <option>Fair</option>
+
                     </select>
+
                 </div>
+
             </div>
 
-            <div class="field">
-                <label for="itemDescription">Description</label>
-                <textarea id="itemDescription" placeholder="Describe the item, what it's good for, and any details a borrower should know." required></textarea>
-            </div>
 
             <div class="field">
-                <label for="itemLocation">Location</label>
-                <input type="text" id="itemLocation" placeholder="e.g. Koramangala, Bangalore" required>
+
+                <label for="itemDescription">
+                    Description
+                </label>
+
+                <textarea
+                    id="itemDescription"
+                    placeholder="Describe the item, what it's good for, and any details a borrower should know."
+                    required>
+                </textarea>
+
             </div>
 
+
             <div class="field">
-                <label>Pick an icon</label>
-                <div class="emoji-picker" id="emojiPicker">
-                    <div class="emoji-option selected" data-emoji="📦">📦</div>
-                    <div class="emoji-option" data-emoji="📷">📷</div>
-                    <div class="emoji-option" data-emoji="🧮">🧮</div>
-                    <div class="emoji-option" data-emoji="🧳">🧳</div>
-                    <div class="emoji-option" data-emoji="📚">📚</div>
-                    <div class="emoji-option" data-emoji="🔧">🔧</div>
-                    <div class="emoji-option" data-emoji="⚽">⚽</div>
-                    <div class="emoji-option" data-emoji="💻">💻</div>
-                    <div class="emoji-option" data-emoji="🎸">🎸</div>
-                    <div class="emoji-option" data-emoji="🚲">🚲</div>
+
+                <label for="itemLocation">
+                    Location
+                </label>
+
+                <input
+                    type="text"
+                    id="itemLocation"
+                    placeholder="e.g. Nagpur"
+                    required>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Pick an icon
+                </label>
+
+                <div
+                    class="emoji-picker"
+                    id="emojiPicker">
+
+                    <div
+                        class="emoji-option selected"
+                        data-emoji="📦">
+                        📦
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="📷">
+                        📷
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="🧮">
+                        🧮
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="🧳">
+                        🧳
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="📚">
+                        📚
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="🔧">
+                        🔧
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="⚽">
+                        ⚽
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="💻">
+                        💻
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="🎸">
+                        🎸
+                    </div>
+
+                    <div
+                        class="emoji-option"
+                        data-emoji="🚲">
+                        🚲
+                    </div>
+
                 </div>
+
             </div>
 
+
             <div class="field">
-                <label>Availability</label>
+
+                <label>
+                    Availability
+                </label>
+
                 <div class="price-row">
+
                     <select id="priceType">
-                        <option value="free">Free to borrow</option>
-                        <option value="paid">Paid — per day</option>
+
+                        <option value="free">
+                            Free to borrow
+                        </option>
+
+                        <option value="paid">
+                            Paid — per day
+                        </option>
+
                     </select>
-                    <input type="number" id="priceAmount" placeholder="₹ amount" min="1" style="display:none;">
+
+
+                    <input
+                        type="number"
+                        id="priceAmount"
+                        placeholder="₹ amount"
+                        min="1"
+                        style="display:none;">
+
                 </div>
+
             </div>
 
-            <button type="submit" class="submit-btn">List This Item</button>
+
+            <button
+                type="submit"
+                class="submit-btn"
+                id="submitBtn">
+
+                List This Item
+
+            </button>
 
         </form>
 
     </div>
+
 </div>
 
+
 <footer>
+
     <h2>BorrowBuddy</h2>
-    <p>Borrow what you need. Share what you don't.</p>
-    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+
+    <p>
+        Borrow what you need. Share what you don't.
+    </p>
+
+    <p>
+        © 2026 BorrowBuddy. All rights reserved.
+    </p>
+
 </footer>
 
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
 <script src="auth.js"></script>
-<script src="items-data.js"></script>
+
+
 <script>
-    // Must be logged in to list an item.
-    const currentUser = bbRequireAuth();
 
-    let selectedEmoji = "📦";
+let selectedEmoji = "📦";
 
-    document.querySelectorAll(".emoji-option").forEach(opt => {
-        opt.addEventListener("click", () => {
-            document.querySelectorAll(".emoji-option").forEach(o => o.classList.remove("selected"));
-            opt.classList.add("selected");
-            selectedEmoji = opt.dataset.emoji;
-        });
+
+// ------------------------------------------
+// LOGIN CHECK
+// ------------------------------------------
+
+async function checkUser() {
+
+    const user = await bbCurrentUser();
+
+    if (!user) {
+
+        window.location.href =
+            "login.html?redirect=list-item.html";
+
+        return null;
+    }
+
+    return user;
+}
+
+
+// ------------------------------------------
+// EMOJI PICKER
+// ------------------------------------------
+
+document
+    .querySelectorAll(".emoji-option")
+    .forEach(function(option) {
+
+        option.addEventListener(
+            "click",
+            function() {
+
+                document
+                    .querySelectorAll(".emoji-option")
+                    .forEach(function(item) {
+
+                        item.classList.remove(
+                            "selected"
+                        );
+
+                    });
+
+                option.classList.add("selected");
+
+                selectedEmoji =
+                    option.dataset.emoji;
+
+            }
+        );
+
     });
 
-    const priceType = document.getElementById("priceType");
-    const priceAmount = document.getElementById("priceAmount");
 
-    priceType.addEventListener("change", () => {
-        priceAmount.style.display = priceType.value === "paid" ? "block" : "none";
-        priceAmount.required = priceType.value === "paid";
-    });
+// ------------------------------------------
+// PRICE
+// ------------------------------------------
 
-    document.getElementById("listForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+const priceType =
+    document.getElementById("priceType");
 
-        const user = bbCurrentUser();
-        if (!user) {
-            window.location.href = "login.html?redirect=list-item.html";
-            return;
+const priceAmount =
+    document.getElementById("priceAmount");
+
+
+priceType.addEventListener(
+    "change",
+    function() {
+
+        if (priceType.value === "paid") {
+
+            priceAmount.style.display =
+                "block";
+
+            priceAmount.required = true;
+
+        } else {
+
+            priceAmount.style.display =
+                "none";
+
+            priceAmount.required = false;
+
+            priceAmount.value = "";
+
         }
 
-        const data = {
-            name: document.getElementById("itemName").value.trim(),
-            category: document.getElementById("itemCategory").value,
-            condition: document.getElementById("itemCondition").value,
-            description: document.getElementById("itemDescription").value.trim(),
-            location: document.getElementById("itemLocation").value.trim(),
-            photo: selectedEmoji,
-            priceType: priceType.value,
-            priceAmount: priceAmount.value
-        };
+    }
+);
 
-        const newItem = bbCreateItem(data, user);
 
-        document.getElementById("listForm").style.display = "none";
-        const successEl = document.getElementById("successMsg");
-        successEl.style.display = "block";
-        successEl.innerHTML = `Your item "${newItem.name}" is now listed! ` +
-            `<a href="item.html?id=${newItem.id}">View it</a> or ` +
-            `<a href="my-items.html">go to My Items</a>.`;
-    });
+// ------------------------------------------
+// SUBMIT ITEM
+// ------------------------------------------
+
+document
+    .getElementById("listForm")
+    .addEventListener(
+        "submit",
+        async function(e) {
+
+            e.preventDefault();
+
+
+            const user =
+                await checkUser();
+
+            if (!user) {
+                return;
+            }
+
+
+            const errorEl =
+                document.getElementById(
+                    "errorMsg"
+                );
+
+            const successEl =
+                document.getElementById(
+                    "successMsg"
+                );
+
+            const button =
+                document.getElementById(
+                    "submitBtn"
+                );
+
+
+            errorEl.style.display =
+                "none";
+
+            successEl.style.display =
+                "none";
+
+            button.disabled = true;
+
+            button.textContent =
+                "Listing item...";
+
+
+            const item = {
+
+                owner_id: user.id,
+
+                name:
+                    document
+                        .getElementById(
+                            "itemName"
+                        )
+                        .value
+                        .trim(),
+
+                category:
+                    document
+                        .getElementById(
+                            "itemCategory"
+                        )
+                        .value,
+
+                condition:
+                    document
+                        .getElementById(
+                            "itemCondition"
+                        )
+                        .value,
+
+                description:
+                    document
+                        .getElementById(
+                            "itemDescription"
+                        )
+                        .value
+                        .trim(),
+
+                location:
+                    document
+                        .getElementById(
+                            "itemLocation"
+                        )
+                        .value
+                        .trim(),
+
+                icon:
+                    selectedEmoji,
+
+                price_type:
+                    priceType.value,
+
+                price_amount:
+                    priceType.value === "paid"
+                        ? Number(
+                            priceAmount.value
+                          )
+                        : 0,
+
+                available: true
+
+            };
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+                    .from("items")
+                    .insert([item])
+                    .select()
+                    .single();
+
+
+                if (error) {
+
+                    console.error(
+                        "Supabase item error:",
+                        error
+                    );
+
+                    throw error;
+                }
+
+
+                document
+                    .getElementById(
+                        "listForm"
+                    )
+                    .style.display =
+                    "none";
+
+
+                successEl.innerHTML =
+
+                    `Your item "<strong>${escapeHtml(data.name)}</strong>" is now listed! ` +
+
+                    `<a href="item.html?id=${data.id}">
+                        View it
+                    </a> or ` +
+
+                    `<a href="my-items.html">
+                        go to My Items
+                    </a>.`;
+
+
+                successEl.style.display =
+                    "block";
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                errorEl.textContent =
+                    error.message ||
+                    "Could not list the item. Please try again.";
+
+                errorEl.style.display =
+                    "block";
+
+                button.disabled = false;
+
+                button.textContent =
+                    "List This Item";
+            }
+
+        }
+    );
+
+
+// ------------------------------------------
+// BASIC HTML ESCAPE
+// ------------------------------------------
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+}
+
+
+// Check authentication when page loads
+checkUser();
+
 </script>
 
 </body>
