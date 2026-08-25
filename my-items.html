@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Items | BorrowBuddy</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -17,6 +20,8 @@
             background: #f8fafc;
             color: #172033;
         }
+
+        /* ================= HEADER ================= */
 
         header {
             background: white;
@@ -46,6 +51,10 @@
             font-size: 14px;
         }
 
+        nav a:hover {
+            color: #2563eb;
+        }
+
         .login {
             border: 1px solid #2563eb;
             padding: 9px 16px;
@@ -71,11 +80,12 @@
             padding: 9px 16px;
             border-radius: 8px;
             color: #475569;
-            background: none;
+            background: white;
             cursor: pointer;
             font-size: 14px;
-            font-family: Arial, sans-serif;
         }
+
+        /* ================= PAGE HEADER ================= */
 
         .page-header {
             text-align: center;
@@ -103,6 +113,12 @@
             font-weight: 600;
         }
 
+        .page-header .cta:hover {
+            background: #1d4ed8;
+        }
+
+        /* ================= SECTIONS ================= */
+
         .section-wrap {
             max-width: 900px;
             margin: 0 auto;
@@ -114,7 +130,10 @@
             margin-bottom: 16px;
         }
 
-        .request-card, .item-row {
+        /* ================= REQUEST CARD ================= */
+
+        .request-card,
+        .item-row {
             background: white;
             border: 1px solid #e5e7eb;
             border-radius: 14px;
@@ -123,6 +142,11 @@
             display: flex;
             gap: 16px;
             align-items: center;
+        }
+
+        .request-card:hover,
+        .item-row:hover {
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
         }
 
         .photo {
@@ -142,18 +166,32 @@
         }
 
         .info h3 {
-            font-size: 15px;
-            margin-bottom: 4px;
+            font-size: 16px;
+            margin-bottom: 5px;
         }
 
         .info p {
             color: #64748b;
             font-size: 13px;
+            line-height: 1.5;
         }
+
+        .message {
+            margin-top: 8px;
+            background: #f8fafc;
+            padding: 8px 10px;
+            border-radius: 7px;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        /* ================= ACTIONS ================= */
 
         .actions {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .action-btn {
@@ -170,9 +208,17 @@
             color: white;
         }
 
+        .accept-btn:hover {
+            background: #1d4ed8;
+        }
+
         .reject-btn {
             background: #fee2e2;
             color: #991b1b;
+        }
+
+        .reject-btn:hover {
+            background: #fecaca;
         }
 
         .delete-btn {
@@ -180,12 +226,24 @@
             color: #475569;
         }
 
+        .delete-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .view-btn {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* ================= STATUS ================= */
+
         .badge {
             font-size: 11px;
             font-weight: 700;
-            padding: 4px 10px;
+            padding: 5px 10px;
             border-radius: 20px;
             text-transform: capitalize;
+            white-space: nowrap;
         }
 
         .badge-available {
@@ -198,6 +256,23 @@
             color: #854d0e;
         }
 
+        .badge-pending {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        .badge-approved {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ================= EMPTY ================= */
+
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -206,6 +281,42 @@
             border: 1px dashed #dbe2ea;
             border-radius: 14px;
         }
+
+        .empty-state h3 {
+            color: #172033;
+            margin-bottom: 8px;
+        }
+
+        .empty-state a {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* ================= ERROR ================= */
+
+        .error-state {
+            text-align: center;
+            padding: 30px 20px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 14px;
+            color: #991b1b;
+        }
+
+        .error-state h3 {
+            margin-bottom: 8px;
+        }
+
+        /* ================= LOADING ================= */
+
+        .loading {
+            text-align: center;
+            padding: 35px;
+            color: #64748b;
+        }
+
+        /* ================= FOOTER ================= */
 
         footer {
             background: #172033;
@@ -221,149 +332,1426 @@
             font-size: 14px;
         }
 
+        /* ================= MOBILE ================= */
+
         @media (max-width: 700px) {
+
             nav a:not(.login):not(.signup) {
                 display: none;
             }
 
-            .request-card, .item-row {
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .request-card,
+            .item-row {
                 flex-wrap: wrap;
             }
+
+            .info {
+                min-width: calc(100% - 80px);
+            }
+
+            .actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .badge {
+                margin-left: 76px;
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
 <header>
-    <a href="index.html" class="logo">BorrowBuddy</a>
+
+    <a href="index.html" class="logo">
+        BorrowBuddy
+    </a>
+
 
     <nav>
-        <a href="index.html">Home</a>
-        <a href="browse.html">Browse</a>
-        <a href="index.html#how-it-works">How It Works</a>
 
-        <span id="authLoggedOut" style="display:flex; align-items:center; gap:25px;">
-            <a href="login.html" class="login">Login</a>
-            <a href="signup.html" class="signup">Sign Up</a>
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="browse.html">
+            Browse
+        </a>
+
+        <a href="index.html#how-it-works">
+            How It Works
+        </a>
+
+
+        <!-- LOGGED OUT -->
+
+        <span
+            id="authLoggedOut"
+            style="display:flex; align-items:center; gap:25px;"
+        >
+
+            <a
+                href="login.html"
+                class="login"
+            >
+                Login
+            </a>
+
+            <a
+                href="signup.html"
+                class="signup"
+            >
+                Sign Up
+            </a>
+
         </span>
+
+
+        <!-- LOGGED IN -->
 
         <span id="authLoggedIn">
-            <a href="my-items.html">My Items</a>
-            <a href="my-requests.html">My Requests</a>
-            <button class="logout-btn" onclick="bbLogout()">Logout</button>
+
+            <a href="my-items.html">
+                My Items
+            </a>
+
+            <a href="my-requests.html">
+                My Requests
+            </a>
+
+            <button
+                type="button"
+                class="logout-btn"
+                onclick="bbLogout()"
+            >
+                Logout
+            </button>
+
         </span>
+
     </nav>
+
 </header>
 
+
+<!-- ==================================================
+     PAGE HEADER
+================================================== -->
+
 <section class="page-header">
-    <h1>My Items</h1>
-    <p>Manage the items you've listed and respond to borrow requests.</p>
-    <a href="list-item.html" class="cta">+ List a New Item</a>
+
+    <h1>
+        My Items
+    </h1>
+
+    <p>
+        Manage your listings and respond to borrow requests.
+    </p>
+
+    <a
+        href="list-item.html"
+        class="cta"
+    >
+        + List a New Item
+    </a>
+
 </section>
 
-<div class="section-wrap">
-    <h2>Incoming Requests</h2>
-    <div id="incomingWrap"></div>
-</div>
+
+<!-- ==================================================
+     INCOMING REQUESTS
+================================================== -->
 
 <div class="section-wrap">
-    <h2>Your Listings</h2>
-    <div id="listingsWrap"></div>
+
+    <h2>
+        Incoming Requests
+    </h2>
+
+    <div id="incomingWrap">
+
+        <div class="loading">
+            Loading requests...
+        </div>
+
+    </div>
+
 </div>
+
+
+<!-- ==================================================
+     YOUR LISTINGS
+================================================== -->
+
+<div class="section-wrap">
+
+    <h2>
+        Your Listings
+    </h2>
+
+    <div id="listingsWrap">
+
+        <div class="loading">
+            Loading your items...
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     FOOTER
+================================================== -->
 
 <footer>
-    <h2>BorrowBuddy</h2>
-    <p>Borrow what you need. Share what you don't.</p>
-    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+
+    <h2>
+        BorrowBuddy
+    </h2>
+
+    <p>
+        Borrow what you need. Share what you don't.
+    </p>
+
+    <p>
+        © 2026 BorrowBuddy. All rights reserved.
+    </p>
+
 </footer>
 
+
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
 <script src="auth.js"></script>
-<script src="items-data.js"></script>
-<script src="requests.js"></script>
+
+
 <script>
-    const user = bbRequireAuth();
 
-    function renderIncoming() {
-        const wrap = document.getElementById("incomingWrap");
-        const incoming = bbGetIncomingRequests(user.id).filter(r => r.status === "pending");
+"use strict";
 
-        if (incoming.length === 0) {
-            wrap.innerHTML = `<div class="empty-state">No pending requests right now.</div>`;
-            return;
+
+/* ==================================================
+   GLOBAL VARIABLES
+================================================== */
+
+let currentUser = null;
+
+let incomingRequests = [];
+
+let myItems = [];
+
+
+/* ==================================================
+   ELEMENTS
+================================================== */
+
+const incomingWrap =
+    document.getElementById(
+        "incomingWrap"
+    );
+
+const listingsWrap =
+    document.getElementById(
+        "listingsWrap"
+    );
+
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ==================================================
+   GET CURRENT USER
+================================================== */
+
+async function getCurrentUser() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+
+        if (error) {
+
+            console.error(
+                "User error:",
+                error
+            );
+
+            return null;
+
         }
 
-        wrap.innerHTML = "";
 
-        incoming.forEach(req => {
-            const item = bbGetItemById(req.itemId);
-            const users = bbGetUsers();
-            const borrower = users.find(u => u.id === req.borrowerId);
-            const borrowerName = borrower ? borrower.name : "A user";
+        return data.user || null;
 
-            const card = document.createElement("div");
-            card.className = "request-card";
+    }
+
+    catch (error) {
+
+        console.error(
+            "Current user error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* ==================================================
+   LOAD EVERYTHING
+================================================== */
+
+async function loadPage() {
+
+    incomingWrap.innerHTML = `
+        <div class="loading">
+            Loading incoming requests...
+        </div>
+    `;
+
+    listingsWrap.innerHTML = `
+        <div class="loading">
+            Loading your listings...
+        </div>
+    `;
+
+
+    currentUser =
+        await getCurrentUser();
+
+
+    /* ================================
+       NOT LOGGED IN
+    ================================= */
+
+    if (!currentUser) {
+
+        incomingWrap.innerHTML = `
+            <div class="error-state">
+                <h3>Please log in</h3>
+                <p>
+                    You need to log in to manage your items.
+                </p>
+            </div>
+        `;
+
+
+        listingsWrap.innerHTML = `
+            <div class="error-state">
+                <h3>Please log in</h3>
+                <p>
+                    You need to log in to see your listings.
+                </p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    await Promise.all([
+        loadIncomingRequests(),
+        loadMyItems()
+    ]);
+
+}
+
+
+/* ==================================================
+   LOAD INCOMING REQUESTS
+================================================== */
+
+async function loadIncomingRequests() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+
+            .from("borrow_requests")
+
+            .select(`
+                id,
+                item_id,
+                borrower_id,
+                owner_id,
+                message,
+                status,
+                requested_at,
+                approved_at,
+                returned_at,
+
+                items (
+                    id,
+                    title,
+                    icon,
+                    availability,
+                    price_type,
+                    price_amount
+                ),
+
+                profiles:borrower_id (
+                    id,
+                    full_name,
+                    email
+                )
+            `)
+
+            .eq(
+                "owner_id",
+                currentUser.id
+            )
+
+            .order(
+                "requested_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Incoming request error:",
+            error
+        );
+
+
+        incomingWrap.innerHTML = `
+            <div class="error-state">
+                <h3>
+                    Could not load requests
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    incomingRequests =
+        data || [];
+
+
+    renderIncomingRequests();
+
+}
+
+
+/* ==================================================
+   RENDER INCOMING REQUESTS
+================================================== */
+
+function renderIncomingRequests() {
+
+    /*
+     Only show pending requests
+     in the main Incoming Requests
+     section.
+    */
+
+    const pendingRequests =
+        incomingRequests.filter(
+            request =>
+                request.status ===
+                "pending"
+        );
+
+
+    if (
+        pendingRequests.length ===
+        0
+    ) {
+
+        incomingWrap.innerHTML = `
+            <div class="empty-state">
+
+                <h3>
+                    No pending requests
+                </h3>
+
+                <p>
+                    You don't have any new borrow requests right now.
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    incomingWrap.innerHTML = "";
+
+
+    pendingRequests.forEach(
+        request => {
+
+            const item =
+                request.items;
+
+
+            const borrower =
+                request.profiles;
+
+
+            if (!item) {
+                return;
+            }
+
+
+            const borrowerName =
+                borrower &&
+                borrower.full_name
+                    ? borrower.full_name
+                    : "BorrowBuddy User";
+
+
+            const message =
+                request.message
+                    ? `
+                        <div class="message">
+                            <strong>
+                                Message:
+                            </strong>
+
+                            ${escapeHtml(
+                                request.message
+                            )}
+                        </div>
+                    `
+                    : "";
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "request-card";
+
+
             card.innerHTML = `
-                <div class="photo">${item.photo}</div>
+
+                <div class="photo">
+
+                    ${escapeHtml(
+                        item.icon ||
+                        "📦"
+                    )}
+
+                </div>
+
+
                 <div class="info">
-                    <h3>${item.name}</h3>
-                    <p>Requested by ${borrowerName}</p>
+
+                    <h3>
+
+                        ${escapeHtml(
+                            item.title ||
+                            "Untitled Item"
+                        )}
+
+                    </h3>
+
+
+                    <p>
+
+                        Requested by
+
+                        <strong>
+                            ${escapeHtml(
+                                borrowerName
+                            )}
+                        </strong>
+
+                    </p>
+
+
+                    ${
+                        borrower &&
+                        borrower.email
+                            ? `
+                                <p>
+                                    ${escapeHtml(
+                                        borrower.email
+                                    )}
+                                </p>
+                            `
+                            : ""
+                    }
+
+
+                    ${message}
+
                 </div>
+
+
                 <div class="actions">
-                    <button class="action-btn accept-btn" onclick="respond('${req.id}', 'accepted')">Accept</button>
-                    <button class="action-btn reject-btn" onclick="respond('${req.id}', 'rejected')">Reject</button>
+
+                    <button
+                        type="button"
+                        class="action-btn accept-btn"
+                        onclick="respondToRequest(
+                            '${request.id}',
+                            'approved'
+                        )"
+                    >
+                        Accept
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="action-btn reject-btn"
+                        onclick="respondToRequest(
+                            '${request.id}',
+                            'rejected'
+                        )"
+                    >
+                        Reject
+                    </button>
+
                 </div>
+
             `;
-            wrap.appendChild(card);
-        });
+
+
+            incomingWrap.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   RESPOND TO REQUEST
+================================================== */
+
+async function respondToRequest(
+    requestId,
+    newStatus
+) {
+
+    if (!currentUser) {
+        return;
     }
 
-    function renderListings() {
-        const wrap = document.getElementById("listingsWrap");
-        const items = bbGetItemsByOwner(user.id);
 
-        if (items.length === 0) {
-            wrap.innerHTML = `<div class="empty-state">You haven't listed anything yet. <a href="list-item.html">List your first item →</a></div>`;
+    const request =
+        incomingRequests.find(
+            item =>
+                item.id ===
+                requestId
+        );
+
+
+    if (!request) {
+
+        alert(
+            "Request could not be found."
+        );
+
+        return;
+
+    }
+
+
+    /* ================================
+       CONFIRM ACTION
+    ================================= */
+
+    let confirmationMessage =
+        "";
+
+
+    if (
+        newStatus ===
+        "approved"
+    ) {
+
+        confirmationMessage =
+            "Approve this borrow request?";
+
+    } else {
+
+        confirmationMessage =
+            "Reject this borrow request?";
+
+    }
+
+
+    if (
+        !confirm(
+            confirmationMessage
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    /* ================================
+       APPROVE
+    ================================= */
+
+    if (
+        newStatus ===
+        "approved"
+    ) {
+
+        /*
+         First make sure the item
+         is still available.
+        */
+
+        const {
+            data: item,
+            error: itemError
+        } =
+            await supabaseClient
+
+                .from("items")
+
+                .select(
+                    "id, availability"
+                )
+
+                .eq(
+                    "id",
+                    request.item_id
+                )
+
+                .single();
+
+
+        if (itemError) {
+
+            console.error(
+                itemError
+            );
+
+            alert(
+                "Could not check item availability."
+            );
+
             return;
+
         }
 
-        wrap.innerHTML = "";
 
-        items.forEach(item => {
-            const row = document.createElement("div");
-            row.className = "item-row";
-            row.innerHTML = `
-                <div class="photo">${item.photo}</div>
-                <div class="info">
-                    <h3>${item.name}</h3>
-                    <p>${item.category} · ${item.price}</p>
-                </div>
-                <span class="badge ${item.availability ? 'badge-available' : 'badge-unavailable'}">
-                    ${item.availability ? 'Available' : 'Borrowed'}
-                </span>
-                <div class="actions">
-                    <button class="action-btn delete-btn" onclick="removeItem('${item.id}')">Delete</button>
-                </div>
-            `;
-            wrap.appendChild(row);
-        });
-    }
+        if (
+            !item ||
+            item.availability !==
+            "available"
+        ) {
 
-    function respond(requestId, status) {
-        bbUpdateRequestStatus(requestId, status);
-        renderIncoming();
-        renderListings();
-    }
+            alert(
+                "This item is no longer available."
+            );
 
-    function removeItem(itemId) {
-        if (confirm("Delete this listing? This can't be undone.")) {
-            bbDeleteItem(itemId);
-            renderListings();
+            await loadIncomingRequests();
+
+            return;
+
         }
+
+
+        /*
+         Update request.
+        */
+
+        const {
+            error: requestError
+        } =
+            await supabaseClient
+
+                .from("borrow_requests")
+
+                .update({
+
+                    status:
+                        "approved",
+
+                    approved_at:
+                        new Date()
+                            .toISOString()
+
+                })
+
+                .eq(
+                    "id",
+                    requestId
+                )
+
+                .eq(
+                    "owner_id",
+                    currentUser.id
+                );
+
+
+        if (requestError) {
+
+            console.error(
+                "Approve error:",
+                requestError
+            );
+
+            alert(
+                "Could not approve request.\n\n" +
+                requestError.message
+            );
+
+            return;
+
+        }
+
+
+        /*
+         Make the item unavailable.
+        */
+
+        const {
+            error: itemUpdateError
+        } =
+            await supabaseClient
+
+                .from("items")
+
+                .update({
+
+                    availability:
+                        "unavailable"
+
+                })
+
+                .eq(
+                    "id",
+                    request.item_id
+                )
+
+                .eq(
+                    "owner_id",
+                    currentUser.id
+                );
+
+
+        if (itemUpdateError) {
+
+            console.error(
+                "Item availability error:",
+                itemUpdateError
+            );
+
+            alert(
+                "Request approved, but the item availability could not be updated.\n\n" +
+                itemUpdateError.message
+            );
+
+        } else {
+
+            alert(
+                "Request approved successfully!"
+            );
+
+        }
+
+
+        /*
+         Refresh page data.
+        */
+
+        await loadPage();
+
+        return;
+
     }
 
-    renderIncoming();
+
+    /* ================================
+       REJECT
+    ================================= */
+
+    if (
+        newStatus ===
+        "rejected"
+    ) {
+
+        const {
+            error
+        } =
+            await supabaseClient
+
+                .from("borrow_requests")
+
+                .update({
+
+                    status:
+                        "rejected"
+
+                })
+
+                .eq(
+                    "id",
+                    requestId
+                )
+
+                .eq(
+                    "owner_id",
+                    currentUser.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Reject error:",
+                error
+            );
+
+            alert(
+                "Could not reject request.\n\n" +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        alert(
+            "Request rejected."
+        );
+
+
+        await loadPage();
+
+    }
+
+}
+
+
+/* ==================================================
+   LOAD MY ITEMS
+================================================== */
+
+async function loadMyItems() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+
+            .from("items")
+
+            .select(`
+                id,
+                title,
+                icon,
+                category,
+                location,
+                availability,
+                price_type,
+                price_amount,
+                created_at
+            `)
+
+            .eq(
+                "owner_id",
+                currentUser.id
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Items loading error:",
+            error
+        );
+
+
+        listingsWrap.innerHTML = `
+            <div class="error-state">
+
+                <h3>
+                    Could not load your listings
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    myItems =
+        data || [];
+
+
     renderListings();
+
+}
+
+
+/* ==================================================
+   RENDER LISTINGS
+================================================== */
+
+function renderListings() {
+
+    if (
+        myItems.length ===
+        0
+    ) {
+
+        listingsWrap.innerHTML = `
+            <div class="empty-state">
+
+                <h3>
+                    You haven't listed anything yet.
+                </h3>
+
+                <p>
+                    Start sharing something with your community.
+                </p>
+
+                <br>
+
+                <a href="list-item.html">
+                    List your first item →
+                </a>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    listingsWrap.innerHTML = "";
+
+
+    myItems.forEach(
+        item => {
+
+            /*
+             Price
+            */
+
+            let priceText =
+                "Free to borrow";
+
+
+            if (
+                item.price_type ===
+                "paid"
+                &&
+                item.price_amount !==
+                null
+            ) {
+
+                priceText =
+                    "₹" +
+                    Number(
+                        item.price_amount
+                    ).toLocaleString(
+                        "en-IN"
+                    ) +
+                    " / day";
+
+            }
+
+
+            /*
+             Availability
+            */
+
+            const isAvailable =
+                item.availability ===
+                "available";
+
+
+            /*
+             Create row
+            */
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "item-row";
+
+
+            row.innerHTML = `
+
+                <div class="photo">
+
+                    ${escapeHtml(
+                        item.icon ||
+                        "📦"
+                    )}
+
+                </div>
+
+
+                <div class="info">
+
+                    <h3>
+
+                        ${escapeHtml(
+                            item.title ||
+                            "Untitled Item"
+                        )}
+
+                    </h3>
+
+
+                    <p>
+
+                        ${
+                            item.category
+                                ? escapeHtml(
+                                    item.category
+                                ) + " · "
+                                : ""
+                        }
+
+                        ${escapeHtml(
+                            priceText
+                        )}
+
+                    </p>
+
+                </div>
+
+
+                <span
+                    class="badge ${
+                        isAvailable
+                            ? "badge-available"
+                            : "badge-unavailable"
+                    }"
+                >
+
+                    ${
+                        isAvailable
+                            ? "Available"
+                            : "Borrowed"
+                    }
+
+                </span>
+
+
+                <div class="actions">
+
+                    <a
+                        href="item.html?id=${encodeURIComponent(
+                            item.id
+                        )}"
+                        class="action-btn view-btn"
+                        style="text-decoration:none;"
+                    >
+                        View
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="action-btn delete-btn"
+                        onclick="deleteItem(
+                            '${item.id}'
+                        )"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            `;
+
+
+            listingsWrap.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   DELETE ITEM
+================================================== */
+
+async function deleteItem(
+    itemId
+) {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    /*
+     Find item.
+    */
+
+    const item =
+        myItems.find(
+            item =>
+                item.id ===
+                itemId
+        );
+
+
+    if (!item) {
+
+        alert(
+            "Item not found."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Don't allow deleting an
+     item that is currently borrowed.
+    */
+
+    if (
+        item.availability !==
+        "available"
+    ) {
+
+        alert(
+            "You cannot delete an item while it is currently borrowed."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Confirm.
+    */
+
+    const confirmed =
+        confirm(
+            "Delete \"" +
+            item.title +
+            "\"?\n\nThis cannot be undone."
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    /*
+     Delete borrow requests
+     associated with this item
+     first.
+    */
+
+    const {
+        error: requestDeleteError
+    } =
+        await supabaseClient
+
+            .from("borrow_requests")
+
+            .delete()
+
+            .eq(
+                "item_id",
+                itemId
+            );
+
+
+    if (requestDeleteError) {
+
+        console.warn(
+            "Could not delete related requests:",
+            requestDeleteError
+        );
+
+        /*
+         We continue because your
+         database may already have
+         cascading delete enabled.
+        */
+
+    }
+
+
+    /*
+     Delete item.
+    */
+
+    const {
+        error
+    } =
+        await supabaseClient
+
+            .from("items")
+
+            .delete()
+
+            .eq(
+                "id",
+                itemId
+            )
+
+            .eq(
+                "owner_id",
+                currentUser.id
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Delete item error:",
+            error
+        );
+
+        alert(
+            "Could not delete this item.\n\n" +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "Item deleted successfully."
+    );
+
+
+    /*
+     Reload listings.
+    */
+
+    await loadMyItems();
+
+}
+
+
+/* ==================================================
+   START
+================================================== */
+
+loadPage();
+
 </script>
 
 </body>
