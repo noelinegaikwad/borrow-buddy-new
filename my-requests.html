@@ -78,7 +78,7 @@
             padding: 9px 16px;
             border-radius: 8px;
             color: #475569;
-            background: none;
+            background: white;
             cursor: pointer;
             font-size: 14px;
         }
@@ -187,7 +187,6 @@
             padding: 8px 10px;
             background: #f8fafc;
             border-radius: 7px;
-            color: #475569 !important;
         }
 
         /* ================= STATUS ================= */
@@ -214,11 +213,6 @@
         .status-rejected {
             background: #fee2e2;
             color: #991b1b;
-        }
-
-        .status-cancelled {
-            background: #f1f5f9;
-            color: #475569;
         }
 
         .status-returned {
@@ -253,16 +247,7 @@
             background: #1d4ed8;
         }
 
-        .chat-btn {
-            background: #0f766e;
-            color: white;
-        }
-
-        .chat-btn:hover {
-            background: #115e59;
-        }
-
-        /* ================= EMPTY / LOADING ================= */
+        /* ================= STATES ================= */
 
         .empty-state {
             text-align: center;
@@ -292,10 +277,6 @@
             border: 1px solid #fecaca;
             border-radius: 12px;
             color: #991b1b;
-        }
-
-        .error-state h3 {
-            margin-bottom: 8px;
         }
 
         .login-state {
@@ -409,7 +390,6 @@
 
         </span>
 
-
         <!-- LOGGED IN -->
 
         <span id="authLoggedIn">
@@ -452,7 +432,7 @@
 </section>
 
 
-<!-- ================= FILTER TABS ================= -->
+<!-- ================= FILTERS ================= -->
 
 <div class="tabs">
 
@@ -558,9 +538,7 @@ let currentUser = null;
 let currentFilter = "all";
 
 const listWrap =
-    document.getElementById(
-        "listWrap"
-    );
+    document.getElementById("listWrap");
 
 
 /* ==================================================
@@ -574,11 +552,7 @@ async function getCurrentUser() {
         const {
             data,
             error
-        } =
-            await supabaseClient
-                .auth
-                .getUser();
-
+        } = await supabaseClient.auth.getUser();
 
         if (error) {
 
@@ -590,12 +564,9 @@ async function getCurrentUser() {
             return null;
         }
 
-
         return data.user || null;
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "Current user error:",
@@ -603,9 +574,7 @@ async function getCurrentUser() {
         );
 
         return null;
-
     }
-
 }
 
 
@@ -677,52 +646,51 @@ async function loadRequests() {
     const {
         data: requests,
         error
-    } =
-        await supabaseClient
+    } = await supabaseClient
 
-            .from("borrow_requests")
+        .from("borrow_requests")
 
-            .select(`
+        .select(`
+            id,
+            item_id,
+            borrower_id,
+            owner_id,
+            message,
+            status,
+            requested_at,
+            approved_at,
+            returned_at,
+
+            items (
                 id,
-                item_id,
-                borrower_id,
-                owner_id,
-                message,
-                status,
-                requested_at,
-                approved_at,
-                returned_at,
+                title,
+                icon,
+                price_type,
+                price_amount,
+                location
+            ),
 
-                items (
-                    id,
-                    title,
-                    icon,
-                    price_type,
-                    price_amount,
-                    location
-                ),
-
-                profiles:owner_id (
-                    id,
-                    full_name
-                )
-            `)
-
-            .eq(
-                "borrower_id",
-                currentUser.id
+            profiles:owner_id (
+                id,
+                full_name
             )
+        `)
 
-            .order(
-                "requested_at",
-                {
-                    ascending: false
-                }
-            );
+        .eq(
+            "borrower_id",
+            currentUser.id
+        )
+
+        .order(
+            "requested_at",
+            {
+                ascending: false
+            }
+        );
 
 
     /* ================================
-       DATABASE ERROR
+       ERROR
     ================================= */
 
     if (error) {
@@ -731,7 +699,6 @@ async function loadRequests() {
             "Requests loading error:",
             error
         );
-
 
         listWrap.innerHTML = `
 
@@ -756,7 +723,6 @@ async function loadRequests() {
     renderRequests(
         requests || []
     );
-
 }
 
 
@@ -764,9 +730,7 @@ async function loadRequests() {
    RENDER REQUESTS
 ================================================== */
 
-function renderRequests(
-    requests
-) {
+function renderRequests(requests) {
 
     let filteredRequests =
         requests;
@@ -776,10 +740,7 @@ function renderRequests(
        FILTER
     ================================= */
 
-    if (
-        currentFilter !==
-        "all"
-    ) {
+    if (currentFilter !== "all") {
 
         filteredRequests =
             requests.filter(
@@ -796,18 +757,14 @@ function renderRequests(
     ================================= */
 
     if (
-        filteredRequests.length ===
-        0
+        filteredRequests.length === 0
     ) {
 
         let message =
             "Browse items and send a request to get started.";
 
 
-        if (
-            currentFilter !==
-            "all"
-        ) {
+        if (currentFilter !== "all") {
 
             message =
                 "You don't have any " +
@@ -826,7 +783,7 @@ function renderRequests(
                 </h3>
 
                 <p>
-                    ${message}
+                    ${escapeHtml(message)}
                 </p>
 
                 <br>
@@ -844,245 +801,224 @@ function renderRequests(
 
 
     /* ================================
-       CLEAR LIST
+       CLEAR
     ================================= */
 
     listWrap.innerHTML = "";
 
 
     /* ================================
-       CREATE CARDS
+       CARDS
     ================================= */
 
-    filteredRequests.forEach(
-        request => {
+    filteredRequests.forEach(request => {
 
-            const item =
-                request.items;
+        const item =
+            request.items;
 
+        const owner =
+            request.profiles;
 
-            const owner =
-                request.profiles;
 
+        if (!item) {
+            return;
+        }
 
-            /* -------------------------
-               Safety check
-            -------------------------- */
 
-            if (!item) {
-                return;
-            }
+        /* PRICE */
 
+        let priceText =
+            "Free to borrow";
 
-            /* -------------------------
-               Price
-            -------------------------- */
 
-            let priceText =
-                "Free to borrow";
+        if (
+            item.price_type === "paid" &&
+            item.price_amount !== null
+        ) {
 
+            priceText =
+                "₹" +
+                Number(
+                    item.price_amount
+                ).toLocaleString("en-IN") +
+                " / day";
 
-            if (
-                item.price_type ===
-                "paid"
-                &&
-                item.price_amount !==
-                null
-            ) {
+        }
 
-                priceText =
-                    "₹" +
-                    Number(
-                        item.price_amount
-                    ).toLocaleString(
-                        "en-IN"
-                    ) +
-                    " / day";
 
-            }
+        /* OWNER */
 
+        const ownerName =
+            owner &&
+            owner.full_name
+                ? owner.full_name
+                : "BorrowBuddy User";
 
-            /* -------------------------
-               Owner
-            -------------------------- */
 
-            const ownerName =
-                owner &&
-                owner.full_name
-                    ? owner.full_name
-                    : "BorrowBuddy User";
+        /* STATUS */
 
+        let statusText =
+            request.status;
 
-            /* -------------------------
-               Status
-            -------------------------- */
 
-            let statusText =
-                request.status;
+        if (request.status === "approved") {
 
+            statusText =
+                "Currently Borrowed";
 
-            if (
-                request.status ===
-                "approved"
-            ) {
+        }
 
-                statusText =
-                    "Approved";
 
-            }
+        if (request.status === "returned") {
 
+            statusText =
+                "Returned";
 
-            /* -------------------------
-               Actions
-            -------------------------- */
+        }
 
-            let actionsHtml =
-                "";
 
+        if (request.status === "pending") {
 
-            /*
-             APPROVED REQUEST
+            statusText =
+                "Pending";
 
-             Show Chat later.
-             For now only return button.
-            */
+        }
 
-            if (
-                request.status ===
-                "approved"
-            ) {
 
-                actionsHtml = `
+        if (request.status === "rejected") {
 
-                    <button
-                        class="action-btn return-btn"
-                        onclick="markReturned('${request.id}')"
-                    >
-                        Mark as Returned
-                    </button>
+            statusText =
+                "Rejected";
 
-                `;
+        }
 
-            }
 
+        /* ACTION */
 
-            /*
-             RETURNED
+        let actionsHtml = "";
 
-             No action.
-            */
 
-            if (
-                request.status ===
-                "returned"
-            ) {
+        if (
+            request.status === "approved"
+        ) {
 
-                actionsHtml = "";
+            actionsHtml = `
 
-            }
-
-
-            /*
-             CARD
-            */
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "request-card";
-
-
-            card.innerHTML = `
-
-                <div class="request-photo">
-                    ${escapeHtml(
-                        item.icon || "📦"
-                    )}
-                </div>
-
-
-                <div class="request-info">
-
-                    <h3>
-                        ${escapeHtml(
-                            item.title ||
-                            "Untitled Item"
-                        )}
-                    </h3>
-
-
-                    <p>
-                        Owner:
-                        ${escapeHtml(
-                            ownerName
-                        )}
-                        ·
-                        ${escapeHtml(
-                            priceText
-                        )}
-                    </p>
-
-
-                    ${
-                        request.message
-                        ? `
-
-                            <p class="request-message">
-
-                                <strong>
-                                    Your message:
-                                </strong>
-
-                                ${escapeHtml(                                    request.message
-                                )}
-
-                            </p>
-
-                        `
-                        : ""
-                    }
-
-                </div>
-
-
-                <div class="request-actions">
-
-                    <span
-                        class="status-pill status-${escapeHtml(
-                            request.status
-                        )}"
-                    >
-                        ${escapeHtml(statusText)}
-                    </span>
-
-
-                    ${actionsHtml}
-
-                </div>
+                <button
+                    type="button"
+                    class="action-btn return-btn"
+                    onclick="markReturned('${request.id}', '${request.item_id}')"
+                >
+                    Mark as Returned
+                </button>
 
             `;
 
-
-            listWrap.appendChild(
-                card
-            );
-
         }
-    );
 
+
+        /* CARD */
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "request-card";
+
+
+        card.innerHTML = `
+
+            <div class="request-photo">
+
+                ${escapeHtml(
+                    item.icon || "📦"
+                )}
+
+            </div>
+
+
+            <div class="request-info">
+
+                <h3>
+
+                    ${escapeHtml(
+                        item.title ||
+                        "Untitled Item"
+                    )}
+
+                </h3>
+
+
+                <p>
+
+                    Owner:
+                    ${escapeHtml(ownerName)}
+
+                    ·
+
+                    ${escapeHtml(priceText)}
+
+                </p>
+
+
+                ${
+                    request.message
+                    ? `
+
+                        <p class="request-message">
+
+                            <strong>
+                                Your message:
+                            </strong>
+
+                            ${escapeHtml(
+                                request.message
+                            )}
+
+                        </p>
+
+                    `
+                    : ""
+                }
+
+            </div>
+
+
+            <div class="request-actions">
+
+                <span
+                    class="status-pill status-${escapeHtml(
+                        request.status
+                    )}"
+                >
+
+                    ${escapeHtml(
+                        statusText
+                    )}
+
+                </span>
+
+
+                ${actionsHtml}
+
+            </div>
+
+        `;
+
+
+        listWrap.appendChild(card);
+
+    });
 }
 
 
 /* ==================================================
-   MARK REQUEST AS RETURNED
+   MARK AS RETURNED
 ================================================== */
 
 async function markReturned(
-    requestId
+    requestId,
+    itemId
 ) {
 
     if (!currentUser) {
@@ -1101,62 +1037,99 @@ async function markReturned(
     }
 
 
-    /*
-     Update the request in Supabase
-    */
+    /* ================================
+       UPDATE REQUEST
+    ================================= */
 
     const {
-        error
-    } =
-        await supabaseClient
+        error: requestError
+    } = await supabaseClient
 
-            .from("borrow_requests")
+        .from("borrow_requests")
 
-            .update({
-                status: "returned",
-                returned_at:
-                    new Date().toISOString()
-            })
+        .update({
+            status: "returned",
+            returned_at:
+                new Date().toISOString()
+        })
 
-            .eq(
-                "id",
-                requestId
-            )
+        .eq(
+            "id",
+            requestId
+        )
 
-            .eq(
-                "borrower_id",
-                currentUser.id
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Return update error:",
-            error
+        .eq(
+            "borrower_id",
+            currentUser.id
         );
 
 
+    if (requestError) {
+
+        console.error(
+            "Return request error:",
+            requestError
+        );
+
         alert(
-            "Could not mark the item as returned.\n\n" +
-            error.message
+            "Could not mark the request as returned.\n\n" +
+            requestError.message
         );
 
         return;
     }
 
 
+    /* ================================
+       MAKE ITEM AVAILABLE AGAIN
+    ================================= */
+
+    const {
+        error: itemError
+    } = await supabaseClient
+
+        .from("items")
+
+        .update({
+            availability: true
+        })
+
+        .eq(
+            "id",
+            itemId
+        );
+
+
+    if (itemError) {
+
+        console.error(
+            "Item availability error:",
+            itemError
+        );
+
+        alert(
+            "The request was marked as returned, " +
+            "but the item availability could not be updated.\n\n" +
+            itemError.message
+        );
+
+        await loadRequests();
+
+        return;
+    }
+
+
+    /* ================================
+       SUCCESS
+    ================================= */
+
     alert(
-        "Item marked as returned successfully!"
+        "Item returned successfully!\n\n" +
+        "The item is now available for other users to borrow."
     );
 
 
-    /*
-     Reload the requests
-    */
-
     await loadRequests();
-
 }
 
 
@@ -1164,9 +1137,7 @@ async function markReturned(
    ESCAPE HTML
 ================================================== */
 
-function escapeHtml(
-    value
-) {
+function escapeHtml(value) {
 
     if (
         value === null ||
@@ -1204,7 +1175,6 @@ function escapeHtml(
             /'/g,
             "&#039;"
         );
-
 }
 
 
@@ -1214,62 +1184,42 @@ function escapeHtml(
 
 document
     .querySelectorAll(".tab-btn")
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    /*
-                     Remove active
-                     from all buttons
-                    */
+                document
+                    .querySelectorAll(".tab-btn")
+                    .forEach(btn => {
 
-                    document
-                        .querySelectorAll(
-                            ".tab-btn"
-                        )
-                        .forEach(
-                            btn =>
-                                btn.classList.remove(
-                                    "active"
-                                )
+                        btn.classList.remove(
+                            "active"
                         );
 
-
-                    /*
-                     Activate clicked button
-                    */
-
-                    button.classList.add(
-                        "active"
-                    );
+                    });
 
 
-                    /*
-                     Change filter
-                    */
-
-                    currentFilter =
-                        button.dataset.filter;
+                button.classList.add(
+                    "active"
+                );
 
 
-                    /*
-                     Reload requests
-                    */
+                currentFilter =
+                    button.dataset.filter;
 
-                    loadRequests();
 
-                }
-            );
+                loadRequests();
 
-        }
-    );
+            }
+        );
+
+    });
 
 
 /* ==================================================
-   START PAGE
+   START
 ================================================== */
 
 loadRequests();
@@ -1278,4 +1228,3 @@ loadRequests();
 
 </body>
 </html>
-   
