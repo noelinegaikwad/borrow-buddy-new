@@ -1,682 +1,774 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List an Item | BorrowBuddy</title>
+    <title>List an Item | BorrowBuddy</title><style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+    body {
+        background: #f8fafc;
+        color: #172033;
+    }
 
-        body {
-            background: #f8fafc;
-            color: #172033;
-        }
+    header {
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 18px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        header {
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 18px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .logo {
+        font-size: 25px;
+        font-weight: 800;
+        color: #2563eb;
+        text-decoration: none;
+    }
 
-        .logo {
-            font-size: 25px;
-            font-weight: 800;
-            color: #2563eb;
-            text-decoration: none;
-        }
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
 
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
+    nav a {
+        text-decoration: none;
+        color: #475569;
+        font-size: 14px;
+    }
 
-        nav a {
-            text-decoration: none;
-            color: #475569;
-            font-size: 14px;
-        }
+    nav a:hover {
+        color: #2563eb;
+    }
 
-        nav a:hover {
-            color: #2563eb;
-        }
+    .login {
+        border: 1px solid #2563eb;
+        padding: 9px 16px;
+        border-radius: 8px;
+        color: #2563eb;
+    }
 
-        .login {
-            border: 1px solid #2563eb;
-            padding: 9px 16px;
-            border-radius: 8px;
-            color: #2563eb;
-        }
+    .signup {
+        background: #2563eb;
+        color: white !important;
+        padding: 10px 16px;
+        border-radius: 8px;
+    }
 
-        .signup {
-            background: #2563eb;
-            color: white !important;
-            padding: 10px 16px;
-            border-radius: 8px;
-        }
+    #authLoggedIn {
+        display: none;
+        align-items: center;
+        gap: 20px;
+    }
 
-        #authLoggedIn {
+    .logout-btn {
+        border: 1px solid #cbd5e1;
+        padding: 9px 16px;
+        border-radius: 8px;
+        color: #475569;
+        background: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .page-header {
+        text-align: center;
+        padding: 50px 7% 30px;
+    }
+
+    .page-header h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .page-header p {
+        color: #64748b;
+    }
+
+    .form-wrap {
+        max-width: 640px;
+        margin: 0 auto 90px;
+        padding: 0 20px;
+    }
+
+    .form-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 34px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .field {
+        margin-bottom: 20px;
+    }
+
+    .field label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #334155;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+        width: 100%;
+        padding: 12px 13px;
+        border: 1px solid #dbe2ea;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        font-family: Arial, sans-serif;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+        border-color: #2563eb;
+    }
+
+    .field textarea {
+        resize: vertical;
+        min-height: 90px;
+    }
+
+    .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .price-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .price-row select,
+    .price-row input {
+        flex: 1;
+    }
+
+    .emoji-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .emoji-option {
+        width: 46px;
+        height: 46px;
+        border: 1px solid #dbe2ea;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        cursor: pointer;
+        background: white;
+        user-select: none;
+        transition: 0.2s;
+    }
+
+    .emoji-option:hover {
+        border-color: #2563eb;
+        transform: translateY(-2px);
+    }
+
+    .emoji-option.selected {
+        border: 2px solid #2563eb;
+        background: #eff6ff;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        background: #2563eb;
+        color: white;
+        border-radius: 9px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 6px;
+    }
+
+    .submit-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .success-msg {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #065f46;
+        padding: 14px 16px;
+        border-radius: 9px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+    }
+
+    .success-msg a {
+        color: #065f46;
+        font-weight: 700;
+    }
+
+    .error-msg {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        padding: 14px 16px;
+        border-radius: 9px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+        word-break: break-word;
+    }
+
+    .price-note {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 6px;
+    }
+
+    footer {
+        background: #172033;
+        color: white;
+        text-align: center;
+        padding: 40px 7%;
+    }
+
+    footer p {
+        color: #94a3b8;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+
+        nav a:not(.login):not(.signup) {
             display: none;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logout-btn {
-            border: 1px solid #cbd5e1;
-            padding: 9px 16px;
-            border-radius: 8px;
-            color: #475569;
-            background: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .page-header {
-            text-align: center;
-            padding: 50px 7% 30px;
-        }
-
-        .page-header h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            color: #64748b;
-        }
-
-        .form-wrap {
-            max-width: 640px;
-            margin: 0 auto 90px;
-            padding: 0 20px;
-        }
-
-        .form-card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 34px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-        }
-
-        .field {
-            margin-bottom: 20px;
-        }
-
-        .field label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #334155;
-        }
-
-        .field input,
-        .field select,
-        .field textarea {
-            width: 100%;
-            padding: 12px 13px;
-            border: 1px solid #dbe2ea;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            font-family: Arial, sans-serif;
-        }
-
-        .field input:focus,
-        .field select:focus,
-        .field textarea:focus {
-            border-color: #2563eb;
-        }
-
-        .field textarea {
-            resize: vertical;
-            min-height: 90px;
         }
 
         .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            grid-template-columns: 1fr;
         }
 
         .price-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+            flex-direction: column;
+            align-items: stretch;
         }
 
-        .price-row select,
-        .price-row input {
-            flex: 1;
+        .form-card {
+            padding: 24px;
         }
 
-        .emoji-picker {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+        .page-header h1 {
+            font-size: 30px;
         }
+    }
+</style>
 
-        .emoji-option {
-            width: 46px;
-            height: 46px;
-            border: 1px solid #dbe2ea;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            cursor: pointer;
-            background: white;
-        }
+</head><body><header><a href="index.html" class="logo">
+    BorrowBuddy
+</a>
 
-        .emoji-option.selected {
-            border-color: #2563eb;
-            background: #eff6ff;
-        }
+<nav>
 
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            background: #2563eb;
-            color: white;
-            border-radius: 9px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 6px;
-        }
-
-        .submit-btn:hover {
-            background: #1d4ed8;
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .success-msg {
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            color: #065f46;
-            padding: 14px 16px;
-            border-radius: 9px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .success-msg a {
-            color: #065f46;
-            font-weight: 700;
-        }
-
-        .error-msg {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
-            padding: 14px 16px;
-            border-radius: 9px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        footer {
-            background: #172033;
-            color: white;
-            text-align: center;
-            padding: 40px 7%;
-        }
-
-        footer p {
-            color: #94a3b8;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 700px) {
-
-            nav a:not(.login):not(.signup) {
-                display: none;
-            }
-
-            .two-col {
-                grid-template-columns: 1fr;
-            }
-
-            .price-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-
-    <a href="index.html" class="logo">
-        BorrowBuddy
+    <a href="index.html">
+        Home
     </a>
 
-    <nav>
+    <a href="browse.html">
+        Browse
+    </a>
 
-        <a href="index.html">
-            Home
+    <a href="index.html#how-it-works">
+        How It Works
+    </a>
+
+    <span id="authLoggedOut"
+          style="display:flex; align-items:center; gap:25px;">
+
+        <a href="login.html" class="login">
+            Login
         </a>
 
-        <a href="browse.html">
-            Browse
+        <a href="signup.html" class="signup">
+            Sign Up
         </a>
 
-        <a href="index.html#how-it-works">
-            How It Works
+    </span>
+
+    <span id="authLoggedIn">
+
+        <a href="my-items.html">
+            Hi, <span id="authUserName"></span>
         </a>
 
-        <span id="authLoggedOut"
-              style="display:flex; align-items:center; gap:25px;">
+        <a href="my-requests.html">
+            My Requests
+        </a>
 
-            <a href="login.html" class="login">
-                Login
-            </a>
+        <button
+            type="button"
+            class="logout-btn"
+            onclick="bbLogout()">
 
-            <a href="signup.html" class="signup">
-                Sign Up
-            </a>
+            Logout
 
-        </span>
+        </button>
 
-        <span id="authLoggedIn">
+    </span>
 
-            <a href="my-items.html">
-                Hi, <span id="authUserName"></span>
-            </a>
+</nav>
 
-            <a href="my-requests.html">
-                My Requests
-            </a>
+</header><section class="page-header"><h1>
+    List an Item
+</h1>
 
-            <button
-                class="logout-btn"
-                onclick="bbLogout()">
+<p>
+    Share something you're not using — someone nearby might need it.
+</p>
 
-                Logout
+</section><div class="form-wrap"><div class="form-card">
 
-            </button>
-
-        </span>
-
-    </nav>
-
-</header>
-
-
-<section class="page-header">
-
-    <h1>
-        List an Item
-    </h1>
-
-    <p>
-        Share something you're not using — someone nearby might need it.
-    </p>
-
-</section>
-
-
-<div class="form-wrap">
-
-    <div class="form-card">
-
-        <div
-            class="success-msg"
-            id="successMsg">
-        </div>
-
-        <div
-            class="error-msg"
-            id="errorMsg">
-        </div>
-
-
-        <form id="listForm">
-
-
-            <!-- ITEM NAME -->
-
-            <div class="field">
-
-                <label for="itemName">
-                    Item name
-                </label>
-
-                <input
-                    type="text"
-                    id="itemName"
-                    placeholder="e.g. Camera Tripod"
-                    required>
-
-            </div>
-
-
-            <!-- CATEGORY + CONDITION -->
-
-            <div class="two-col">
-
-                <div class="field">
-
-                    <label for="itemCategory">
-                        Category
-                    </label>
-
-                    <select
-                        id="itemCategory"
-                        required>
-
-                        <option value="">
-                            Select category
-                        </option>
-
-                        <option value="Books">
-                            Books
-                        </option>
-
-                        <option value="Electronics">
-                            Electronics
-                        </option>
-
-                        <option value="Travel">
-                            Travel
-                        </option>
-
-                        <option value="Tools">
-                            Tools
-                        </option>
-
-                        <option value="Study">
-                            Study
-                        </option>
-
-                        <option value="Photography">
-                            Photography
-                        </option>
-
-                        <option value="Sports">
-                            Sports
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="field">
-
-                    <label for="itemCondition">
-                        Condition
-                    </label>
-
-                    <select
-                        id="itemCondition"
-                        required>
-
-                        <option value="">
-                            Select condition
-                        </option>
-
-                        <option value="Like New">
-                            Like New
-                        </option>
-
-                        <option value="Very Good">
-                            Very Good
-                        </option>
-
-                        <option value="Good">
-                            Good
-                        </option>
-
-                        <option value="Fair">
-                            Fair
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-
-            <!-- DESCRIPTION -->
-
-            <div class="field">
-
-                <label for="itemDescription">
-                    Description
-                </label>
-
-                <textarea
-                    id="itemDescription"
-                    placeholder="Describe the item, what it's good for, and any details a borrower should know."
-                    required></textarea>
-
-            </div>
-
-
-            <!-- LOCATION -->
-
-            <div class="field">
-
-                <label for="itemLocation">
-                    Location
-                </label>
-
-                <input
-                    type="text"
-                    id="itemLocation"
-                    placeholder="e.g. Nagpur"
-                    required>
-
-            </div>
-
-
-            <!-- ICON -->
-
-            <div class="field">
-
-                <label>
-                    Pick an icon
-                </label>
-
-                <div
-                    class="emoji-picker"
-                    id="emojiPicker">
-
-                    <div
-                        class="emoji-option selected"
-                        data-emoji="📦">
-                        📦
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="📷">
-                        📷
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="🧮">
-                        🧮
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="🧳">
-                        🧳
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="📚">
-                        📚
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="🔧">
-                        🔧
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="⚽">
-                        ⚽
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="💻">
-                        💻
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="🎸">
-                        🎸
-                    </div>
-
-                    <div
-                        class="emoji-option"
-                        data-emoji="🚲">
-                        🚲
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- PRICE -->
-
-            <div class="field">
-
-                <label>
-                    Borrowing Price
-                </label>
-
-                <div class="price-row">
-
-                    <select id="priceType">
-
-                        <option value="free">
-                            Free to borrow
-                        </option>
-
-                        <option value="paid">
-                            Paid — per day
-                        </option>
-
-                    </select>
-
-                    <input
-                        type="number"
-                        id="priceAmount"
-                        placeholder="₹ amount per day"
-                        min="1"
-                        step="1"
-                        style="display:none;">
-
-                </div>
-
-            </div>
-
-
-            <!-- SUBMIT -->
-
-            <button
-                type="submit"
-                class="submit-btn"
-                id="submitBtn">
-
-                List This Item
-
-            </button>
-
-        </form>
-
+    <div
+        class="success-msg"
+        id="successMsg">
     </div>
+
+    <div
+        class="error-msg"
+        id="errorMsg">
+    </div>
+
+
+    <form id="listForm">
+
+        <!-- ITEM NAME -->
+
+        <div class="field">
+
+            <label for="itemName">
+                Item name
+            </label>
+
+            <input
+                type="text"
+                id="itemName"
+                placeholder="e.g. Camera Tripod"
+                required>
+
+        </div>
+
+
+        <!-- CATEGORY + CONDITION -->
+
+        <div class="two-col">
+
+            <div class="field">
+
+                <label for="itemCategory">
+                    Category
+                </label>
+
+                <select
+                    id="itemCategory"
+                    required>
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                    <option value="Books">
+                        Books
+                    </option>
+
+                    <option value="Electronics">
+                        Electronics
+                    </option>
+
+                    <option value="Travel">
+                        Travel
+                    </option>
+
+                    <option value="Tools">
+                        Tools
+                    </option>
+
+                    <option value="Study">
+                        Study
+                    </option>
+
+                    <option value="Photography">
+                        Photography
+                    </option>
+
+                    <option value="Sports">
+                        Sports
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="itemCondition">
+                    Condition
+                </label>
+
+                <select
+                    id="itemCondition"
+                    required>
+
+                    <option value="">
+                        Select condition
+                    </option>
+
+                    <option value="Like New">
+                        Like New
+                    </option>
+
+                    <option value="Very Good">
+                        Very Good
+                    </option>
+
+                    <option value="Good">
+                        Good
+                    </option>
+
+                    <option value="Fair">
+                        Fair
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="field">
+
+            <label for="itemDescription">
+                Description
+            </label>
+
+            <textarea
+                id="itemDescription"
+                placeholder="Describe the item, what it's good for, and any details a borrower should know."
+                required></textarea>
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="field">
+
+            <label for="itemLocation">
+                Location
+            </label>
+
+            <input
+                type="text"
+                id="itemLocation"
+                placeholder="e.g. Nagpur"
+                required>
+
+        </div>
+
+
+        <!-- ICON -->
+
+        <div class="field">
+
+            <label>
+                Pick an icon
+            </label>
+
+            <div
+                class="emoji-picker"
+                id="emojiPicker">
+
+                <button
+                    type="button"
+                    class="emoji-option selected"
+                    data-emoji="📦">
+                    📦
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="📷">
+                    📷
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="🧮">
+                    🧮
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="🧳">
+                    🧳
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="📚">
+                    📚
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="🔧">
+                    🔧
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="⚽">
+                    ⚽
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="💻">
+                    💻
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="🎸">
+                    🎸
+                </button>
+
+                <button
+                    type="button"
+                    class="emoji-option"
+                    data-emoji="🚲">
+                    🚲
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRICE -->
+
+        <div class="field">
+
+            <label for="priceType">
+                Borrowing Price
+            </label>
+
+            <div class="price-row">
+
+                <select id="priceType">
+
+                    <option value="free">
+                        Free to borrow
+                    </option>
+
+                    <option value="paid">
+                        Paid — per day
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="number"
+                    id="priceAmount"
+                    placeholder="₹ amount per day"
+                    min="1"
+                    step="1"
+                    style="display:none;">
+
+            </div>
+
+            <div class="price-note">
+                Choose "Paid" if you want to charge a daily borrowing amount.
+            </div>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+
+        <button
+            type="submit"
+            class="submit-btn"
+            id="submitBtn">
+
+            List This Item
+
+        </button>
+
+    </form>
 
 </div>
 
+</div><footer><h2>
+    BorrowBuddy
+</h2>
 
-<footer>
+<p>
+    Borrow what you need. Share what you don't.
+</p>
 
-    <h2>
-        BorrowBuddy
-    </h2>
+<p>
+    © 2026 BorrowBuddy. All rights reserved.
+</p>
 
-    <p>
-        Borrow what you need. Share what you don't.
-    </p>
+</footer><!-- SUPABASE LIBRARY --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><!-- YOUR SUPABASE CONFIG --><script src="supabase-config.js"></script><!-- YOUR AUTH FILE --><script src="auth.js"></script><script>
 
-    <p>
-        © 2026 BorrowBuddy. All rights reserved.
-    </p>
-
-</footer>
-
-
-<!-- SUPABASE -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="supabase-config.js"></script>
-
-<script src="auth.js"></script>
+"use strict";
 
 
-<script>
+/* ==========================================
+   VARIABLES
+========================================== */
 
 let selectedEmoji = "📦";
 
 
-// ------------------------------------------
-// LOGIN CHECK
-// ------------------------------------------
+/* ==========================================
+   ELEMENTS
+========================================== */
 
-async function checkUser() {
+const listForm =
+    document.getElementById("listForm");
 
-    const user = await bbCurrentUser();
+const errorEl =
+    document.getElementById("errorMsg");
 
-    if (!user) {
+const successEl =
+    document.getElementById("successMsg");
 
-        window.location.href =
-            "login.html?redirect=list-item.html";
+const submitBtn =
+    document.getElementById("submitBtn");
 
-        return null;
-    }
+const priceType =
+    document.getElementById("priceType");
 
-    return user;
+const priceAmount =
+    document.getElementById("priceAmount");
+
+
+/* ==========================================
+   SHOW ERROR
+========================================== */
+
+function showError(message) {
+
+    errorEl.textContent = message;
+
+    errorEl.style.display = "block";
+
+    successEl.style.display = "none";
 }
 
 
-// ------------------------------------------
-// EMOJI PICKER
-// ------------------------------------------
+/* ==========================================
+   SHOW SUCCESS
+========================================== */
+
+function showSuccess(message) {
+
+    successEl.innerHTML = message;
+
+    successEl.style.display = "block";
+
+    errorEl.style.display = "none";
+}
+
+
+/* ==========================================
+   CHECK LOGIN
+========================================== */
+
+async function checkUser() {
+
+    try {
+
+        if (
+            typeof bbCurrentUser !==
+            "function"
+        ) {
+
+            showError(
+                "Authentication system could not be loaded. Please check auth.js."
+            );
+
+            return null;
+        }
+
+
+        const user =
+            await bbCurrentUser();
+
+
+        if (!user) {
+
+            window.location.href =
+                "login.html?redirect=list-item.html";
+
+            return null;
+        }
+
+
+        return user;
+
+    } catch (error) {
+
+        console.error(
+            "Login check error:",
+            error
+        );
+
+        showError(
+            "Could not check your login. Please refresh and try again."
+        );
+
+        return null;
+    }
+}
+
+
+/* ==========================================
+   ICON PICKER
+========================================== */
 
 document
     .querySelectorAll(".emoji-option")
@@ -687,21 +779,33 @@ document
             function() {
 
                 document
-                    .querySelectorAll(".emoji-option")
-                    .forEach(function(item) {
+                    .querySelectorAll(
+                        ".emoji-option"
+                    )
+                    .forEach(
+                        function(item) {
 
-                        item.classList.remove(
-                            "selected"
-                        );
+                            item.classList.remove(
+                                "selected"
+                            );
 
-                    });
+                        }
+                    );
+
 
                 option.classList.add(
                     "selected"
                 );
 
+
                 selectedEmoji =
                     option.dataset.emoji;
+
+
+                console.log(
+                    "Selected icon:",
+                    selectedEmoji
+                );
 
             }
         );
@@ -709,26 +813,18 @@ document
     });
 
 
-// ------------------------------------------
-// PRICE
-// ------------------------------------------
-
-const priceType =
-    document.getElementById(
-        "priceType"
-    );
-
-const priceAmount =
-    document.getElementById(
-        "priceAmount"
-    );
-
+/* ==========================================
+   PRICE SELECTOR
+========================================== */
 
 priceType.addEventListener(
     "change",
     function() {
 
-        if (priceType.value === "paid") {
+        if (
+            priceType.value ===
+            "paid"
+        ) {
 
             priceAmount.style.display =
                 "block";
@@ -753,67 +849,89 @@ priceType.addEventListener(
 );
 
 
-// ------------------------------------------
-// SUBMIT ITEM
-// ------------------------------------------
+/* ==========================================
+   FORM SUBMIT
+========================================== */
 
-document
-    .getElementById("listForm")
-    .addEventListener(
-        "submit",
-        async function(e) {
+listForm.addEventListener(
+    "submit",
+    async function(event) {
 
-            e.preventDefault();
+        /*
+         IMPORTANT:
+         This prevents the browser from
+         refreshing the page.
+        */
 
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        errorEl.style.display =
+            "none";
+
+        successEl.style.display =
+            "none";
+
+
+        submitBtn.disabled =
+            true;
+
+        submitBtn.textContent =
+            "Listing item...";
+
+
+        try {
+
+            /* ------------------------------
+               CHECK SUPABASE
+            ------------------------------ */
+
+            if (
+                typeof supabaseClient ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "Supabase is not connected. Check supabase-config.js."
+                );
+
+            }
+
+
+            /* ------------------------------
+               CHECK USER
+            ------------------------------ */
 
             const user =
                 await checkUser();
 
+
             if (!user) {
+
+                submitBtn.disabled =
+                    false;
+
+                submitBtn.textContent =
+                    "List This Item";
+
                 return;
             }
 
 
-            const errorEl =
-                document.getElementById(
-                    "errorMsg"
-                );
+            /* ------------------------------
+               GET VALUES
+            ------------------------------ */
 
-            const successEl =
-                document.getElementById(
-                    "successMsg"
-                );
-
-            const button =
-                document.getElementById(
-                    "submitBtn"
-                );
-
-
-            errorEl.style.display =
-                "none";
-
-            successEl.style.display =
-                "none";
-
-            button.disabled =
-                true;
-
-            button.textContent =
-                "Listing item...";
-
-
-            // ------------------------------------------
-            // GET FORM VALUES
-            // ------------------------------------------
-
-            const itemTitle =
+            const title =
                 document
                     .getElementById(
                         "itemName"
                     )
                     .value
                     .trim();
+
 
             const category =
                 document
@@ -822,12 +940,14 @@ document
                     )
                     .value;
 
+
             const condition =
                 document
                     .getElementById(
                         "itemCondition"
                     )
                     .value;
+
 
             const description =
                 document
@@ -836,6 +956,7 @@ document
                     )
                     .value
                     .trim();
+
 
             const location =
                 document
@@ -846,53 +967,94 @@ document
                     .trim();
 
 
-            // ------------------------------------------
-            // PRICE
-            // ------------------------------------------
+            /* ------------------------------
+               VALIDATE
+            ------------------------------ */
 
-            const selectedPriceType =
+            if (!title) {
+
+                throw new Error(
+                    "Please enter an item name."
+                );
+
+            }
+
+
+            if (!category) {
+
+                throw new Error(
+                    "Please select a category."
+                );
+
+            }
+
+
+            if (!condition) {
+
+                throw new Error(
+                    "Please select the item's condition."
+                );
+
+            }
+
+
+            if (!description) {
+
+                throw new Error(
+                    "Please enter a description."
+);
+
+            }
+
+
+            if (!location) {
+
+                throw new Error(
+                    "Please enter a location."
+                );
+
+            }
+
+
+            /* ------------------------------
+               PRICE
+            ------------------------------ */
+
+            let finalPriceType =
                 priceType.value;
 
-            let selectedPriceAmount = 0;
+            let finalPriceAmount =
+                0;
 
 
             if (
-                selectedPriceType ===
+                finalPriceType ===
                 "paid"
             ) {
 
-                selectedPriceAmount =
+                finalPriceAmount =
                     Number(
                         priceAmount.value
                     );
 
 
                 if (
-                    !selectedPriceAmount ||
-                    selectedPriceAmount <= 0
+                    !finalPriceAmount ||
+                    finalPriceAmount <= 0
                 ) {
 
-                    errorEl.textContent =
-                        "Please enter a valid price per day.";
+                    throw new Error(
+                        "Please enter a valid price per day."
+                    );
 
-                    errorEl.style.display =
-                        "block";
-
-                    button.disabled =
-                        false;
-
-                    button.textContent =
-                        "List This Item";
-
-                    return;
                 }
 
             }
 
 
-            // ------------------------------------------
-            // ITEM OBJECT
-            // ------------------------------------------
+            /* ------------------------------
+               ITEM DATA
+            ------------------------------ */
 
             const item = {
 
@@ -900,7 +1062,7 @@ document
                     user.id,
 
                 title:
-                    itemTitle,
+                    title,
 
                 description:
                     description,
@@ -918,10 +1080,10 @@ document
                     selectedEmoji,
 
                 price_type:
-                    selectedPriceType,
+                    finalPriceType,
 
                 price_amount:
-                    selectedPriceAmount,
+                    finalPriceAmount,
 
                 availability:
                     true
@@ -930,9 +1092,157 @@ document
 
 
             console.log(
-                "Item being inserted:",
+                "Sending item to Supabase:",
                 item
             );
 
 
-            // ----------------------
+            /* ------------------------------
+               INSERT
+            ------------------------------ */
+
+            const result =
+                await supabaseClient
+                    .from("items")
+                    .insert([item])
+                    .select()
+                    .single();
+
+
+            const data =
+                result.data;
+
+            const error =
+                result.error;
+
+
+            console.log(
+                "Supabase response:",
+                result
+            );
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            if (!data) {
+
+                throw new Error(
+                    "The item was not returned by Supabase."
+                );
+
+            }
+
+
+            /* ------------------------------
+               SUCCESS
+            ------------------------------ */
+
+            listForm.style.display =
+                "none";
+
+
+            const safeTitle =
+                escapeHtml(
+                    data.title ||
+                    title
+                );
+
+
+            const itemId =
+                encodeURIComponent(
+                    data.id
+                );
+
+
+            showSuccess(
+
+                `Your item "<strong>${safeTitle}</strong>" has been successfully listed!<br><br>` +
+
+                `<a href="item.html?id=${itemId}">
+                    View Item
+                </a> &nbsp; | &nbsp; ` +
+
+                `<a href="my-items.html">
+                    My Items
+                </a>`
+
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "LIST ITEM ERROR:",
+                error
+            );
+
+
+            showError(
+                error.message ||
+                "Could not list the item. Please try again."
+            );
+
+
+            submitBtn.disabled =
+                false;
+
+            submitBtn.textContent =
+                "List This Item";
+
+        }
+
+    }
+);
+
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* ==========================================
+   PAGE START
+========================================== */
+
+checkUser();
+
+</script>
+
+</body>
+</html>
