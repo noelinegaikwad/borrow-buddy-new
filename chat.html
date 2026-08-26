@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Private Chat | BorrowBuddy</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        .logout-btn {
+            border: 1px solid #cbd5e1;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #475569;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 18px;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .chat-container {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+        }
+
+        /* ================= CHAT HEADER ================= */
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item-icon {
+            width: 55px;
+            height: 55px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .chat-header h1 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* ================= PRIVATE NOTICE ================= */
+
+        .private-notice {
+            margin: 15px 20px 0;
+            padding: 10px 12px;
+            background: #eff6ff;
+            color: #1e40af;
+            border-radius: 9px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* ================= MESSAGES ================= */
+
+        .messages {
+            height: 480px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+
+        .loading,
+        .empty {
+            text-align: center;
+            color: #64748b;
+            padding: 60px 20px;
+            font-size: 14px;
+        }
+
+        .message-row {
+            display: flex;
+            margin-bottom: 14px;
+        }
+
+        .message-row.mine {
+            justify-content: flex-end;
+        }
+
+        .message-row.theirs {
+            justify-content: flex-start;
+        }
+
+        .bubble {
+            max-width: 75%;
+            padding: 11px 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        .mine .bubble {
+            background: #2563eb;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .theirs .bubble {
+            background: white;
+            color: #172033;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+        }
+
+        .sender {
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            opacity: 0.75;
+        }
+
+        .time {
+            font-size: 10px;
+            margin-top: 5px;
+            opacity: 0.65;
+        }
+
+        /* ================= INPUT ================= */
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            display: flex;
+            gap: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 14px;
+            outline: none;
+            resize: none;
+            min-height: 45px;
+            max-height: 120px;
+        }
+
+        #messageInput:focus {
+            border-color: #2563eb;
+        }
+
+        .send-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .send-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .send-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        /* ================= ERROR ================= */
+
+        .error-state {
+            text-align: center;
+            padding: 45px 20px;
+            background: #fef2f2;
+            color: #991b1b;
+            border-radius: 12px;
+            margin: 20px;
+        }
+
+        .error-state h3 {
+            margin-bottom: 8px;
+        }
+
+        .login-state {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .login-state h2 {
+            margin-bottom: 10px;
+        }
+
+        .login-state p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: #172033;
+            color: white;
+            text-align: center;
+            padding: 35px 7%;
+            margin-top: 50px;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 15px 5%;
+            }
+
+            nav a {
+                display: none;
+            }
+
+            .page {
+                margin: 25px auto;
+            }
+
+            .messages {
+                height: 55vh;
+            }
+
+            .bubble {
+                max-width: 85%;
+            }
+
+            .chat-input-area {
+                padding: 10px;
+            }
+
+            .send-btn {
+                padding: 0 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <a href="index.html" class="logo">
+        BorrowBuddy
+    </a>
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="browse.html">
+            Browse
+        </a>
+
+        <a href="my-items.html">
+            My Items
+        </a>
+
+        <a href="my-requests.html">
+            My Requests
+        </a>
+
+        <button
+            type="button"
+            class="logout-btn"
+            onclick="bbLogout()"
+        >
+            Logout
+        </button>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="page">
+
+    <a
+        href="javascript:history.back()"
+        class="back"
+    >
+        ← Back
+    </a>
+
+
+    <div
+        id="pageContent"
+        class="chat-container"
+    >
+
+        <div class="loading">
+            Opening private chat...
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <h2>
+        BorrowBuddy
+    </h2>
+
+    <p>
+        Borrow what you need. Share what you don't.
+    </p>
+
+    <p>
+        © 2026 BorrowBuddy. All rights reserved.
+    </p>
+
+</footer>
+
+
+<!-- ================= SUPABASE ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+<script src="auth.js"></script>
+
+
+<script>
+
+"use strict";
+
+
+/* ==================================================
+   VARIABLES
+================================================== */
+
+let currentUser = null;
+
+let conversation = null;
+
+let item = null;
+
+let otherUser = null;
+
+let refreshTimer = null;
+
+
+/* ==================================================
+   ELEMENTS
+================================================== */
+
+const pageContent =
+    document.getElementById(
+        "pageContent"
+    );
+
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ==================================================
+   FORMAT TIME
+================================================== */
+
+function formatTime(dateValue) {
+
+    if (!dateValue) {
+        return "";
+    }
+
+    const date =
+        new Date(dateValue);
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day: "numeric",
+            month: "short",
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/* ==================================================
+   GET CURRENT USER
+================================================== */
+
+async function getCurrentUser() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+        if (error) {
+
+            console.error(
+                "User error:",
+                error
+            );
+
+            return null;
+
+        }
+
+        return data.user || null;
+
+    } catch (error) {
+
+        console.error(
+            "Current user error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* ==================================================
+   GET URL PARAMETERS
+================================================== */
+
+function getParams() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    return {
+
+        conversationId:
+            params.get(
+                "conversation"
+            ),
+
+        itemId:
+            params.get(
+                "item"
+            ),
+
+        otherUserId:
+            params.get(
+                "user"
+            )
+
+    };
+
+}
+
+
+/* ==================================================
+   LOAD CHAT
+================================================== */
+
+async function loadChat() {
+
+    currentUser =
+        await getCurrentUser();
+
+
+    if (!currentUser) {
+
+        pageContent.outerHTML = `
+
+            <div class="login-state">
+
+                <h2>
+                    Please log in
+                </h2>
+
+                <p>
+                    You need to log in to use private chat.
+                </p>
+
+                <a
+                    href="login.html"
+                    class="login-btn"
+                >
+                    Login
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const params =
+        getParams();
+
+
+    /*
+     We can open an existing conversation
+     directly using its ID.
+    */
+
+    if (params.conversationId) {
+
+        await loadExistingConversation(
+            params.conversationId
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Otherwise we need an item and
+     the other user's ID.
+    */
+
+    if (
+        !params.itemId ||
+        !params.otherUserId
+    ) {
+
+        showError(
+            "Chat information is missing.",
+            "Please open the chat using the Private Chat button."
+        );
+
+        return;
+
+    }
+
+
+    await findOrCreateConversation(
+        params.itemId,
+        params.otherUserId
+    );
+
+}
+
+
+/* ==================================================
+   FIND OR CREATE CONVERSATION
+================================================== */
+
+async function findOrCreateConversation(
+    itemId,
+    otherUserId
+) {
+
+    /*
+     Get item.
+    */
+
+    const {
+        data: itemData,
+        error: itemError
+    } =
+        await supabaseClient
+
+            .from("items")
+
+            .select(`
+                id,
+                title,
+                icon,
+                owner_id
+            `)
+
+            .eq(
+                "id",
+                itemId
+            )
+
+            .single();
+
+
+    if (itemError || !itemData) {
+
+        console.error(
+            "Item error:",
+            itemError
+        );
+
+        showError(
+            "Could not open item.",
+            itemError
+                ? itemError.message
+                : "Item was not found."
+        );
+
+        return;
+
+    }
+
+
+    item =
+        itemData;
+
+
+    /*
+     Determine borrower and owner.
+    */
+
+    let borrowerId;
+    let ownerId;
+
+
+    if (
+        currentUser.id ===
+        item.owner_id
+    ) {
+
+        ownerId =
+            currentUser.id;
+
+        borrowerId =
+            otherUserId;
+
+    } else {
+
+        borrowerId =
+            currentUser.id;
+
+        ownerId =
+            item.owner_id;
+
+    }
+
+
+    /*
+     Make sure the other person
+     is actually part of the conversation.
+    */
+
+    if (
+        otherUserId !== borrowerId &&
+        otherUserId !== ownerId
+    ) {
+
+        showError(
+            "Private chat unavailable.",
+            "You are not a member of this conversation."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Look for an existing conversation.
+    */
+
+    const {
+        data: existing,
+        error: findError
+    } =
+        await supabaseClient
+
+            .from("conversations")
+
+            .select("*")
+
+            .eq(
+                "item_id",
+                itemId
+            )
+
+            .eq(
+                "borrower_id",
+                borrowerId
+            )
+
+            .eq(
+                "owner_id",
+                ownerId
+            )
+
+            .maybeSingle();
+
+
+    if (findError) {
+
+        console.error(
+            "Conversation search error:",
+            findError
+        );
+
+        showError(
+            "Could not open private chat.",
+            findError.message
+        );
+
+        return;
+
+    }
+
+
+    if (existing) {
+
+        conversation =
+            existing;
+
+        await loadConversationData();
+
+        return;
+
+    }
+
+
+    /*
+     Create conversation.
+    */
+
+    const {
+        data: newConversation,
+        error: createError
+    } =
+        await supabaseClient
+
+            .from("conversations")
+
+            .insert({
+
+                item_id:
+                    itemId,
+
+                borrower_id:
+                    borrowerId,
+
+                owner_id:
+                    ownerId
+
+            })
+
+            .select()
+            .single();
+
+
+    if (createError) {
+
+        console.error(
+            "Create conversation error:",
+            createError
+        );
+
+        showError(
+            "Could not create private chat.",
+            createError.message
+        );
+
+        return;
+
+    }
+
+
+    conversation =
+        newConversation;
+
+
+    await loadConversationData();
+
+}
+
+
+/* ==================================================
+   LOAD EXISTING CONVERSATION
+================================================== */
+
+async function loadExistingConversation(
+    conversationId
+) {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+
+            .from("conversations")
+
+            .select("*")
+
+            .eq(
+                "id",
+                conversationId
+            )
+
+            .single();
+
+
+    if (error || !data) {
+
+        console.error(
+            "Conversation error:",
+            error
+        );
+
+        showError(
+            "Could not open conversation.",
+            error
+                ? error.message
+                : "Conversation not found."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     RLS should make sure that only
+     the borrower or owner can access it.
+    */
+
+    if (
+        currentUser.id !==
+            data.borrower_id
+        &&
+        currentUser.id !==
+            data.owner_id
+    ) {
+
+        showError(
+            "Private chat unavailable.",
+            "You are not allowed to access this conversation."
+        );
+
+        return;
+
+    }
+
+
+    conversation =
+        data;
+
+
+    await loadConversationData();
+
+}
+
+
+/* ==================================================
+   LOAD CONVERSATION DATA
+================================================== */
+
+async function loadConversationData() {
+
+    /*
+     Load item.
+    */
+
+    const {
+        data: itemData,
+        error: itemError
+    } =
+        await supabaseClient
+
+            .from("items")
+
+            .select(`
+                id,
+                title,
+                icon
+            `)
+
+            .eq(
+                "id",
+                conversation.item_id
+            )
+
+            .single();
+
+
+    if (itemError) {
+
+        console.error(
+            "Item loading error:",
+            itemError
+        );
+
+    }
+
+
+    item =
+        itemData || null;
+
+
+    /*
+     Determine other user.
+    */
+
+    const otherUserId =
+        currentUser.id ===
+            conversation.owner_id
+            ? conversation.borrower_id
+            : conversation.owner_id;
+
+
+    /*
+     Load profile.
+    */
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+
+            .from("profiles")
+
+            .select(`
+                id,
+                full_name
+            `)
+
+            .eq(
+                "id",
+                otherUserId
+            )
+
+            .maybeSingle();
+
+
+    if (profileError) {
+
+        console.warn(
+            "Profile loading error:",
+            profileError
+        );
+
+    }
+
+
+    otherUser =
+        profile || null;
+
+
+    renderChat();
+
+    await loadMessages();
+
+
+    /*
+     Refresh messages periodically.
+     This gives a simple live-chat effect
+     without requiring Realtime setup.
+    */
+
+    clearInterval(
+        refreshTimer
+    );
+
+    refreshTimer =
+        setInterval(
+            loadMessages,
+            4000
+        );
+
+}
+
+
+/* ==================================================
+   RENDER CHAT
+================================================== */
+
+function renderChat() {
+
+    const itemTitle =
+        item &&
+        item.title
+            ? item.title
+            : "BorrowBuddy Item";
+
+
+    const itemIcon =
+        item &&
+        item.icon
+            ? item.icon
+            : "📦";
+
+
+    const otherName =
+        otherUser &&
+        otherUser.full_name
+            ? otherUser.full_name
+            : "BorrowBuddy User";
+
+
+    pageContent.innerHTML = `
+
+        <div class="chat-header">
+
+            <div class="item-icon">
+
+                ${escapeHtml(
+                    itemIcon
+                )}
+
+            </div>
+
+            <div>
+
+                <h1>
+                    ${escapeHtml(
+                        otherName
+                    )}
+                </h1>
+
+                <p>
+                    Chat about:
+                    ${escapeHtml(
+                        itemTitle
+                    )}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="private-notice">
+
+            🔒 This is a private conversation
+            between you and ${escapeHtml(
+                otherName
+            )}.
+
+        </div>
+
+
+        <div
+            id="messages"
+            class="messages"
+        >
+
+            <div class="loading">
+                Loading messages...
+            </div>
+
+        </div>
+
+
+        <form
+            id="messageForm"
+            class="chat-input-area"
+        >
+
+            <textarea
+                id="messageInput"
+                placeholder="Type your message..."
+                maxlength="2000"
+                required
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="send-btn"
+                id="sendButton"
+            >
+                Send
+            </button>
+
+        </form>
+
+    `;
+
+
+    document
+        .getElementById(
+            "messageForm"
+        )
+        .addEventListener(
+            "submit",
+            sendMessage
+        );
+
+
+    document
+        .getElementById(
+            "messageInput"
+        )
+        .addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    document
+                        .getElementById(
+                            "messageForm"
+                        )
+                        .requestSubmit();
+
+                }
+
+            }
+        );
+
+}
+
+
+/* ==================================================
+   LOAD MESSAGES
+================================================== */
+
+async function loadMessages() {
+
+    if (!conversation) {
+        return;
+    }
+
+
+    const {
+        data: messages,
+        error
+    } =
+        await supabaseClient
+
+            .from("messages")
+
+            .select(`
+                id,
+                conversation_id,
+                sender_id,
+                message,
+                created_at
+            `)
+
+            .eq(
+                "conversation_id",
+                conversation.id
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Messages loading error:",
+            error
+        );
+
+        const messagesBox =
+            document.getElementById(
+                "messages"
+            );
+
+        if (messagesBox) {
+
+            messagesBox.innerHTML = `
+
+                <div class="error-state">
+
+                    <h3>
+                        Could not load messages
+                    </h3>
+
+                    <p>
+                        ${escapeHtml(
+                            error.message
+                        )}
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+        return;
+
+    }
+
+
+    renderMessages(
+        messages || []
+    );
+
+}
+
+
+/* ==================================================
+   RENDER MESSAGES
+================================================== */
+
+function renderMessages(messages) {
+
+    const messagesBox =
+        document.getElementById(
+            "messages"
+        );
+
+
+    if (!messagesBox) {
+        return;
+    }
+
+
+    if (
+        messages.length === 0
+    ) {
+
+        messagesBox.innerHTML = `
+
+            <div class="empty">
+
+                No messages yet.<br>
+                Start the conversation!
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+     Remember whether the user is
+     already near the bottom.
+    */
+
+    const wasNearBottom =
+        messagesBox.scrollHeight -
+        messagesBox.scrollTop -
+        messagesBox.clientHeight <
+        100;
+
+
+    messagesBox.innerHTML = "";
+
+
+    messages.forEach(
+        msg => {
+
+            const mine =
+                msg.sender_id ===
+                currentUser.id;
+
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "message-row " +
+                (
+                    mine
+                        ? "mine"
+                        : "theirs"
+                );
+
+
+            const bubble =
+                document.createElement(
+                    "div"
+                );
+
+
+            bubble.className =
+                "bubble";
+
+
+            bubble.innerHTML = `
+
+                ${
+                    !mine
+                        ? `
+                            <div class="sender">
+                                ${escapeHtml(
+                                    otherUser &&
+                                    otherUser.full_name
+                                        ? otherUser.full_name
+                                        : "User"
+                                )}
+                            </div>
+                          `
+                        : ""
+                }
+
+
+                <div>
+                    ${escapeHtml(
+                        msg.message
+                    )}
+                </div>
+
+
+                <div class="time">
+
+                    ${formatTime(
+                        msg.created_at
+                    )}
+
+                </div>
+
+            `;
+
+
+            row.appendChild(
+                bubble
+            );
+
+
+            messagesBox.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    if (wasNearBottom) {
+
+        messagesBox.scrollTop =
+            messagesBox.scrollHeight;
+
+    }
+
+}
+
+
+/* ==================================================
+   SEND MESSAGE
+================================================== */
+
+async function sendMessage(
+    event
+) {
+
+    event.preventDefault();
+
+
+    if (
+        !currentUser ||
+        !conversation
+    ) {
+        return;
+    }
+
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+
+    const button =
+        document.getElementById(
+            "sendButton"
+        );
+
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+        return;
+    }
+
+
+    button.disabled =
+        true;
+
+
+    input.disabled =
+        true;
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+
+            .from("messages")
+
+            .insert({
+
+                conversation_id:
+                    conversation.id,
+
+                sender_id:
+                    currentUser.id,
+
+                message:
+                    text
+
+            });
+
+
+    if (error) {
+
+        console.error(
+            "Send message error:",
+            error
+        );
+
+        alert(
+            "Could not send message.\n\n" +
+            error.message
+        );
+
+    } else {
+
+        input.value = "";
+
+        await loadMessages();
+
+        input.focus();
+
+    }
+
+
+    button.disabled =
+        false;
+
+    input.disabled =
+        false;
+
+}
+
+
+/* ==================================================
+   ERROR DISPLAY
+================================================== */
+
+function showError(
+    title,
+    message
+) {
+
+    pageContent.innerHTML = `
+
+        <div class="error-state">
+
+            <h3>
+                ${escapeHtml(
+                    title
+                )}
+            </h3>
+
+            <p>
+                ${escapeHtml(
+                    message
+                )}
+            </p>
+
+            <br>
+
+            <a
+                href="my-items.html"
+                style="
+                    color:#2563eb;
+                    font-weight:600;
+                    text-decoration:none;
+                "
+            >
+                ← Back to My Items
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==================================================
+   CLEAN UP
+================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+        clearInterval(
+            refreshTimer
+        );
+
+    }
+);
+
+
+/* ==================================================
+   START
+================================================== */
+
+loadChat();
+
+</script>
+
+</body>
+
+</html>
