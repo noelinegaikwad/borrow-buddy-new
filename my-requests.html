@@ -19,8 +19,6 @@
             color: #172033;
         }
 
-        /* ================= HEADER ================= */
-
         header {
             background: white;
             border-bottom: 1px solid #e5e7eb;
@@ -83,8 +81,6 @@
             font-size: 14px;
         }
 
-        /* ================= PAGE HEADER ================= */
-
         .page-header {
             text-align: center;
             padding: 50px 7% 30px;
@@ -98,8 +94,6 @@
         .page-header p {
             color: #64748b;
         }
-
-        /* ================= TABS ================= */
 
         .tabs {
             display: flex;
@@ -130,8 +124,6 @@
             color: white;
             border-color: #2563eb;
         }
-
-        /* ================= LIST ================= */
 
         .list-wrap {
             max-width: 850px;
@@ -189,8 +181,6 @@
             border-radius: 7px;
         }
 
-        /* ================= STATUS ================= */
-
         .status-pill {
             font-size: 12px;
             font-weight: 700;
@@ -220,8 +210,6 @@
             color: #166534;
         }
 
-        /* ================= ACTIONS ================= */
-
         .request-actions {
             display: flex;
             flex-direction: column;
@@ -246,8 +234,6 @@
         .return-btn:hover {
             background: #1d4ed8;
         }
-
-        /* ================= STATES ================= */
 
         .empty-state {
             text-align: center;
@@ -302,8 +288,6 @@
             border-radius: 8px;
         }
 
-        /* ================= FOOTER ================= */
-
         footer {
             background: #172033;
             color: white;
@@ -316,8 +300,6 @@
             margin-top: 10px;
             font-size: 14px;
         }
-
-        /* ================= MOBILE ================= */
 
         @media (max-width: 700px) {
 
@@ -351,8 +333,6 @@
 
 <body>
 
-<!-- ================= HEADER ================= -->
-
 <header>
 
     <a href="index.html" class="logo">
@@ -373,8 +353,6 @@
             How It Works
         </a>
 
-        <!-- LOGGED OUT -->
-
         <span
             id="authLoggedOut"
             style="display:flex; align-items:center; gap:25px;"
@@ -389,8 +367,6 @@
             </a>
 
         </span>
-
-        <!-- LOGGED IN -->
 
         <span id="authLoggedIn">
 
@@ -417,8 +393,6 @@
 </header>
 
 
-<!-- ================= PAGE HEADER ================= -->
-
 <section class="page-header">
 
     <h1>
@@ -431,8 +405,6 @@
 
 </section>
 
-
-<!-- ================= FILTERS ================= -->
 
 <div class="tabs">
 
@@ -474,8 +446,6 @@
 </div>
 
 
-<!-- ================= REQUEST LIST ================= -->
-
 <div
     class="list-wrap"
     id="listWrap"
@@ -496,8 +466,6 @@
 </div>
 
 
-<!-- ================= FOOTER ================= -->
-
 <footer>
 
     <h2>
@@ -515,8 +483,6 @@
 </footer>
 
 
-<!-- ================= SUPABASE ================= -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase-config.js"></script>
@@ -528,10 +494,6 @@
 
 "use strict";
 
-
-/* ==================================================
-   VARIABLES
-================================================== */
 
 let currentUser = null;
 
@@ -605,10 +567,6 @@ async function loadRequests() {
         await getCurrentUser();
 
 
-    /* ================================
-       NOT LOGGED IN
-    ================================= */
-
     if (!currentUser) {
 
         listWrap.innerHTML = `
@@ -638,10 +596,6 @@ async function loadRequests() {
         return;
     }
 
-
-    /* ================================
-       GET REQUESTS
-    ================================= */
 
     const {
         data: requests,
@@ -689,10 +643,6 @@ async function loadRequests() {
         );
 
 
-    /* ================================
-       ERROR
-    ================================= */
-
     if (error) {
 
         console.error(
@@ -736,10 +686,6 @@ function renderRequests(requests) {
         requests;
 
 
-    /* ================================
-       FILTER
-    ================================= */
-
     if (currentFilter !== "all") {
 
         filteredRequests =
@@ -751,10 +697,6 @@ function renderRequests(requests) {
 
     }
 
-
-    /* ================================
-       EMPTY
-    ================================= */
 
     if (
         filteredRequests.length === 0
@@ -800,16 +742,8 @@ function renderRequests(requests) {
     }
 
 
-    /* ================================
-       CLEAR
-    ================================= */
-
     listWrap.innerHTML = "";
 
-
-    /* ================================
-       CARDS
-    ================================= */
 
     filteredRequests.forEach(request => {
 
@@ -824,8 +758,6 @@ function renderRequests(requests) {
             return;
         }
 
-
-        /* PRICE */
 
         let priceText =
             "Free to borrow";
@@ -846,16 +778,12 @@ function renderRequests(requests) {
         }
 
 
-        /* OWNER */
-
         const ownerName =
             owner &&
             owner.full_name
                 ? owner.full_name
                 : "BorrowBuddy User";
 
-
-        /* STATUS */
 
         let statusText =
             request.status;
@@ -893,8 +821,6 @@ function renderRequests(requests) {
         }
 
 
-        /* ACTION */
-
         let actionsHtml = "";
 
 
@@ -916,8 +842,6 @@ function renderRequests(requests) {
 
         }
 
-
-        /* CARD */
 
         const card =
             document.createElement("div");
@@ -1022,6 +946,11 @@ async function markReturned(
 ) {
 
     if (!currentUser) {
+
+        alert(
+            "Please log in first."
+        );
+
         return;
     }
 
@@ -1037,9 +966,9 @@ async function markReturned(
     }
 
 
-    /* ================================
-       UPDATE REQUEST
-    ================================= */
+    /* ================================================
+       STEP 1 — MARK REQUEST AS RETURNED
+    ================================================= */
 
     const {
         error: requestError
@@ -1080,24 +1009,38 @@ async function markReturned(
     }
 
 
-    /* ================================
-       MAKE ITEM AVAILABLE AGAIN
-    ================================= */
+    /* ================================================
+       STEP 2 — MAKE ITEM AVAILABLE AGAIN
+
+       IMPORTANT:
+       availability is TEXT in your database.
+
+       Correct:
+       "available"
+
+       NOT:
+       true
+    ================================================= */
 
     const {
+        data: updatedItem,
         error: itemError
     } = await supabaseClient
 
         .from("items")
 
         .update({
-            availability: true
+            availability: "available",
+            updated_at: new Date().toISOString()
         })
 
         .eq(
             "id",
             itemId
-        );
+        )
+
+        .select("id, availability")
+        .maybeSingle();
 
 
     if (itemError) {
@@ -1109,7 +1052,7 @@ async function markReturned(
 
         alert(
             "The request was marked as returned, " +
-            "but the item availability could not be updated.\n\n" +
+            "but the item could not be made available again.\n\n" +
             itemError.message
         );
 
@@ -1119,9 +1062,34 @@ async function markReturned(
     }
 
 
-    /* ================================
+    /* ================================================
+       CHECK WHETHER ITEM WAS ACTUALLY UPDATED
+    ================================================= */
+
+    if (
+        !updatedItem ||
+        updatedItem.availability !== "available"
+    ) {
+
+        console.error(
+            "Item was not updated correctly:",
+            updatedItem
+        );
+
+        alert(
+            "The request was returned, but BorrowBuddy could not update the item's availability.\n\n" +
+            "Please check your Supabase permissions (RLS)."
+        );
+
+        await loadRequests();
+
+        return;
+    }
+
+
+    /* ================================================
        SUCCESS
-    ================================= */
+    ================================================= */
 
     alert(
         "Item returned successfully!\n\n" +
@@ -1130,6 +1098,7 @@ async function markReturned(
 
 
     await loadRequests();
+
 }
 
 
