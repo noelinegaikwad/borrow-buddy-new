@@ -1,506 +1,471 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Requests | BorrowBuddy</title><style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-    <title>My Requests | BorrowBuddy</title>
+    body {
+        background: #f8fafc;
+        color: #172033;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+    header {
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 18px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        body {
-            background: #f8fafc;
-            color: #172033;
-        }
+    .logo {
+        font-size: 25px;
+        font-weight: 800;
+        color: #2563eb;
+        text-decoration: none;
+    }
 
-        header {
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 18px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
 
-        .logo {
-            font-size: 25px;
-            font-weight: 800;
-            color: #2563eb;
-            text-decoration: none;
-        }
+    nav a {
+        text-decoration: none;
+        color: #475569;
+        font-size: 14px;
+    }
 
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
+    nav a:hover {
+        color: #2563eb;
+    }
 
-        nav a {
-            text-decoration: none;
-            color: #475569;
-            font-size: 14px;
-        }
+    .login {
+        border: 1px solid #2563eb;
+        padding: 9px 16px;
+        border-radius: 8px;
+        color: #2563eb;
+    }
 
-        nav a:hover {
-            color: #2563eb;
-        }
+    .signup {
+        background: #2563eb;
+        color: white !important;
+        padding: 10px 16px;
+        border-radius: 8px;
+    }
 
-        .login {
-            border: 1px solid #2563eb;
-            padding: 9px 16px;
-            border-radius: 8px;
-            color: #2563eb;
-        }
+    #authLoggedIn {
+        display: none;
+        align-items: center;
+        gap: 20px;
+    }
 
-        .signup {
-            background: #2563eb;
-            color: white !important;
-            padding: 10px 16px;
-            border-radius: 8px;
-        }
+    .logout-btn {
+        border: 1px solid #cbd5e1;
+        padding: 9px 16px;
+        border-radius: 8px;
+        color: #475569;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+    }
 
-        #authLoggedIn {
+    .page-header {
+        text-align: center;
+        padding: 50px 7% 30px;
+    }
+
+    .page-header h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .page-header p {
+        color: #64748b;
+    }
+
+    .tabs {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        padding: 0 15px;
+    }
+
+    .tab-btn {
+        border: 1px solid #dbe2ea;
+        background: white;
+        padding: 9px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        cursor: pointer;
+        color: #475569;
+    }
+
+    .tab-btn:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+    }
+
+    .tab-btn.active {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+    }
+
+    .list-wrap {
+        max-width: 850px;
+        margin: 0 auto 90px;
+        padding: 0 20px;
+        min-height: 300px;
+    }
+
+    .request-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 16px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+    }
+
+    .request-card:hover {
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+    }
+
+    .request-photo {
+        width: 75px;
+        height: 75px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        flex-shrink: 0;
+    }
+
+    .request-info {
+        flex: 1;
+    }
+
+    .request-info h3 {
+        font-size: 17px;
+        margin-bottom: 6px;
+    }
+
+    .request-info p {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .request-message {
+        margin-top: 8px;
+        padding: 8px 10px;
+        background: #f8fafc;
+        border-radius: 7px;
+    }
+
+    .status-pill {
+        font-size: 12px;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 20px;
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: #fef9c3;
+        color: #854d0e;
+    }
+
+    .status-approved {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .status-returned {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .request-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+    }
+
+    .action-btn {
+        border: none;
+        padding: 8px 14px;
+        border-radius: 7px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .return-btn {
+        background: #2563eb;
+        color: white;
+    }
+
+    .return-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .chat-btn {
+        background: #ede9fe;
+        color: #6d28d9;
+    }
+
+    .chat-btn:hover {
+        background: #ddd6fe;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+    }
+
+    .empty-state h3 {
+        color: #172033;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        line-height: 1.6;
+    }
+
+    .empty-state a {
+        color: #2563eb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .error-state {
+        text-align: center;
+        padding: 40px 20px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        color: #991b1b;
+    }
+
+    .login-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .login-state h3 {
+        margin-bottom: 10px;
+    }
+
+    .login-state p {
+        color: #64748b;
+        margin-bottom: 20px;
+    }
+
+    .login-btn {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        padding: 11px 20px;
+        border-radius: 8px;
+    }
+
+    footer {
+        background: #172033;
+        color: white;
+        text-align: center;
+        padding: 40px 7%;
+    }
+
+    footer p {
+        color: #94a3b8;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+        nav a:not(.login):not(.signup) {
             display: none;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logout-btn {
-            border: 1px solid #cbd5e1;
-            padding: 9px 16px;
-            border-radius: 8px;
-            color: #475569;
-            background: white;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .page-header {
-            text-align: center;
-            padding: 50px 7% 30px;
-        }
-
-        .page-header h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            color: #64748b;
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            padding: 0 15px;
-        }
-
-        .tab-btn {
-            border: 1px solid #dbe2ea;
-            background: white;
-            padding: 9px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            color: #475569;
-        }
-
-        .tab-btn:hover {
-            border-color: #2563eb;
-            color: #2563eb;
-        }
-
-        .tab-btn.active {
-            background: #2563eb;
-            color: white;
-            border-color: #2563eb;
-        }
-
-        .list-wrap {
-            max-width: 850px;
-            margin: 0 auto 90px;
-            padding: 0 20px;
-            min-height: 300px;
         }
 
         .request-card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 16px;
-            display: flex;
-            gap: 18px;
-            align-items: center;
-        }
-
-        .request-card:hover {
-            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
-        }
-
-        .request-photo {
-            width: 75px;
-            height: 75px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 34px;
-            flex-shrink: 0;
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
 
         .request-info {
-            flex: 1;
-        }
-
-        .request-info h3 {
-            font-size: 17px;
-            margin-bottom: 6px;
-        }
-
-        .request-info p {
-            color: #64748b;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .request-message {
-            margin-top: 8px;
-            padding: 8px 10px;
-            background: #f8fafc;
-            border-radius: 7px;
-        }
-
-        .status-pill {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 20px;
-            text-transform: capitalize;
-            white-space: nowrap;
-        }
-
-        .status-pending {
-            background: #fef9c3;
-            color: #854d0e;
-        }
-
-        .status-approved {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .status-rejected {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .status-returned {
-            background: #dcfce7;
-            color: #166534;
+            min-width: calc(100% - 95px);
         }
 
         .request-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-end;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
         }
 
-        .action-btn {
-            border: none;
-            padding: 8px 14px;
-            border-radius: 7px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
+        .page-header h1 {
+            font-size: 30px;
         }
+    }
+</style>
 
-        .return-btn {
-            background: #2563eb;
-            color: white;
-        }
+</head><body><header><a href="index.html" class="logo">
+    BorrowBuddy
+</a>
 
-        .return-btn:hover {
-            background: #1d4ed8;
-        }
+<nav>
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #64748b;
-        }
+    <a href="index.html">Home</a>
 
-        .empty-state h3 {
-            color: #172033;
-            margin-bottom: 10px;
-        }
+    <a href="browse.html">Browse</a>
 
-        .empty-state p {
-            line-height: 1.6;
-        }
-
-        .empty-state a {
-            color: #2563eb;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .error-state {
-            text-align: center;
-            padding: 40px 20px;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 12px;
-            color: #991b1b;
-        }
-
-        .login-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .login-state h3 {
-            margin-bottom: 10px;
-        }
-
-        .login-state p {
-            color: #64748b;
-            margin-bottom: 20px;
-        }
-
-        .login-btn {
-            display: inline-block;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            padding: 11px 20px;
-            border-radius: 8px;
-        }
-
-        footer {
-            background: #172033;
-            color: white;
-            text-align: center;
-            padding: 40px 7%;
-        }
-
-        footer p {
-            color: #94a3b8;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 700px) {
-
-            nav a:not(.login):not(.signup) {
-                display: none;
-            }
-
-            .request-card {
-                align-items: flex-start;
-                flex-wrap: wrap;
-            }
-
-            .request-info {
-                min-width: calc(100% - 95px);
-            }
-
-            .request-actions {
-                width: 100%;
-                flex-direction: row;
-                align-items: center;
-                justify-content: flex-end;
-                flex-wrap: wrap;
-            }
-
-            .page-header h1 {
-                font-size: 30px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-
-    <a href="index.html" class="logo">
-        BorrowBuddy
+    <a href="index.html#how-it-works">
+        How It Works
     </a>
 
-    <nav>
+    <span
+        id="authLoggedOut"
+        style="display:flex; align-items:center; gap:25px;"
+    >
 
-        <a href="index.html">
-            Home
+        <a href="login.html" class="login">
+            Login
         </a>
 
-        <a href="browse.html">
-            Browse
+        <a href="signup.html" class="signup">
+            Sign Up
         </a>
 
-        <a href="index.html#how-it-works">
-            How It Works
+    </span>
+
+    <span id="authLoggedIn">
+
+        <a href="my-items.html">
+            My Items
         </a>
 
-        <span
-            id="authLoggedOut"
-            style="display:flex; align-items:center; gap:25px;"
+        <a href="my-requests.html">
+            Hi, <span id="authUserName"></span>
+        </a>
+
+        <button
+            type="button"
+            class="logout-btn"
+            onclick="bbLogout()"
         >
+            Logout
+        </button>
 
-            <a href="login.html" class="login">
-                Login
-            </a>
+    </span>
 
-            <a href="signup.html" class="signup">
-                Sign Up
-            </a>
+</nav>
 
-        </span>
+</header><section class="page-header"><h1>My Requests</h1>
 
-        <span id="authLoggedIn">
+<p>
+    Track the items you've requested to borrow.
+</p>
 
-            <a href="my-items.html">
-                My Items
-            </a>
+</section><div class="tabs"><button class="tab-btn active" data-filter="all">
+    All
+</button>
 
-            <a href="my-requests.html">
-                Hi, <span id="authUserName"></span>
-            </a>
+<button class="tab-btn" data-filter="pending">
+    Pending
+</button>
 
-            <button
-                type="button"
-                class="logout-btn"
-                onclick="bbLogout()"
-            >
-                Logout
-            </button>
+<button class="tab-btn" data-filter="approved">
+    Currently Borrowed
+</button>
 
-        </span>
+<button class="tab-btn" data-filter="returned">
+    Returned
+</button>
 
-    </nav>
+<button class="tab-btn" data-filter="rejected">
+    Rejected
+</button>
 
-</header>
+</div><div class="list-wrap" id="listWrap"><div class="empty-state">
 
-
-<section class="page-header">
-
-    <h1>
-        My Requests
-    </h1>
+    <h3>
+        Loading requests...
+    </h3>
 
     <p>
-        Track the items you've requested to borrow.
+        Please wait.
     </p>
-
-</section>
-
-
-<div class="tabs">
-
-    <button
-        class="tab-btn active"
-        data-filter="all"
-    >
-        All
-    </button>
-
-    <button
-        class="tab-btn"
-        data-filter="pending"
-    >
-        Pending
-    </button>
-
-    <button
-        class="tab-btn"
-        data-filter="approved"
-    >
-        Currently Borrowed
-    </button>
-
-    <button
-        class="tab-btn"
-        data-filter="returned"
-    >
-        Returned
-    </button>
-
-    <button
-        class="tab-btn"
-        data-filter="rejected"
-    >
-        Rejected
-    </button>
 
 </div>
 
+</div><footer><h2>BorrowBuddy</h2>
 
-<div
-    class="list-wrap"
-    id="listWrap"
->
+<p>
+    Borrow what you need. Share what you don't.
+</p>
 
-    <div class="empty-state">
+<p>
+    © 2026 BorrowBuddy. All rights reserved.
+</p>
 
-        <h3>
-            Loading requests...
-        </h3>
-
-        <p>
-            Please wait.
-        </p>
-
-    </div>
-
-</div>
-
-
-<footer>
-
-    <h2>
-        BorrowBuddy
-    </h2>
-
-    <p>
-        Borrow what you need. Share what you don't.
-    </p>
-
-    <p>
-        © 2026 BorrowBuddy. All rights reserved.
-    </p>
-
-</footer>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="supabase-config.js"></script>
-
-<script src="auth.js"></script>
-
-
-<script>
+</footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script><script>
 
 "use strict";
 
 
 let currentUser = null;
-
 let currentFilter = "all";
+let allRequests = [];
 
 const listWrap =
     document.getElementById("listWrap");
+
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 
 /* ==================================================
@@ -514,7 +479,8 @@ async function getCurrentUser() {
         const {
             data,
             error
-        } = await supabaseClient.auth.getUser();
+        } =
+            await supabaseClient.auth.getUser();
 
         if (error) {
 
@@ -600,47 +566,50 @@ async function loadRequests() {
     const {
         data: requests,
         error
-    } = await supabaseClient
+    } =
+        await supabaseClient
 
-        .from("borrow_requests")
+            .from("borrow_requests")
 
-        .select(`
-            id,
-            item_id,
-            borrower_id,
-            owner_id,
-            message,
-            status,
-            requested_at,
-            approved_at,
-            returned_at,
+            .select(`
 
-            items (
                 id,
-                title,
-                icon,
-                price_type,
-                price_amount,
-                location
-            ),
+                item_id,
+                borrower_id,
+                owner_id,
+                message,
+                status,
+                requested_at,
+                approved_at,
+                returned_at,
 
-            profiles:owner_id (
-                id,
-                full_name
+                items (
+                    id,
+                    title,
+                    icon,
+                    price_type,
+                    price_amount,
+                    location
+                ),
+
+                profiles:owner_id (
+                    id,
+                    full_name
+                )
+
+            `)
+
+            .eq(
+                "borrower_id",
+                currentUser.id
             )
-        `)
 
-        .eq(
-            "borrower_id",
-            currentUser.id
-        )
-
-        .order(
-            "requested_at",
-            {
-                ascending: false
-            }
-        );
+            .order(
+                "requested_at",
+                {
+                    ascending: false
+                }
+            );
 
 
     if (error) {
@@ -659,7 +628,9 @@ async function loadRequests() {
                 </h3>
 
                 <p>
-                    ${escapeHtml(error.message)}
+                    ${escapeHtml(
+                        error.message
+                    )}
                 </p>
 
             </div>
@@ -670,9 +641,12 @@ async function loadRequests() {
     }
 
 
-    renderRequests(
-        requests || []
-    );
+    allRequests =
+        requests || [];
+
+
+    renderRequests();
+
 }
 
 
@@ -680,16 +654,18 @@ async function loadRequests() {
    RENDER REQUESTS
 ================================================== */
 
-function renderRequests(requests) {
+function renderRequests() {
 
     let filteredRequests =
-        requests;
+        allRequests;
 
 
-    if (currentFilter !== "all") {
+    if (
+        currentFilter !== "all"
+    ) {
 
         filteredRequests =
-            requests.filter(
+            allRequests.filter(
                 request =>
                     request.status ===
                     currentFilter
@@ -706,11 +682,35 @@ function renderRequests(requests) {
             "Browse items and send a request to get started.";
 
 
-        if (currentFilter !== "all") {
+        if (
+            currentFilter !== "all"
+        ) {
+
+            const filterNames = {
+
+                pending:
+                    "pending",
+
+                approved:
+                    "currently borrowed",
+
+                returned:
+                    "returned",
+
+                rejected:
+                    "rejected"
+
+            };
+
 
             message =
                 "You don't have any " +
-                currentFilter +
+                (
+                    filterNames[
+                        currentFilter
+                    ] ||
+                    currentFilter
+                ) +
                 " requests.";
 
         }
@@ -745,194 +745,480 @@ function renderRequests(requests) {
     listWrap.innerHTML = "";
 
 
-    filteredRequests.forEach(request => {
+    filteredRequests.forEach(
+        request => {
 
-        const item =
-            request.items;
+            const item =
+                request.items;
 
-        const owner =
-            request.profiles;
+            const owner =
+                request.profiles;
 
 
-        if (!item) {
+            if (!item) {
+                return;
+            }
+
+
+            /* PRICE */
+
+            let priceText =
+                "Free to borrow";
+
+
+            if (
+                item.price_type ===
+                    "paid" &&
+                item.price_amount !==
+                    null
+            ) {
+
+                priceText =
+                    "₹" +
+                    Number(
+                        item.price_amount
+                    ).toLocaleString(
+                        "en-IN"
+                    ) +
+                    " / day";
+
+            }
+
+
+            /* OWNER */
+
+            const ownerName =
+                owner &&
+                owner.full_name
+                    ? owner.full_name
+                    : "BorrowBuddy User";
+
+
+            /* STATUS */
+
+            let statusText =
+                request.status;
+
+
+            if (
+                request.status ===
+                "approved"
+            ) {
+
+                statusText =
+                    "Currently Borrowed";
+
+            }
+
+
+            if (
+                request.status ===
+                "returned"
+            ) {
+
+                statusText =
+                    "Returned";
+
+            }
+
+
+            if (
+                request.status ===
+                "pending"
+            ) {
+
+                statusText =
+                    "Pending";
+
+            }
+
+
+            if (
+                request.status ===
+                "rejected"
+            ) {
+
+                statusText =
+                    "Rejected";
+
+            }
+
+
+            /* ACTIONS */
+
+            let actionsHtml = "";
+
+
+            /*
+             Private chat is available
+             for approved or pending
+             requests.
+            */
+
+            if (
+                request.status ===
+                    "pending" ||
+                request.status ===
+                    "approved"
+            ) {
+
+                actionsHtml += `
+
+                    <button
+                        type="button"
+                        class="action-btn chat-btn"
+                        onclick="openPrivateChat(
+                            '${escapeHtml(request.item_id)}',
+                            '${escapeHtml(request.owner_id)}',
+                            '${escapeHtml(request.borrower_id)}'
+                        )"
+                    >
+                        💬 Private Chat
+                    </button>
+
+                `;
+
+            }
+
+
+            /*
+             Return button.
+            */
+
+            if (
+                request.status ===
+                "approved"
+            ) {
+
+                actionsHtml += `
+
+                    <button
+                        type="button"
+                        class="action-btn return-btn"
+                        onclick="markReturned(
+                            '${escapeHtml(request.id)}',
+                            '${escapeHtml(request.item_id)}'
+                        )"
+                    >
+                        Mark as Returned
+                    </button>
+
+                `;
+
+            }
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "request-card";
+
+
+            card.innerHTML = `
+
+                <div class="request-photo">
+
+                    ${escapeHtml(
+                        item.icon ||
+                        "📦"
+                    )}
+
+                </div>
+
+
+                <div class="request-info">
+
+                    <h3>
+
+                        ${escapeHtml(
+                            item.title ||
+                            "Untitled Item"
+                        )}
+
+                    </h3>
+
+
+                    <p>
+
+                        Owner:
+                        <strong>
+                            ${escapeHtml(
+                                ownerName
+                            )}
+                        </strong>
+
+                        ·
+
+                        ${escapeHtml(
+                            priceText
+                        )}
+
+                    </p>
+
+
+                    ${
+                        item.location
+                        ? `
+
+                            <p>
+                                📍
+                                ${escapeHtml(
+                                    item.location
+                                )}
+                            </p>
+
+                        `
+                        : ""
+                    }
+
+
+                    ${
+                        request.message
+                        ? `
+
+                            <p
+                                class="request-message"
+                            >
+
+                                <strong>
+                                    Your message:
+                                </strong>
+
+                                ${escapeHtml(
+                                    request.message
+                                )}
+
+                            </p>
+
+                        `
+                        : ""
+                    }
+
+                </div>
+
+
+                <div
+                    class="request-actions"
+                >
+
+                    <span
+                        class="
+                            status-pill
+                            status-${escapeHtml(
+                                request.status
+                            )}
+                        "
+                    >
+
+                        ${escapeHtml(
+                            statusText
+                        )}
+
+                    </span>
+
+
+                    ${actionsHtml}
+
+                </div>
+
+            `;
+
+
+            listWrap.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   OPEN PRIVATE CHAT
+================================================== */
+
+async function openPrivateChat(
+    itemId,
+    ownerId,
+    borrowerId
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please log in first."
+        );
+
+        return;
+    }
+
+
+    /*
+     The logged-in borrower
+     must match borrowerId.
+    */
+
+    if (
+        currentUser.id !==
+        borrowerId
+    ) {
+
+        alert(
+            "You are not allowed to open this conversation."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        /*
+         Check existing conversation.
+        */
+
+        const {
+            data: existingConversation,
+            error: findError
+        } =
+            await supabaseClient
+
+                .from("conversations")
+
+                .select(`
+                    id,
+                    item_id,
+                    borrower_id,
+                    owner_id
+                `)
+
+                .eq(
+                    "item_id",
+                    itemId
+                )
+
+                .eq(
+                    "borrower_id",
+                    borrowerId
+                )
+
+                .eq(
+                    "owner_id",
+                    ownerId
+                )
+
+                .maybeSingle();
+
+
+        if (findError) {
+
+            console.error(
+                "Conversation lookup error:",
+                findError
+            );
+
+            alert(
+                "Could not open private chat.\n\n" +
+                findError.message
+            );
+
             return;
         }
 
 
-        let priceText =
-            "Free to borrow";
+        let conversationId = null;
 
 
         if (
-            item.price_type === "paid" &&
-            item.price_amount !== null
+            existingConversation
         ) {
 
-            priceText =
-                "₹" +
-                Number(
-                    item.price_amount
-                ).toLocaleString("en-IN") +
-                " / day";
+            conversationId =
+                existingConversation.id;
+
+        } else {
+
+            /*
+             Create conversation.
+            */
+
+            const {
+                data: newConversation,
+                error: createError
+            } =
+                await supabaseClient
+
+                    .from("conversations")
+
+                    .insert({
+
+                        item_id:
+                            itemId,
+
+                        borrower_id:
+                            borrowerId,
+
+                        owner_id:
+                            ownerId
+
+                    })
+
+                    .select(`
+                        id,
+                        item_id,
+                        borrower_id,
+                        owner_id
+                    `)
+
+                    .single();
+
+
+            if (createError) {
+
+                console.error(
+                    "Conversation creation error:",
+                    createError
+                );
+
+                alert(
+                    "Could not create private chat.\n\n" +
+                    createError.message
+                );
+
+                return;
+            }
+
+
+            conversationId =
+                newConversation.id;
 
         }
 
 
-        const ownerName =
-            owner &&
-            owner.full_name
-                ? owner.full_name
-                : "BorrowBuddy User";
+        window.location.href =
+            "chat.html?conversation_id=" +
+            encodeURIComponent(
+                conversationId
+            );
 
+    } catch (error) {
 
-        let statusText =
-            request.status;
+        console.error(
+            "Private chat error:",
+            error
+        );
 
+        alert(
+            "Something went wrong while opening the private chat."
+        );
 
-        if (request.status === "approved") {
+    }
 
-            statusText =
-                "Currently Borrowed";
-
-        }
-
-
-        if (request.status === "returned") {
-
-            statusText =
-                "Returned";
-
-        }
-
-
-        if (request.status === "pending") {
-
-            statusText =
-                "Pending";
-
-        }
-
-
-        if (request.status === "rejected") {
-
-            statusText =
-                "Rejected";
-
-        }
-
-
-        let actionsHtml = "";
-
-
-        if (
-            request.status === "approved"
-        ) {
-
-            actionsHtml = `
-
-                <button
-                    type="button"
-                    class="action-btn return-btn"
-                    onclick="markReturned('${request.id}', '${request.item_id}')"
-                >
-                    Mark as Returned
-                </button>
-
-            `;
-
-        }
-
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "request-card";
-
-
-        card.innerHTML = `
-
-            <div class="request-photo">
-
-                ${escapeHtml(
-                    item.icon || "📦"
-                )}
-
-            </div>
-
-
-            <div class="request-info">
-
-                <h3>
-
-                    ${escapeHtml(
-                        item.title ||
-                        "Untitled Item"
-                    )}
-
-                </h3>
-
-
-                <p>
-
-                    Owner:
-                    ${escapeHtml(ownerName)}
-
-                    ·
-
-                    ${escapeHtml(priceText)}
-
-                </p>
-
-
-                ${
-                    request.message
-                    ? `
-
-                        <p class="request-message">
-
-                            <strong>
-                                Your message:
-                            </strong>
-
-                            ${escapeHtml(
-                                request.message
-                            )}
-
-                        </p>
-
-                    `
-                    : ""
-                }
-
-            </div>
-
-
-            <div class="request-actions">
-
-                <span
-                    class="status-pill status-${escapeHtml(
-                        request.status
-                    )}"
-                >
-
-                    ${escapeHtml(
-                        statusText
-                    )}
-
-                </span>
-
-
-                ${actionsHtml}
-
-            </div>
-
-        `;
-
-
-        listWrap.appendChild(card);
-
-    });
 }
 
 
@@ -966,31 +1252,38 @@ async function markReturned(
     }
 
 
-    /* ================================================
-       STEP 1 — MARK REQUEST AS RETURNED
-    ================================================= */
+    /*
+     STEP 1:
+     Mark request as returned.
+    */
 
     const {
         error: requestError
-    } = await supabaseClient
+    } =
+        await supabaseClient
 
-        .from("borrow_requests")
+            .from("borrow_requests")
 
-        .update({
-            status: "returned",
-            returned_at:
-                new Date().toISOString()
-        })
+            .update({
 
-        .eq(
-            "id",
-            requestId
-        )
+                status:
+                    "returned",
 
-        .eq(
-            "borrower_id",
-            currentUser.id
-        );
+                returned_at:
+                    new Date()
+                        .toISOString()
+
+            })
+
+            .eq(
+                "id",
+                requestId
+            )
+
+            .eq(
+                "borrower_id",
+                currentUser.id
+            );
 
 
     if (requestError) {
@@ -1009,38 +1302,42 @@ async function markReturned(
     }
 
 
-    /* ================================================
-       STEP 2 — MAKE ITEM AVAILABLE AGAIN
+    /*
+     STEP 2:
+     Make item available again.
 
-       IMPORTANT:
-       availability is TEXT in your database.
-
-       Correct:
-       "available"
-
-       NOT:
-       true
-    ================================================= */
+     IMPORTANT:
+     availability is TEXT.
+    */
 
     const {
         data: updatedItem,
         error: itemError
-    } = await supabaseClient
+    } =
+        await supabaseClient
 
-        .from("items")
+            .from("items")
 
-        .update({
-            availability: "available",
-            updated_at: new Date().toISOString()
-        })
+            .update({
 
-        .eq(
-            "id",
-            itemId
-        )
+                availability:
+                    "available",
 
-        .select("id, availability")
-        .maybeSingle();
+                updated_at:
+                    new Date()
+                        .toISOString()
+
+            })
+
+            .eq(
+                "id",
+                itemId
+            )
+
+            .select(
+                "id, availability"
+            )
+            .maybeSingle();
 
 
     if (itemError) {
@@ -1062,23 +1359,20 @@ async function markReturned(
     }
 
 
-    /* ================================================
-       CHECK WHETHER ITEM WAS ACTUALLY UPDATED
-    ================================================= */
-
     if (
         !updatedItem ||
-        updatedItem.availability !== "available"
+        updatedItem.availability !==
+            "available"
     ) {
 
         console.error(
-            "Item was not updated correctly:",
+            "Item was not updated:",
             updatedItem
         );
 
         alert(
-            "The request was returned, but BorrowBuddy could not update the item's availability.\n\n" +
-            "Please check your Supabase permissions (RLS)."
+            "The request was returned, but the item could not be updated.\n\n" +
+            "Please check your Supabase RLS policies."
         );
 
         await loadRequests();
@@ -1087,13 +1381,9 @@ async function markReturned(
     }
 
 
-    /* ================================================
-       SUCCESS
-    ================================================= */
-
     alert(
         "Item returned successfully!\n\n" +
-        "The item is now available for other users to borrow."
+        "The item is now available for other users."
     );
 
 
@@ -1103,88 +1393,50 @@ async function markReturned(
 
 
 /* ==================================================
-   ESCAPE HTML
-================================================== */
-
-function escapeHtml(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-
-    }
-
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-}
-
-
-/* ==================================================
    FILTER BUTTONS
 ================================================== */
 
 document
     .querySelectorAll(".tab-btn")
-    .forEach(button => {
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                document
-                    .querySelectorAll(".tab-btn")
-                    .forEach(btn => {
+                    document
+                        .querySelectorAll(
+                            ".tab-btn"
+                        )
+                        .forEach(
+                            btn => {
 
-                        btn.classList.remove(
-                            "active"
+                                btn.classList
+                                    .remove(
+                                        "active"
+                                    );
+
+                            }
                         );
 
-                    });
+
+                    button.classList.add(
+                        "active"
+                    );
 
 
-                button.classList.add(
-                    "active"
-                );
+                    currentFilter =
+                        button.dataset.filter;
 
 
-                currentFilter =
-                    button.dataset.filter;
+                    renderRequests();
 
+                }
+            );
 
-                loadRequests();
-
-            }
-        );
-
-    });
+        }
+    );
 
 
 /* ==================================================
@@ -1193,7 +1445,5 @@ document
 
 loadRequests();
 
-</script>
-
-</body>
+</script></body>
 </html>
