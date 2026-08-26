@@ -201,6 +201,8 @@
             font-size: 12px;
             cursor: pointer;
             font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .accept-btn {
@@ -219,6 +221,15 @@
 
         .reject-btn:hover {
             background: #fecaca;
+        }
+
+        .chat-btn {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .chat-btn:hover {
+            background: #ddd6fe;
         }
 
         .delete-btn {
@@ -968,6 +979,23 @@ function renderIncomingRequests() {
 
                 <div class="actions">
 
+                    <!-- PRIVATE CHAT -->
+
+                    <button
+                        type="button"
+                        class="action-btn chat-btn"
+                        onclick="openPrivateChat(
+                            '${request.item_id}',
+                            '${request.borrower_id}',
+                            '${request.owner_id}'
+                        )"
+                    >
+                        💬 Private Chat
+                    </button>
+
+
+                    <!-- ACCEPT -->
+
                     <button
                         type="button"
                         class="action-btn accept-btn"
@@ -979,6 +1007,8 @@ function renderIncomingRequests() {
                         Accept
                     </button>
 
+
+                    <!-- REJECT -->
 
                     <button
                         type="button"
@@ -1002,6 +1032,209 @@ function renderIncomingRequests() {
 
         }
     );
+
+}
+
+
+/* ==================================================
+   OPEN PRIVATE CHAT
+================================================== */
+
+async function openPrivateChat(
+    itemId,
+    borrowerId,
+    ownerId
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please log in first."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     Make sure the logged-in user
+     is actually the owner.
+    */
+
+    if (
+        currentUser.id !==
+        ownerId
+    ) {
+
+        alert(
+            "You are not allowed to open this conversation."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        /*
+         Check whether a conversation
+         already exists.
+        */
+
+        const {
+            data: existingConversation,
+            error: findError
+        } =
+            await supabaseClient
+
+                .from("conversations")
+
+                .select(`
+                    id,
+                    item_id,
+                    borrower_id,
+                    owner_id
+                `)
+
+                .eq(
+                    "item_id",
+                    itemId
+                )
+
+                .eq(
+                    "borrower_id",
+                    borrowerId
+                )
+
+                .eq(
+                    "owner_id",
+                    ownerId
+                )
+
+                .maybeSingle();
+
+
+        if (findError) {
+
+            console.error(
+                "Conversation lookup error:",
+                findError
+            );
+
+            alert(
+                "Could not open the private chat.\n\n" +
+                findError.message
+            );
+
+            return;
+
+        }
+
+
+        let conversationId = null;
+
+
+        /*
+         If conversation already exists,
+         use it.
+        */
+
+        if (
+            existingConversation
+        ) {
+
+            conversationId =
+                existingConversation.id;
+
+        }
+
+
+        /*
+         Otherwise create one.
+        */
+
+        else {
+
+            const {
+                data: newConversation,
+                error: createError
+            } =
+                await supabaseClient
+
+                    .from("conversations")
+
+                    .insert({
+
+                        item_id:
+                            itemId,
+
+                        borrower_id:
+                            borrowerId,
+
+                        owner_id:
+                            ownerId
+
+                    })
+
+                    .select(`
+                        id,
+                        item_id,
+                        borrower_id,
+                        owner_id
+                    `)
+
+                    .single();
+
+
+            if (createError) {
+
+                console.error(
+                    "Conversation creation error:",
+                    createError
+                );
+
+                alert(
+                    "Could not create the private chat.\n\n" +
+                    createError.message
+                );
+
+                return;
+
+            }
+
+
+            conversationId =
+                newConversation.id;
+
+        }
+
+
+        /*
+         Open the chat page.
+        */
+
+        window.location.href =
+            "chat.html?conversation_id=" +
+            encodeURIComponent(
+                conversationId
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Private chat error:",
+            error
+        );
+
+        alert(
+            "Something went wrong while opening the private chat."
+        );
+
+    }
 
 }
 
@@ -1551,7 +1784,6 @@ function renderListings() {
                             item.id
                         )}"
                         class="action-btn view-btn"
-                        style="text-decoration:none;"
                     >
                         View
                     </a>
