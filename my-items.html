@@ -21,8 +21,6 @@
             color: #172033;
         }
 
-        /* ================= HEADER ================= */
-
         header {
             background: white;
             border-bottom: 1px solid #e5e7eb;
@@ -85,8 +83,6 @@
             font-size: 14px;
         }
 
-        /* ================= PAGE HEADER ================= */
-
         .page-header {
             text-align: center;
             padding: 50px 7% 20px;
@@ -117,8 +113,6 @@
             background: #1d4ed8;
         }
 
-        /* ================= SECTIONS ================= */
-
         .section-wrap {
             max-width: 900px;
             margin: 0 auto;
@@ -129,8 +123,6 @@
             font-size: 20px;
             margin-bottom: 16px;
         }
-
-        /* ================= REQUEST CARD ================= */
 
         .request-card,
         .item-row {
@@ -184,8 +176,6 @@
             color: #475569;
             font-size: 13px;
         }
-
-        /* ================= ACTIONS ================= */
 
         .actions {
             display: flex;
@@ -246,8 +236,6 @@
             color: #1e40af;
         }
 
-        /* ================= STATUS ================= */
-
         .badge {
             font-size: 11px;
             font-weight: 700;
@@ -282,8 +270,6 @@
             color: #991b1b;
         }
 
-        /* ================= EMPTY ================= */
-
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -304,8 +290,6 @@
             text-decoration: none;
         }
 
-        /* ================= ERROR ================= */
-
         .error-state {
             text-align: center;
             padding: 30px 20px;
@@ -319,15 +303,18 @@
             margin-bottom: 8px;
         }
 
-        /* ================= LOADING ================= */
-
         .loading {
             text-align: center;
             padding: 35px;
             color: #64748b;
         }
 
-        /* ================= FOOTER ================= */
+        .section-note {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: -8px;
+            margin-bottom: 16px;
+        }
 
         footer {
             background: #172033;
@@ -342,8 +329,6 @@
             margin-top: 10px;
             font-size: 14px;
         }
-
-        /* ================= MOBILE ================= */
 
         @media (max-width: 700px) {
 
@@ -379,20 +364,13 @@
 
 </head>
 
-
 <body>
-
-
-<!-- ==================================================
-     HEADER
-================================================== -->
 
 <header>
 
     <a href="index.html" class="logo">
         BorrowBuddy
     </a>
-
 
     <nav>
 
@@ -408,32 +386,20 @@
             How It Works
         </a>
 
-
-        <!-- LOGGED OUT -->
-
         <span
             id="authLoggedOut"
             style="display:flex; align-items:center; gap:25px;"
         >
 
-            <a
-                href="login.html"
-                class="login"
-            >
+            <a href="login.html" class="login">
                 Login
             </a>
 
-            <a
-                href="signup.html"
-                class="signup"
-            >
+            <a href="signup.html" class="signup">
                 Sign Up
             </a>
 
         </span>
-
-
-        <!-- LOGGED IN -->
 
         <span id="authLoggedIn">
 
@@ -460,10 +426,6 @@
 </header>
 
 
-<!-- ==================================================
-     PAGE HEADER
-================================================== -->
-
 <section class="page-header">
 
     <h1>
@@ -485,7 +447,7 @@
 
 
 <!-- ==================================================
-     INCOMING REQUESTS
+     PENDING REQUESTS
 ================================================== -->
 
 <div class="section-wrap">
@@ -494,10 +456,60 @@
         Incoming Requests
     </h2>
 
+    <p class="section-note">
+        Chat with the borrower before accepting the request.
+    </p>
+
     <div id="incomingWrap">
 
         <div class="loading">
             Loading requests...
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     APPROVED REQUESTS
+================================================== -->
+
+<div class="section-wrap">
+
+    <h2>
+        Active Borrowing & Chats
+    </h2>
+
+    <p class="section-note">
+        Approved requests remain available here so you can continue your private conversation.
+    </p>
+
+    <div id="approvedWrap">
+
+        <div class="loading">
+            Loading approved requests...
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     REJECTED REQUESTS
+================================================== -->
+
+<div class="section-wrap">
+
+    <h2>
+        Rejected Requests
+    </h2>
+
+    <div id="rejectedWrap">
+
+        <div class="loading">
+            Loading rejected requests...
         </div>
 
     </div>
@@ -526,10 +538,6 @@
 </div>
 
 
-<!-- ==================================================
-     FOOTER
-================================================== -->
-
 <footer>
 
     <h2>
@@ -547,14 +555,8 @@
 </footer>
 
 
-<!-- ==================================================
-     SUPABASE
-================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase-config.js"></script>
-
 <script src="auth.js"></script>
 
 
@@ -563,10 +565,6 @@
 "use strict";
 
 
-/* ==================================================
-   GLOBAL VARIABLES
-================================================== */
-
 let currentUser = null;
 
 let incomingRequests = [];
@@ -574,24 +572,18 @@ let incomingRequests = [];
 let myItems = [];
 
 
-/* ==================================================
-   ELEMENTS
-================================================== */
-
 const incomingWrap =
-    document.getElementById(
-        "incomingWrap"
-    );
+    document.getElementById("incomingWrap");
+
+const approvedWrap =
+    document.getElementById("approvedWrap");
+
+const rejectedWrap =
+    document.getElementById("rejectedWrap");
 
 const listingsWrap =
-    document.getElementById(
-        "listingsWrap"
-    );
+    document.getElementById("listingsWrap");
 
-
-/* ==================================================
-   ESCAPE HTML
-================================================== */
 
 function escapeHtml(value) {
 
@@ -603,33 +595,14 @@ function escapeHtml(value) {
     }
 
     return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
-
-/* ==================================================
-   GET CURRENT USER
-================================================== */
 
 async function getCurrentUser() {
 
@@ -643,7 +616,6 @@ async function getCurrentUser() {
                 .auth
                 .getUser();
 
-
         if (error) {
 
             console.error(
@@ -654,7 +626,6 @@ async function getCurrentUser() {
             return null;
 
         }
-
 
         return data.user || null;
 
@@ -674,15 +645,23 @@ async function getCurrentUser() {
 }
 
 
-/* ==================================================
-   LOAD EVERYTHING
-================================================== */
-
 async function loadPage() {
 
     incomingWrap.innerHTML = `
         <div class="loading">
             Loading incoming requests...
+        </div>
+    `;
+
+    approvedWrap.innerHTML = `
+        <div class="loading">
+            Loading approved requests...
+        </div>
+    `;
+
+    rejectedWrap.innerHTML = `
+        <div class="loading">
+            Loading rejected requests...
         </div>
     `;
 
@@ -697,13 +676,9 @@ async function loadPage() {
         await getCurrentUser();
 
 
-    /* ================================
-       NOT LOGGED IN
-    ================================= */
-
     if (!currentUser) {
 
-        incomingWrap.innerHTML = `
+        const loginHtml = `
             <div class="error-state">
                 <h3>Please log in</h3>
                 <p>
@@ -712,15 +687,10 @@ async function loadPage() {
             </div>
         `;
 
-
-        listingsWrap.innerHTML = `
-            <div class="error-state">
-                <h3>Please log in</h3>
-                <p>
-                    You need to log in to see your listings.
-                </p>
-            </div>
-        `;
+        incomingWrap.innerHTML = loginHtml;
+        approvedWrap.innerHTML = loginHtml;
+        rejectedWrap.innerHTML = loginHtml;
+        listingsWrap.innerHTML = loginHtml;
 
         return;
 
@@ -735,10 +705,6 @@ async function loadPage() {
 }
 
 
-/* ==================================================
-   LOAD INCOMING REQUESTS
-================================================== */
-
 async function loadIncomingRequests() {
 
     const {
@@ -746,9 +712,7 @@ async function loadIncomingRequests() {
         error
     } =
         await supabaseClient
-
             .from("borrow_requests")
-
             .select(`
                 id,
                 item_id,
@@ -775,12 +739,10 @@ async function loadIncomingRequests() {
                     email
                 )
             `)
-
             .eq(
                 "owner_id",
                 currentUser.id
             )
-
             .order(
                 "requested_at",
                 {
@@ -796,20 +758,20 @@ async function loadIncomingRequests() {
             error
         );
 
-
-        incomingWrap.innerHTML = `
+        const errorHtml = `
             <div class="error-state">
                 <h3>
                     Could not load requests
                 </h3>
-
                 <p>
-                    ${escapeHtml(
-                        error.message
-                    )}
+                    ${escapeHtml(error.message)}
                 </p>
             </div>
         `;
+
+        incomingWrap.innerHTML = errorHtml;
+        approvedWrap.innerHTML = errorHtml;
+        rejectedWrap.innerHTML = errorHtml;
 
         return;
 
@@ -822,32 +784,237 @@ async function loadIncomingRequests() {
 
     renderIncomingRequests();
 
+    renderApprovedRequests();
+
+    renderRejectedRequests();
+
 }
 
 
-/* ==================================================
-   RENDER INCOMING REQUESTS
-================================================== */
+function createRequestCard(
+    request,
+    type
+) {
+
+    const item =
+        request.items;
+
+    const borrower =
+        request.profiles;
+
+
+    if (!item) {
+        return null;
+    }
+
+
+    const borrowerName =
+        borrower &&
+        borrower.full_name
+            ? borrower.full_name
+            : "BorrowBuddy User";
+
+
+    const message =
+        request.message
+            ? `
+                <div class="message">
+                    <strong>
+                        Message:
+                    </strong>
+
+                    ${escapeHtml(
+                        request.message
+                    )}
+                </div>
+            `
+            : "";
+
+
+    const card =
+        document.createElement("div");
+
+
+    card.className =
+        "request-card";
+
+
+    let actions = "";
+
+
+    if (type === "pending") {
+
+        actions = `
+
+            <button
+                type="button"
+                class="action-btn chat-btn"
+                onclick="openPrivateChat(
+                    '${request.item_id}',
+                    '${request.borrower_id}',
+                    '${request.owner_id}'
+                )"
+            >
+                💬 Private Chat
+            </button>
+
+            <button
+                type="button"
+                class="action-btn accept-btn"
+                onclick="respondToRequest(
+                    '${request.id}',
+                    'approved'
+                )"
+            >
+                Accept
+            </button>
+
+            <button
+                type="button"
+                class="action-btn reject-btn"
+                onclick="respondToRequest(
+                    '${request.id}',
+                    'rejected'
+                )"
+            >
+                Reject
+            </button>
+
+        `;
+
+    }
+
+
+    if (type === "approved") {
+
+        actions = `
+
+            <button
+                type="button"
+                class="action-btn chat-btn"
+                onclick="openPrivateChat(
+                    '${request.item_id}',
+                    '${request.borrower_id}',
+                    '${request.owner_id}'
+                )"
+            >
+                💬 Private Chat
+            </button>
+
+            <span class="badge badge-approved">
+                Approved
+            </span>
+
+        `;
+
+    }
+
+
+    if (type === "rejected") {
+
+        actions = `
+
+            <button
+                type="button"
+                class="action-btn chat-btn"
+                onclick="openPrivateChat(
+                    '${request.item_id}',
+                    '${request.borrower_id}',
+                    '${request.owner_id}'
+                )"
+            >
+                💬 View Chat
+            </button>
+
+            <span class="badge badge-rejected">
+                Rejected
+            </span>
+
+        `;
+
+    }
+
+
+    card.innerHTML = `
+
+        <div class="photo">
+
+            ${escapeHtml(
+                item.icon || "📦"
+            )}
+
+        </div>
+
+
+        <div class="info">
+
+            <h3>
+
+                ${escapeHtml(
+                    item.title ||
+                    "Untitled Item"
+                )}
+
+            </h3>
+
+
+            <p>
+
+                Requested by
+
+                <strong>
+                    ${escapeHtml(
+                        borrowerName
+                    )}
+                </strong>
+
+            </p>
+
+
+            ${
+                borrower &&
+                borrower.email
+                    ? `
+                        <p>
+                            ${escapeHtml(
+                                borrower.email
+                            )}
+                        </p>
+                    `
+                    : ""
+            }
+
+
+            ${message}
+
+        </div>
+
+
+        <div class="actions">
+
+            ${actions}
+
+        </div>
+
+    `;
+
+
+    return card;
+
+}
+
 
 function renderIncomingRequests() {
-
-    /*
-     Only show pending requests
-     in the main Incoming Requests
-     section.
-    */
 
     const pendingRequests =
         incomingRequests.filter(
             request =>
-                request.status ===
-                "pending"
+                request.status === "pending"
         );
 
 
     if (
-        pendingRequests.length ===
-        0
+        pendingRequests.length === 0
     ) {
 
         incomingWrap.innerHTML = `
@@ -875,160 +1042,20 @@ function renderIncomingRequests() {
     pendingRequests.forEach(
         request => {
 
-            const item =
-                request.items;
-
-
-            const borrower =
-                request.profiles;
-
-
-            if (!item) {
-                return;
-            }
-
-
-            const borrowerName =
-                borrower &&
-                borrower.full_name
-                    ? borrower.full_name
-                    : "BorrowBuddy User";
-
-
-            const message =
-                request.message
-                    ? `
-                        <div class="message">
-                            <strong>
-                                Message:
-                            </strong>
-
-                            ${escapeHtml(
-                                request.message
-                            )}
-                        </div>
-                    `
-                    : "";
-
-
             const card =
-                document.createElement(
-                    "div"
+                createRequestCard(
+                    request,
+                    "pending"
                 );
 
 
-            card.className =
-                "request-card";
+            if (card) {
 
+                incomingWrap.appendChild(
+                    card
+                );
 
-            card.innerHTML = `
-
-                <div class="photo">
-
-                    ${escapeHtml(
-                        item.icon ||
-                        "📦"
-                    )}
-
-                </div>
-
-
-                <div class="info">
-
-                    <h3>
-
-                        ${escapeHtml(
-                            item.title ||
-                            "Untitled Item"
-                        )}
-
-                    </h3>
-
-
-                    <p>
-
-                        Requested by
-
-                        <strong>
-                            ${escapeHtml(
-                                borrowerName
-                            )}
-                        </strong>
-
-                    </p>
-
-
-                    ${
-                        borrower &&
-                        borrower.email
-                            ? `
-                                <p>
-                                    ${escapeHtml(
-                                        borrower.email
-                                    )}
-                                </p>
-                            `
-                            : ""
-                    }
-
-
-                    ${message}
-
-                </div>
-
-
-                <div class="actions">
-
-                    <!-- PRIVATE CHAT -->
-
-                    <button
-                        type="button"
-                        class="action-btn chat-btn"
-                        onclick="openPrivateChat(
-                            '${request.item_id}',
-                            '${request.borrower_id}',
-                            '${request.owner_id}'
-                        )"
-                    >
-                        💬 Private Chat
-                    </button>
-
-
-                    <!-- ACCEPT -->
-
-                    <button
-                        type="button"
-                        class="action-btn accept-btn"
-                        onclick="respondToRequest(
-                            '${request.id}',
-                            'approved'
-                        )"
-                    >
-                        Accept
-                    </button>
-
-
-                    <!-- REJECT -->
-
-                    <button
-                        type="button"
-                        class="action-btn reject-btn"
-                        onclick="respondToRequest(
-                            '${request.id}',
-                            'rejected'
-                        )"
-                    >
-                        Reject
-                    </button>
-
-                </div>
-
-            `;
-
-
-            incomingWrap.appendChild(
-                card
-            );
+            }
 
         }
     );
@@ -1036,9 +1063,123 @@ function renderIncomingRequests() {
 }
 
 
-/* ==================================================
-   OPEN PRIVATE CHAT
-================================================== */
+function renderApprovedRequests() {
+
+    const approvedRequests =
+        incomingRequests.filter(
+            request =>
+                request.status === "approved"
+        );
+
+
+    if (
+        approvedRequests.length === 0
+    ) {
+
+        approvedWrap.innerHTML = `
+            <div class="empty-state">
+
+                <h3>
+                    No active borrowed items
+                </h3>
+
+                <p>
+                    Approved borrow requests will appear here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    approvedWrap.innerHTML = "";
+
+
+    approvedRequests.forEach(
+        request => {
+
+            const card =
+                createRequestCard(
+                    request,
+                    "approved"
+                );
+
+
+            if (card) {
+
+                approvedWrap.appendChild(
+                    card
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+function renderRejectedRequests() {
+
+    const rejectedRequests =
+        incomingRequests.filter(
+            request =>
+                request.status === "rejected"
+        );
+
+
+    if (
+        rejectedRequests.length === 0
+    ) {
+
+        rejectedWrap.innerHTML = `
+            <div class="empty-state">
+
+                <h3>
+                    No rejected requests
+                </h3>
+
+                <p>
+                    Rejected requests will appear here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    rejectedWrap.innerHTML = "";
+
+
+    rejectedRequests.forEach(
+        request => {
+
+            const card =
+                createRequestCard(
+                    request,
+                    "rejected"
+                );
+
+
+            if (card) {
+
+                rejectedWrap.appendChild(
+                    card
+                );
+
+            }
+
+        }
+    );
+
+}
+
 
 async function openPrivateChat(
     itemId,
@@ -1057,14 +1198,9 @@ async function openPrivateChat(
     }
 
 
-    /*
-     Make sure the logged-in user
-     is actually the owner.
-    */
-
     if (
-        currentUser.id !==
-        ownerId
+        currentUser.id !== borrowerId &&
+        currentUser.id !== ownerId
     ) {
 
         alert(
@@ -1077,11 +1213,6 @@ async function openPrivateChat(
 
 
     try {
-
-        /*
-         Check whether a conversation
-         already exists.
-        */
 
         const {
             data: existingConversation,
@@ -1136,24 +1267,12 @@ async function openPrivateChat(
         let conversationId = null;
 
 
-        /*
-         If conversation already exists,
-         use it.
-        */
-
-        if (
-            existingConversation
-        ) {
+        if (existingConversation) {
 
             conversationId =
                 existingConversation.id;
 
         }
-
-
-        /*
-         Otherwise create one.
-        */
 
         else {
 
@@ -1211,10 +1330,6 @@ async function openPrivateChat(
         }
 
 
-        /*
-         Open the chat page.
-        */
-
         window.location.href =
             "chat.html?conversation_id=" +
             encodeURIComponent(
@@ -1239,10 +1354,6 @@ async function openPrivateChat(
 }
 
 
-/* ==================================================
-   RESPOND TO REQUEST
-================================================== */
-
 async function respondToRequest(
     requestId,
     newStatus
@@ -1256,8 +1367,7 @@ async function respondToRequest(
     const request =
         incomingRequests.find(
             item =>
-                item.id ===
-                requestId
+                item.id === requestId
         );
 
 
@@ -1272,54 +1382,20 @@ async function respondToRequest(
     }
 
 
-    /* ================================
-       CONFIRM ACTION
-    ================================= */
-
-    let confirmationMessage =
-        "";
-
-
     if (
-        newStatus ===
-        "approved"
+        newStatus === "approved"
     ) {
 
-        confirmationMessage =
-            "Approve this borrow request?";
+        if (
+            !confirm(
+                "Approve this borrow request?"
+            )
+        ) {
 
-    } else {
+            return;
 
-        confirmationMessage =
-            "Reject this borrow request?";
+        }
 
-    }
-
-
-    if (
-        !confirm(
-            confirmationMessage
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    /* ================================
-       APPROVE
-    ================================= */
-
-    if (
-        newStatus ===
-        "approved"
-    ) {
-
-        /*
-         First make sure the item
-         is still available.
-        */
 
         const {
             data: item,
@@ -1358,8 +1434,7 @@ async function respondToRequest(
 
         if (
             !item ||
-            item.availability !==
-            "available"
+            item.availability !== "available"
         ) {
 
             alert(
@@ -1374,8 +1449,98 @@ async function respondToRequest(
 
 
         /*
-         Update request.
+         IMPORTANT:
+         Create the conversation BEFORE approval.
+
+         This guarantees that the same private
+         conversation exists before and after
+         accepting the request.
         */
+
+        const {
+            data: existingConversation,
+            error: conversationFindError
+        } =
+            await supabaseClient
+
+                .from("conversations")
+
+                .select("id")
+
+                .eq(
+                    "item_id",
+                    request.item_id
+                )
+
+                .eq(
+                    "borrower_id",
+                    request.borrower_id
+                )
+
+                .eq(
+                    "owner_id",
+                    request.owner_id
+                )
+
+                .maybeSingle();
+
+
+        if (conversationFindError) {
+
+            console.error(
+                conversationFindError
+            );
+
+            alert(
+                "Could not prepare the private chat.\n\n" +
+                conversationFindError.message
+            );
+
+            return;
+
+        }
+
+
+        if (!existingConversation) {
+
+            const {
+                error: conversationCreateError
+            } =
+                await supabaseClient
+
+                    .from("conversations")
+
+                    .insert({
+
+                        item_id:
+                            request.item_id,
+
+                        borrower_id:
+                            request.borrower_id,
+
+                        owner_id:
+                            request.owner_id
+
+                    });
+
+
+            if (conversationCreateError) {
+
+                console.error(
+                    conversationCreateError
+                );
+
+                alert(
+                    "Could not prepare the private chat.\n\n" +
+                    conversationCreateError.message
+                );
+
+                return;
+
+            }
+
+        }
+
 
         const {
             error: requestError
@@ -1402,8 +1567,7 @@ async function respondToRequest(
 
                 .eq(
                     "owner_id",
-                    currentUser.id
-                );
+                    currentUser.id );
 
 
         if (requestError) {
@@ -1422,10 +1586,6 @@ async function respondToRequest(
 
         }
 
-
-        /*
-         Make the item unavailable.
-        */
 
         const {
             error: itemUpdateError
@@ -1464,18 +1624,16 @@ async function respondToRequest(
                 itemUpdateError.message
             );
 
-        } else {
+        }
+
+        else {
 
             alert(
-                "Request approved successfully!"
+                "Request approved successfully!\n\nPrivate chat remains available."
             );
 
         }
 
-
-        /*
-         Refresh page data.
-        */
 
         await loadPage();
 
@@ -1484,14 +1642,20 @@ async function respondToRequest(
     }
 
 
-    /* ================================
-       REJECT
-    ================================= */
-
     if (
-        newStatus ===
-        "rejected"
+        newStatus === "rejected"
     ) {
+
+        if (
+            !confirm(
+                "Reject this borrow request?"
+            )
+        ) {
+
+            return;
+
+        }
+
 
         const {
             error
@@ -1546,10 +1710,6 @@ async function respondToRequest(
 
 }
 
-
-/* ==================================================
-   LOAD MY ITEMS
-================================================== */
 
 async function loadMyItems() {
 
@@ -1624,15 +1784,10 @@ async function loadMyItems() {
 }
 
 
-/* ==================================================
-   RENDER LISTINGS
-================================================== */
-
 function renderListings() {
 
     if (
-        myItems.length ===
-        0
+        myItems.length === 0
     ) {
 
         listingsWrap.innerHTML = `
@@ -1666,20 +1821,13 @@ function renderListings() {
     myItems.forEach(
         item => {
 
-            /*
-             Price
-            */
-
             let priceText =
                 "Free to borrow";
 
 
             if (
-                item.price_type ===
-                "paid"
-                &&
-                item.price_amount !==
-                null
+                item.price_type === "paid" &&
+                item.price_amount !== null
             ) {
 
                 priceText =
@@ -1694,23 +1842,12 @@ function renderListings() {
             }
 
 
-            /*
-             Availability
-            */
-
             const isAvailable =
-                item.availability ===
-                "available";
+                item.availability === "available";
 
-
-            /*
-             Create row
-            */
 
             const row =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             row.className =
@@ -1722,8 +1859,7 @@ function renderListings() {
                 <div class="photo">
 
                     ${escapeHtml(
-                        item.icon ||
-                        "📦"
+                        item.icon || "📦"
                     )}
 
                 </div>
@@ -1814,10 +1950,6 @@ function renderListings() {
 }
 
 
-/* ==================================================
-   DELETE ITEM
-================================================== */
-
 async function deleteItem(
     itemId
 ) {
@@ -1827,15 +1959,10 @@ async function deleteItem(
     }
 
 
-    /*
-     Find item.
-    */
-
     const item =
         myItems.find(
             item =>
-                item.id ===
-                itemId
+                item.id === itemId
         );
 
 
@@ -1850,14 +1977,8 @@ async function deleteItem(
     }
 
 
-    /*
-     Don't allow deleting an
-     item that is currently borrowed.
-    */
-
     if (
-        item.availability !==
-        "available"
+        item.availability !== "available"
     ) {
 
         alert(
@@ -1868,10 +1989,6 @@ async function deleteItem(
 
     }
 
-
-    /*
-     Confirm.
-    */
 
     const confirmed =
         confirm(
@@ -1887,9 +2004,7 @@ async function deleteItem(
 
 
     /*
-     Delete borrow requests
-     associated with this item
-     first.
+     Delete related requests.
     */
 
     const {
@@ -1914,11 +2029,34 @@ async function deleteItem(
             requestDeleteError
         );
 
-        /*
-         We continue because your
-         database may already have
-         cascading delete enabled.
-        */
+    }
+
+
+    /*
+     Delete conversations for this item.
+    */
+
+    const {
+        error: conversationDeleteError
+    } =
+        await supabaseClient
+
+            .from("conversations")
+
+            .delete()
+
+            .eq(
+                "item_id",
+                itemId
+            );
+
+
+    if (conversationDeleteError) {
+
+        console.warn(
+            "Could not delete related conversations:",
+            conversationDeleteError
+        );
 
     }
 
@@ -1969,18 +2107,10 @@ async function deleteItem(
     );
 
 
-    /*
-     Reload listings.
-    */
-
     await loadMyItems();
 
 }
 
-
-/* ==================================================
-   START
-================================================== */
 
 loadPage();
 
